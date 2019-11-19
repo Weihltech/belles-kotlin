@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?><!-- xml/step1.xml -->
+
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- TODO: Define a Transition -->
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:duration="3000">
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/title"
+            app:touchAnchorSide="bottom" />
+
+        <KeyFrameSet>
+
+            <KeyPosition
+                app:framePosition="25"
+                app:keyPositionType="parentRelative"
+                app:motionTarget="@id/title"
+                app:percentY="0.6" />
+
+            <KeyPosition
+                app:framePosition="50"
+                app:keyPositionType="parentRelative"
+                app:motionTarget="@id/title"
+                app:percentY="0.5" />
+
+            <KeyPosition
+                app:framePosition="75"
+                app:keyPositionType="parentRelative"
+                app:motionTarget="@id/title"
+                app:percentY="0.6" />
+
+            <KeyAttribute
+                app:framePosition="25"
+                android:translationY="60dp"
+                app:motionTarget="@id/title" />
+
+            <KeyAttribute
+                android:alpha="1.0"
+                android:scaleX="2.0"
+                android:scaleY="2.0"
+                app:framePosition="50"
+                app:motionTarget="@id/title" />
+
+            <KeyAttribute
+                app:framePosition="75"
+                app:motionTarget="@id/title"
+                android:rotation="180"
+                />
+
+
+        </KeyFrameSet>
+
+
+    </Transition>
+
+    <!-- TODO: Define @id/start -->
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+        </Constraint>
+
+
+    </ConstraintSet>
+
+
+    <!-- TODO: Define @id/end -->
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+        </Constraint>
+
+    </ConstraintSet>
+
+
+</MotionScene>
