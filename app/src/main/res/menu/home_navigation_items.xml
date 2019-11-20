@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/bellesFragment"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        android:title="@string/menu_belles" />
+    <item
+        android:id="@+id/collectFragment"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:title="@string/menu_collect" />
+    <item
+        android:id="@+id/userFragment"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/menu_user" />
+
+</menu>
