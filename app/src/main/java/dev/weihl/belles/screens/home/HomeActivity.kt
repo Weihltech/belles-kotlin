@@ -16,10 +16,12 @@ class HomeActivity : AppCompatActivity() {
 
         navigationView.setOnNavigationItemSelectedListener {
             NavigationUI.onNavDestinationSelected(
-                it, navHostFragment!!.findNavController()
+                it, navHost!!.findNavController()
             )
         }
 
 
     }
+
+
 }
