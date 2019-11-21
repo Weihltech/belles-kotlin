@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation.xml"
+    app:startDestination="@id/bellesFragment">
+    <fragment
+        android:id="@+id/bellesFragment"
+        android:name="dev.weihl.belles.screens.home.BellesFragment"
+        android:label="fragment_belles"
+        tools:layout="@layout/fragment_belles" >
+        <action
+            android:id="@+id/action_bellesFragment_to_collectFragment"
+            app:destination="@id/collectFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectFragment"
+        android:name="dev.weihl.belles.screens.home.CollectFragment"
+        android:label="fragment_collect"
+        tools:layout="@layout/fragment_collect" >
+        <action
+            android:id="@+id/action_collectFragment_to_userFragment"
+            app:destination="@id/userFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <argument
+            android:name="collectArgs"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_collectFragment_to_bellesFragment"
+            app:destination="@id/bellesFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="dev.weihl.belles.screens.home.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_collectFragment"
+            app:destination="@id/collectFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+</navigation>
