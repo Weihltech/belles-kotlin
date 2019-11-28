@@ -6,20 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 
 import dev.weihl.belles.R
-import kotlinx.android.synthetic.main.fragment_collect.*
+import dev.weihl.belles.databinding.FragmentCollectBinding
 
 
 class CollectFragment : Fragment() {
+
+    private lateinit var binding: FragmentCollectBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collect, container, false)
+        binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_collect, container, false)
+        return binding.root
     }
 
 
@@ -28,7 +31,7 @@ class CollectFragment : Fragment() {
 
         try {
             var bundle = CollectFragmentArgs.fromBundle(arguments!!)
-            text.text = bundle.collectArgs
+            binding.message.text = bundle.collectArgs
         } catch (e: Exception) {
         }
 

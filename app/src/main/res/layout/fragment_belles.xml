@@ -2,24 +2,45 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <FrameLayout
+        <variable
+            name="bellesViewModel"
+            type="dev.weihl.belles.screens.home.BellesViewMode" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         tools:context=".screens.home.BellesFragment">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/menu_belles" />
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@{@string/menu_belles(bellesViewModel.count)}" />
+
+
+        <TextView
+            android:id="@+id/text_format"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text"
+            android:layout_centerHorizontal="true"
+            android:text="@{bellesViewModel.currentTimeString}" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/start_timer"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:layout_below="@id/text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:onClick="@{()-> bellesViewModel.clickStartTimer()}"
+            android:text="@string/belles_start_time" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </layout>
