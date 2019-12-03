@@ -3,6 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="bellesAdapterCallBack"
+            type="dev.weihl.belles.screens.home.belles.BellesAdapterCallBack" />
+
+        <variable
+            name="itemBelles"
+            type="dev.weihl.belles.data.local.belles.Belles" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,6 +38,7 @@
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="24sp"
+            android:onClick="@{()->bellesAdapterCallBack.itemClick(itemBelles)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintHorizontal_bias="0.5"

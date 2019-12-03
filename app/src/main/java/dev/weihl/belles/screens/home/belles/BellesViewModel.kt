@@ -40,7 +40,7 @@ class BellesViewModel(
             // new Belles and Insert
             withContext(Dispatchers.IO) {
                 val belles = Belles()
-                belles.title = "Title:${allBelles.value?.size}"
+                belles.title = "title"//"Title:${allBelles.value?.size}"
                 belles.desc = "Last Belles , new and insert BellesDatabase ! " +
                         "last.index = ${allBelles.value?.size}"
                 dbDao.insert(belles)

@@ -4,12 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.belles.Belles
 import dev.weihl.belles.databinding.LayoutItemBellesBinding
+import timber.log.Timber
 
 /**
  * @desc Belles 列表 Adapter
@@ -17,14 +21,14 @@ import dev.weihl.belles.databinding.LayoutItemBellesBinding
  * @author Weihl Created by 2019/12/3
  *
  */
-class BellesAdapter : RecyclerView.Adapter<BellesAdapter.BellesItemHolder>() {
+class BellesAdapter(val callBack: BellesAdapterCallBack) :
+    ListAdapter<Belles, BellesAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
-    var data = listOf<Belles>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
+//    var data = listOf<Belles>()
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
         val itemBinding = DataBindingUtil.inflate(
@@ -33,16 +37,18 @@ class BellesAdapter : RecyclerView.Adapter<BellesAdapter.BellesItemHolder>() {
             parent, false
         ) as LayoutItemBellesBinding
         val viewHolder = BellesItemHolder(itemBinding.root)
+        itemBinding.bellesAdapterCallBack = callBack
         viewHolder.bind = itemBinding
         return viewHolder
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+//    override fun getItemCount(): Int {
+//        return data.size
+//    }
 
     override fun onBindViewHolder(holder: BellesItemHolder, position: Int) {
-        val itemBelles = data[position]
+        val itemBelles = getItem(position)
+        holder.bind.itemBelles = itemBelles
         holder.bind.title.text = itemBelles.title
         holder.bind.desc.text = itemBelles.desc
     }
@@ -53,15 +59,18 @@ class BellesAdapter : RecyclerView.Adapter<BellesAdapter.BellesItemHolder>() {
     }
 }
 
-//class SleepNightDiffCallback :
-//    DiffUtil.ItemCallback<Belles>() {
-//    override fun areItemsTheSame(oldItem: Belles, newItem: Belles): Boolean {
-//
-//        return oldItem.id == newItem.id
-//    }
-//
-//    override fun areContentsTheSame(oldItem: Belles, newItem: Belles): Boolean {
-//
-//        return oldItem == newItem
-//    }
-//}
+class BellesDiffCallback :
+    DiffUtil.ItemCallback<Belles>() {
+    override fun areItemsTheSame(oldItem: Belles, newItem: Belles): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Belles, newItem: Belles): Boolean {
+        return oldItem == newItem
+    }
+}
+
+interface BellesAdapterCallBack {
+
+    fun itemClick(itemBelles: Belles)
+}
