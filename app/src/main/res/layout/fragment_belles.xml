@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,52 +10,49 @@
             type="dev.weihl.belles.screens.home.belles.BellesViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         tools:context=".screens.home.belles.BellesFragment">
 
-        <TextView
-            android:id="@+id/text"
+        <Button
+            android:id="@+id/add_belles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@{@string/menu_belles(bellesViewModel.count)}" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:onClick="@{()->bellesViewModel.addBellesClick()}"
+            android:text="@{bellesViewModel.bellesSizeString}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-
-        <TextView
-            android:id="@+id/text_format"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text"
-            android:layout_centerHorizontal="true"
-            android:text="@{bellesViewModel.currentTimeString}" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/belles_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_belles"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="165dp"
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
-            android:onClick="@{()-> bellesViewModel.onClick()}"
-            android:text="@string/belles_start_time" />
-
-        <TextView
-            android:id="@+id/all_belles_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/text"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:tooltipText="321321321"
-            android:text="@{bellesViewModel.allBellesString}"
-            android:textColor="@color/colorAccent" />
-
-
-
-    </RelativeLayout>
+            android:layout_marginTop="16dp"
+            android:text="Clear All"
+            android:onClick="@{()->bellesViewModel.clearAllClick()}"
+            app:layout_constraintBottom_toBottomOf="@+id/add_belles"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_belles"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

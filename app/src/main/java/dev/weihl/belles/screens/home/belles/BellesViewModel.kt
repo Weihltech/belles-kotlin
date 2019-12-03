@@ -24,75 +24,42 @@ class BellesViewModel(
     application: Application
 ) : BaseViewModel(application) {
 
-    private var title: String = "???"
-
-
-    private var allBelles = dbDao.queryAllDescId()
-
-    val allBellesString = Transformations.map(allBelles) {
-        formatBelles(it)
-    }
-
-
-    fun onClick() {
-        uiScope.launch {
-            title = getTitle()
-            _count.value = _count.value?.plus(1)
-            Timber.d("onClick !" + count.value)
-        }
-    }
-
-    private suspend fun getTitle(): String {
-        return withContext(Dispatchers.IO) {
-            val belles = Belles()
-            belles.title = "title : " + _count.value
-            dbDao.insert(belles)
-            val title = dbDao?.queryLastBelles()?.title.toString()
-            title
-        }
-    }
-
-    companion object {
-        const val DELAY = 1000L
-        const val PERIOD = 1000L
-    }
-
-    private val _count = MutableLiveData<Int>()
-    val count: LiveData<Int>
-        get() = _count
-
-    val currentTimeString = Transformations.map(count) { time ->
-
-        val time = DateUtils.formatElapsedTime(time.toLong())
-
-        return@map "$title : $time"
-    }
-
-    private val _timer = Timer()
-//    private val _handler = Handler()
-
     init {
         Timber.tag("BaseViewModel")
         Timber.d("init !")
-        _count.postValue(1)
+    }
 
-        // startTime
-//        _timer.scheduleAtFixedRate(object : TimerTask() {
-//            override fun run() {
-//                _handler.post {
-//                    _count.value = _count.value?.plus(1)
-//                    Timber.d(count.value.toString())
-//                }
-//            }
-//
-//        }, DELAY, PERIOD)
+    var allBelles = dbDao.queryAllDescId()
+
+    var bellesSizeString = Transformations.map(allBelles) {
+        return@map "Belles.Size() = ${it.size}"
+    }
+
+    fun addBellesClick() {
+        uiScope.launch {
+            // new Belles and Insert
+            withContext(Dispatchers.IO) {
+                val belles = Belles()
+                belles.title = "Title:${allBelles.value?.size}"
+                belles.desc = "Last Belles , new and insert BellesDatabase ! " +
+                        "last.index = ${allBelles.value?.size}"
+                dbDao.insert(belles)
+            }
+        }
+    }
+
+    fun clearAllClick(){
+        uiScope.launch {
+            withContext(Dispatchers.IO){
+                dbDao.deleteAll()
+            }
+        }
     }
 
 
     override fun onCleared() {
         super.onCleared()
         Timber.d("onCleared !")
-        _timer.cancel()
     }
 
 }

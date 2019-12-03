@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.belles.BellesDB
 import dev.weihl.belles.databinding.FragmentBellesBinding
@@ -39,18 +41,29 @@ class BellesFragment : Fragment() {
     ): View? {
 
         Timber.d("onCreateView !")
+        // data binding and view model
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_belles, container, false)
 
-
         val application = requireNotNull(this.activity).application
-        val dbDao = BellesDB.getInstance(application).bellesDBDao
-
-        val homeViewModelFactory = HomeViewModelFactory(dbDao,application)
+        val homeViewModelFactory = HomeViewModelFactory(application)
         bellesModel = ViewModelProviders.of(this, homeViewModelFactory)
             .get(BellesViewModel::class.java)
         binding.bellesViewModel = bellesModel
         binding.lifecycleOwner = this
+
+        // recycler view
+        val adapter = BellesAdapter()
+        binding.bellesRecyclerView.adapter = adapter
+        binding.bellesRecyclerView.layoutManager = LinearLayoutManager(application)
+
+        bellesModel.allBelles.observe(this, Observer {
+            it?.let {
+                Timber.d("allBelles.observe !")
+                adapter.data = it
+            }
+        })
+
         return binding.root
     }
 
@@ -59,13 +72,6 @@ class BellesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated !")
 
-//        bellesModel.count.observe(this, Observer {
-//            binding.text.text = DateUtils.formatElapsedTime(it.toLong())
-//        })
-
-//        binding.startTimer.setOnClickListener {
-//            bellesModel.onClick()
-//        }
 
     }
 
