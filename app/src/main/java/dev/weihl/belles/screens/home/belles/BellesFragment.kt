@@ -1,4 +1,4 @@
-package dev.weihl.belles.screens.home
+package dev.weihl.belles.screens.home.belles
 
 
 import android.content.Context
@@ -10,7 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import dev.weihl.belles.R
+import dev.weihl.belles.data.local.belles.BellesDB
 import dev.weihl.belles.databinding.FragmentBellesBinding
+import dev.weihl.belles.screens.home.HomeViewModelFactory
 import timber.log.Timber
 
 /**
@@ -24,8 +26,7 @@ import timber.log.Timber
 class BellesFragment : Fragment() {
 
     private lateinit var binding: FragmentBellesBinding
-    private lateinit var bellesMode: BellesViewMode
-    private lateinit var homeViewModelFactory: HomeViewModelFactory
+    private lateinit var bellesModel: BellesViewModel
 
     init {
         Timber.tag("BellesFragment")
@@ -40,10 +41,15 @@ class BellesFragment : Fragment() {
         Timber.d("onCreateView !")
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_belles, container, false)
-        homeViewModelFactory = HomeViewModelFactory()
-        bellesMode = ViewModelProviders.of(this, homeViewModelFactory)
-            .get(BellesViewMode::class.java)
-        binding.bellesViewModel = bellesMode
+
+
+        val application = requireNotNull(this.activity).application
+        val dbDao = BellesDB.getInstance(application).bellesDBDao
+
+        val homeViewModelFactory = HomeViewModelFactory(dbDao,application)
+        bellesModel = ViewModelProviders.of(this, homeViewModelFactory)
+            .get(BellesViewModel::class.java)
+        binding.bellesViewModel = bellesModel
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -53,12 +59,12 @@ class BellesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated !")
 
-//        bellesMode.count.observe(this, Observer {
+//        bellesModel.count.observe(this, Observer {
 //            binding.text.text = DateUtils.formatElapsedTime(it.toLong())
 //        })
 
 //        binding.startTimer.setOnClickListener {
-//            bellesMode.clickStartTimer()
+//            bellesModel.onClick()
 //        }
 
     }

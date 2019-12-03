@@ -4,7 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'androidx.navigation.safeargs'
+
 
 android {
     compileSdkVersion 29
@@ -16,6 +19,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // room
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [
+//                        "room.schemaLocation":"$projectDir/schemas".toString(),
+//                        "room.incremental":"true",
+//                        "room.expandProjection":"true"]
+//            }
+//        }
     }
     buildTypes {
         release {
@@ -54,4 +67,13 @@ dependencies {
 
     // lifeCycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    // room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_coroutine"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_coroutine"
 }

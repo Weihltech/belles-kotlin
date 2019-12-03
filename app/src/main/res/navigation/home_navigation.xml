@@ -6,7 +6,7 @@
     app:startDestination="@id/bellesFragment">
     <fragment
         android:id="@+id/bellesFragment"
-        android:name="dev.weihl.belles.screens.home.BellesFragment"
+        android:name="dev.weihl.belles.screens.home.belles.BellesFragment"
         android:label="fragment_belles"
         tools:layout="@layout/fragment_belles" />
     <fragment

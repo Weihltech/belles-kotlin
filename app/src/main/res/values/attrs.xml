@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DialView">
+        <attr name="offColor" format="color" />
+        <attr name="lowColor" format="color" />
+        <attr name="mediumColor" format="color" />
+        <attr name="highColor" format="color" />
+    </declare-styleable>
+
+</resources>

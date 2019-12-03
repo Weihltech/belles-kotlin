@@ -6,14 +6,14 @@
 
         <variable
             name="bellesViewModel"
-            type="dev.weihl.belles.screens.home.BellesViewMode" />
+            type="dev.weihl.belles.screens.home.belles.BellesViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        tools:context=".screens.home.BellesFragment">
+        tools:context=".screens.home.belles.BellesFragment">
 
         <TextView
             android:id="@+id/text"
@@ -32,14 +32,28 @@
             android:text="@{bellesViewModel.currentTimeString}" />
 
         <Button
-            android:id="@+id/start_timer"
+            android:id="@+id/confirm_button"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/text"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
-            android:onClick="@{()-> bellesViewModel.clickStartTimer()}"
+            android:onClick="@{()-> bellesViewModel.onClick()}"
             android:text="@string/belles_start_time" />
+
+        <TextView
+            android:id="@+id/all_belles_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/text"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:tooltipText="321321321"
+            android:text="@{bellesViewModel.allBellesString}"
+            android:textColor="@color/colorAccent" />
+
+
 
     </RelativeLayout>
 
