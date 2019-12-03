@@ -31,14 +31,18 @@ class BellesAdapter(val callBack: BellesAdapterCallBack) :
 //        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
-        val itemBinding = DataBindingUtil.inflate(
+//        val itemBinding = DataBindingUtil.inflate(
+//            LayoutInflater.from(parent.context),
+//            R.layout.layout_item_belles,
+//            parent, false
+//        ) as LayoutItemBellesBinding
+        val bind = LayoutItemBellesBinding.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.layout_item_belles,
             parent, false
-        ) as LayoutItemBellesBinding
-        val viewHolder = BellesItemHolder(itemBinding.root)
-        itemBinding.bellesAdapterCallBack = callBack
-        viewHolder.bind = itemBinding
+        )
+        val viewHolder = BellesItemHolder(bind.root)
+        bind.bellesAdapterCallBack = callBack
+        viewHolder.bind = bind
         return viewHolder
     }
 
