@@ -10,17 +10,12 @@
         android:label="fragment_belles"
         tools:layout="@layout/fragment_belles" />
     <fragment
-        android:id="@+id/collectFragment"
-        android:name="dev.weihl.belles.screens.home.CollectFragment"
-        android:label="fragment_collect"
-        tools:layout="@layout/fragment_collect" >
-        <argument
-            android:name="collectArgs"
-            app:argType="string" />
-    </fragment>
-    <fragment
         android:id="@+id/userFragment"
         android:name="dev.weihl.belles.screens.home.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="dev.weihl.belles.screens.home.favorite.FavoriteFragment"
+        android:label="FavoriteFragment" />
 </navigation>

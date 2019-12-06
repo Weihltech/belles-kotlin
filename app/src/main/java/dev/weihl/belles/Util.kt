@@ -4,7 +4,7 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
-import dev.weihl.belles.data.local.belles.Belles
+import dev.weihl.belles.data.local.table.Belles
 import java.lang.StringBuilder
 
 /**
@@ -22,7 +22,7 @@ fun formatBelles(allBelles: List<Belles>): Spanned {
     allBelles.forEach {
         sb.append("id:${it.id}; ")
         sb.append("title:${it.title}; ")
-        sb.append("desc:${it.desc}; ")
+        sb.append("desc:${it.href}; ")
         sb.append("</br>")
     }
 

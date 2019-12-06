@@ -1,7 +1,7 @@
 package dev.weihl.belles.data.remote
 
 import com.google.gson.Gson
-import dev.weihl.belles.data.local.belles.Belles
+import dev.weihl.belles.data.local.table.Belles
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -33,8 +33,9 @@ class ReqManager {
     private fun testGson() {
         val result = "{\"title\":\"title\",\"desc\":\"APP被用户自己禁用，请在控制台解禁\",\"url\":\"url\"}"
         println("----------")
-        val resp = Gson().fromJson(result,Belles::class.java) as Belles
-        println(resp.desc)
+        val resp = Gson().fromJson(result,
+            Belles::class.java) as Belles
+        println(resp.href)
 
         println("----------")
         val respS = Gson().toJson(resp)

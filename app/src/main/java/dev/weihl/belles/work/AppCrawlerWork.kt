@@ -5,30 +5,32 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import timber.log.Timber
 
+
 /**
- * @desc Work
+ * @desc Work,搜索网络资源，并插入数据库
  *
  * @author Weihl Created by 2019/12/4
  *
  */
-class BellesWork(appContext: Context, params: WorkerParameters) : CoroutineWorker(
+class AppCrawlerWork(appContext: Context, params: WorkerParameters) : CoroutineWorker(
     appContext,
     params
 ) {
 
     companion object {
-        const val WORK_NAME = "BellesWork"
+        const val WORK_NAME = "AppCrawlerWork"
     }
 
     init {
-        Timber.tag("BellesWork")
+        Timber.tag("AppCrawlerWork")
     }
 
     override suspend fun doWork(): Result {
-
         Timber.d("doWork !")
 
+        MmnetTaskWork(applicationContext).run()
 
+        return Result.success()
     }
 
 }

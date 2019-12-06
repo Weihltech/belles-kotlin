@@ -16,11 +16,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        navigationView.setOnNavigationItemSelectedListener {
+        navigation_view.setOnNavigationItemSelectedListener {
 
             if (currFragmentId != it.itemId) {
                 NavigationUI.onNavDestinationSelected(
-                    it, navHost!!.findNavController()
+                    it, nav_host!!.findNavController()
                 )
             }
             currFragmentId = it.itemId

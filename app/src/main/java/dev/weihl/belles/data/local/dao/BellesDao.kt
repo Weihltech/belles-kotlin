@@ -1,7 +1,8 @@
-package dev.weihl.belles.data.local.belles
+package dev.weihl.belles.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import dev.weihl.belles.data.local.table.Belles
 
 /**
  * @desc DebllesDB 数据访问对象
@@ -10,7 +11,7 @@ import androidx.room.*
  *
  */
 @Dao
-interface BellesDBDao {
+interface BellesDao {
 
     @Insert
     fun insert(belles: Belles)
@@ -40,6 +41,6 @@ interface BellesDBDao {
     fun queryById(id: Long): Belles
 
     @Query("SELECT * FROM belles_table  ORDER BY id DESC LIMIT 1")
-    fun queryLastBelles():Belles
+    fun queryLastBelles(): Belles
 
 }

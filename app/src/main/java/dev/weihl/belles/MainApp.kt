@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import dev.weihl.belles.work.BellesWork
+import dev.weihl.belles.work.AppCrawlerWork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,12 +26,11 @@ class MainApp : Application() {
         Timber.plant(Timber.DebugTree())
         Timber.tag("MainApp")
         Timber.d("init !")
-
-        delayedInit()
     }
 
-    fun getContext(): Context {
-        return this
+    override fun onCreate() {
+        super.onCreate()
+        delayedInit()
     }
 
     private fun delayedInit() = applicationScope.launch {
@@ -40,10 +39,10 @@ class MainApp : Application() {
 
     private fun setupRecurringWork() {
         val repeatingRequest =
-            PeriodicWorkRequestBuilder<BellesWork>(1, TimeUnit.DAYS)
+            PeriodicWorkRequestBuilder<AppCrawlerWork>(1, TimeUnit.DAYS)
                 .build()
         WorkManager.getInstance().enqueueUniquePeriodicWork(
-            BellesWork.WORK_NAME,
+            AppCrawlerWork.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             repeatingRequest
         )

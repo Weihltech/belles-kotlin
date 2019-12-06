@@ -40,6 +40,15 @@ android {
     dataBinding {
         enabled = true
     }
+
+//    signingConfigs {
+//        debug {
+//            storeFile file("release.keystore")
+//            storePassword "709394"
+//            keyAlias "iptv"
+//            keyPassword "709394"
+//        }
+//    }
 }
 
 dependencies {
@@ -93,4 +102,5 @@ dependencies {
 
     // work
     implementation "android.arch.work:work-runtime-ktx:$version_work"
+    implementation 'org.jsoup:jsoup:1.12.1'
 }

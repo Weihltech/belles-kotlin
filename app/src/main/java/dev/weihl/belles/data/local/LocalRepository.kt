@@ -1,7 +1,7 @@
 package dev.weihl.belles.data.local
 
 import android.content.Context
-import dev.weihl.belles.data.local.belles.Belles
+import dev.weihl.belles.data.local.table.Belles
 import timber.log.Timber
 
 /**
@@ -12,11 +12,6 @@ import timber.log.Timber
  */
 class LocalRepository(context: Context) {
 
-    companion object {
-
-        const val DATA_BASE_NAME = "belles_db"
-
-    }
 
     init {
         Timber.tag("LocalRepository")

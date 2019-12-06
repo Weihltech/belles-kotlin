@@ -1,17 +1,11 @@
 package dev.weihl.belles.screens.home.belles
 
 import android.app.Application
-import android.text.format.DateUtils
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import dev.weihl.belles.BaseViewModel
-import dev.weihl.belles.data.local.belles.Belles
-import dev.weihl.belles.data.local.belles.BellesDBDao
-import dev.weihl.belles.formatBelles
+import dev.weihl.belles.data.local.dao.BellesDao
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
 
 /**
  * @desc ViewMode
@@ -20,7 +14,7 @@ import java.util.*
  *
  */
 class BellesViewModel(
-    private val dbDao: BellesDBDao,
+    private val dao: BellesDao,
     application: Application
 ) : BaseViewModel(application) {
 
@@ -29,7 +23,7 @@ class BellesViewModel(
         Timber.d("init !")
     }
 
-    var allBelles = dbDao.queryAllDescId()
+    var allBelles = dao.queryAllDescId()
 
     var bellesSizeString = Transformations.map(allBelles) {
         return@map "Belles.Size() = ${it.size}"
@@ -39,11 +33,11 @@ class BellesViewModel(
         uiScope.launch {
             // new Belles and Insert
             withContext(Dispatchers.IO) {
-                val belles = Belles()
-                belles.title = "title"//"Title:${allBelles.value?.size}"
-                belles.desc = "Last Belles , new and insert BellesDatabase ! " +
-                        "last.index = ${allBelles.value?.size}"
-                dbDao.insert(belles)
+//                val belles = Belles()
+//                belles.title = "title"//"Title:${allBelles.value?.size}"
+//                belles.href = "Last Belles , new and insert BellesDatabase ! " +
+//                        "last.index = ${allBelles.value?.size}"
+//                dao.insert(belles)
             }
         }
     }
@@ -51,7 +45,7 @@ class BellesViewModel(
     fun clearAllClick(){
         uiScope.launch {
             withContext(Dispatchers.IO){
-                dbDao.deleteAll()
+                dao.deleteAll()
             }
         }
     }
