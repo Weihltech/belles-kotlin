@@ -16,5 +16,6 @@ class MainActivity : BasicActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.button
+        setContentView(R.layout.activity_main)
     }
 }
