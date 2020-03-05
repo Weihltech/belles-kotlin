@@ -10,7 +10,7 @@ apply plugin: 'androidx.navigation.safeargs'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "dev.weihl.belles"
@@ -53,21 +53,21 @@ android {
 
 dependencies {
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version_kotlin"
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // widget
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0-rc01'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     // navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
@@ -75,7 +75,7 @@ dependencies {
 
 
     // lifeCycle
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // room
     implementation "androidx.room:room-runtime:$version_room"
@@ -97,10 +97,10 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$version_glide"
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // work
     implementation "android.arch.work:work-runtime-ktx:$version_work"
-    implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'org.jsoup:jsoup:1.12.2'
 }
