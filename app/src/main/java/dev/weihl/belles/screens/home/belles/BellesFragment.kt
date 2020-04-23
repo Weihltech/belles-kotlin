@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.weihl.belles.R
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
 import dev.weihl.belles.screens.home.HomeViewModelFactory
 import timber.log.Timber

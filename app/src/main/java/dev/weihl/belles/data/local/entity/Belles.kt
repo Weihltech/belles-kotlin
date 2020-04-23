@@ -1,4 +1,4 @@
-package dev.weihl.belles.data.local.table
+package dev.weihl.belles.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dev.weihl.belles.data.local.dao.BellesDao
 import dev.weihl.belles.data.local.dao.UserDao
-import dev.weihl.belles.data.local.table.Belles
-import dev.weihl.belles.data.local.table.User
+import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.data.local.entity.User
 
 /**
  * @desc Belles Data Base
@@ -16,7 +16,7 @@ import dev.weihl.belles.data.local.table.User
  *
  */
 @Database(entities = [Belles::class, User::class], version = 1, exportSchema = false)
-abstract class BellesDB : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract val bellesDao: BellesDao
     abstract val userDao: UserDao
@@ -26,15 +26,15 @@ abstract class BellesDB : RoomDatabase() {
         private const val DATA_BASE_NAME = "belles_db.db"
 
         @Volatile
-        private var INSTANCT: BellesDB? = null
+        private var INSTANCT: AppDatabase? = null
 
-        fun getInstance(context: Context): BellesDB {
+        fun getInstance(context: Context): AppDatabase {
             synchronized(this) {
                 var instance = INSTANCT
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        BellesDB::class.java,
+                        AppDatabase::class.java,
                         DATA_BASE_NAME
                     )
                         .fallbackToDestructiveMigration()

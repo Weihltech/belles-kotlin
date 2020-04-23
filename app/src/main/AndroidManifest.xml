@@ -22,7 +22,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".screens.about.AboutActivity"></activity>
+        <activity android:name=".screens.about.AboutActivity" />
         <activity android:name=".screens.main.MainActivity">
 
         </activity>

@@ -1,4 +1,4 @@
-package dev.weihl.belles.screens.home
+package dev.weihl.belles.screens.home.user
 
 
 import android.os.Bundle

@@ -1,15 +1,18 @@
 package dev.weihl.belles.screens.home
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import dev.weihl.belles.R
+import dev.weihl.belles.screens.BasicActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity() {
+/**
+ * @author Weihl
+ */
+class HomeActivity : BasicActivity() {
 
-
+    // var 可变变量；val 不可变变量；
     private var currFragmentId: Int = R.id.bellesFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {

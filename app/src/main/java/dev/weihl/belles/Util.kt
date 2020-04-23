@@ -4,7 +4,7 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 import java.lang.StringBuilder
 
 /**

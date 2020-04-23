@@ -1,7 +1,7 @@
 package dev.weihl.belles.data.local
 
 import android.content.Context
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 import timber.log.Timber
 
 /**

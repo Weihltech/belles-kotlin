@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_belles" />
     <fragment
         android:id="@+id/userFragment"
-        android:name="dev.weihl.belles.screens.home.UserFragment"
+        android:name="dev.weihl.belles.screens.home.user.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
     <fragment

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.LayoutItemBellesBinding
 
 /**

@@ -10,7 +10,7 @@ apply plugin: 'androidx.navigation.safeargs'
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "dev.weihl.belles"
@@ -49,6 +49,15 @@ android {
 //            keyPassword "709394"
 //        }
 //    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -65,7 +74,7 @@ dependencies {
 
     // widget
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 

@@ -3,7 +3,7 @@ package dev.weihl.belles.screens.home
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dev.weihl.belles.data.local.BellesDB
+import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.screens.home.belles.BellesViewModel
 import java.lang.RuntimeException
 
@@ -19,7 +19,7 @@ class HomeViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(BellesViewModel::class.java)) {
-            val dbDao = BellesDB.getInstance(application).bellesDao
+            val dbDao = AppDatabase.getInstance(application).bellesDao
             return BellesViewModel(dbDao, application) as T
         }
 

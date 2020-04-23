@@ -1,7 +1,7 @@
 package dev.weihl.belles.data.remote
 
 import com.google.gson.Gson
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 import okhttp3.OkHttpClient
 import okhttp3.Request
 

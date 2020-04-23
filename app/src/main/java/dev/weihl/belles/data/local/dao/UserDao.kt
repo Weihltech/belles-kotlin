@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import dev.weihl.belles.data.local.table.User
+import dev.weihl.belles.data.local.entity.User
 
 /**
  * @desc 用户信息数据表映射关系

@@ -2,8 +2,8 @@ package dev.weihl.belles.work
 
 import android.content.Context
 import com.google.gson.Gson
-import dev.weihl.belles.data.local.BellesDB
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.AppDatabase
+import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.work.bean.WorkBelles
 import dev.weihl.belles.work.bean.WorkExtraImg
 import org.jsoup.Jsoup
@@ -42,7 +42,7 @@ class MmnetTaskWork(applicationContext: Context) {
         }
 
         // insert db
-        val bellesDao = BellesDB.getInstance(context).bellesDao
+        val bellesDao = AppDatabase.getInstance(context).bellesDao
         wBelles.forEach {
             if ("" != it.details) {
                 bellesDao.insert(

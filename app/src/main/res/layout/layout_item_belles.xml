@@ -10,7 +10,7 @@
 
         <variable
             name="itemBelles"
-            type="dev.weihl.belles.data.local.table.Belles" />
+            type="dev.weihl.belles.data.local.entity.Belles" />
     </data>
 
     <RelativeLayout

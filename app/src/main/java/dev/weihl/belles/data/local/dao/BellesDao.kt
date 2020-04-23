@@ -2,7 +2,7 @@ package dev.weihl.belles.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import dev.weihl.belles.data.local.table.Belles
+import dev.weihl.belles.data.local.entity.Belles
 
 /**
  * @desc DebllesDB 数据访问对象
