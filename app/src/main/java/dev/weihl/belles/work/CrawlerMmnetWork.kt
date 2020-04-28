@@ -15,7 +15,7 @@ import org.jsoup.Jsoup
  *
  */
 
-class MmnetTaskWork(applicationContext: Context) {
+class CrawlerMmnetWork(applicationContext: Context) {
 
     private var context: Context = applicationContext
 
