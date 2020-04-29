@@ -19,7 +19,7 @@ class HomeActivity : BasicActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        CrawlerWork.enqueue();
+        CrawlerWork.enqueue()
 
         navigation_view.setOnNavigationItemSelectedListener {
 

@@ -1,11 +1,14 @@
 package dev.weihl.belles
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
 import dev.weihl.belles.data.local.entity.Belles
 import java.lang.StringBuilder
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @desc 通用工具类
@@ -14,6 +17,8 @@ import java.lang.StringBuilder
  *
  */
 
+@SuppressLint("SimpleDateFormat")
+val DATE_FORMAT = SimpleDateFormat("YYYY-MM-dd")
 
 fun formatBelles(allBelles: List<Belles>): Spanned {
 
@@ -31,4 +36,8 @@ fun formatBelles(allBelles: List<Belles>): Spanned {
     } else {
         HtmlCompat.fromHtml(sb.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
+}
+
+fun currDateYyyyMmDd(): String {
+    return DATE_FORMAT.format(Date())
 }

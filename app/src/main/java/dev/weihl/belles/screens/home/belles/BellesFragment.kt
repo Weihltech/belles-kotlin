@@ -62,7 +62,7 @@ class BellesFragment : Fragment() {
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application,2)
 
-        bellesModel.allBelles.observe(this, Observer {
+        bellesModel.allBelles.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Timber.d("allBelles.observe !")
                 adapter.submitList(it)

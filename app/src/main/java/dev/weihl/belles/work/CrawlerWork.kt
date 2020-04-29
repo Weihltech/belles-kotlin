@@ -2,14 +2,13 @@ package dev.weihl.belles.work
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -25,9 +24,8 @@ class CrawlerWork(appContext: Context, params: WorkerParameters) :
         fun enqueue() {
             val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
-                var appWorkRequest = PeriodicWorkRequestBuilder<CrawlerWork>(
-                    1, TimeUnit.DAYS
-                ).build()
+                var appWorkRequest =
+                    OneTimeWorkRequestBuilder<CrawlerWork>().build()
                 WorkManager.getInstance().enqueue(appWorkRequest)
             }
         }

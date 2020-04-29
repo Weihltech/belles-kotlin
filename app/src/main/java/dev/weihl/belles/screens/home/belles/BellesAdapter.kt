@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.LayoutItemBellesBinding
+
 
 /**
  * @desc Belles 列表 Adapter
@@ -34,7 +37,12 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         val itemBelles = getItem(position)
         holder.bind.itemBelles = itemBelles
         Glide.with(holder.bind.image.context)
-            .load(itemBelles.thumb)
+            .load(
+                GlideUrl(
+                    itemBelles.thumb,
+                    LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
+                )
+            )
             .into(holder.bind.image)
         holder.bind.desc.text = itemBelles.href
     }

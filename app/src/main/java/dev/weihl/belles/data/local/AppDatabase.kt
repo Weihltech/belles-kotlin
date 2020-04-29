@@ -15,7 +15,7 @@ import dev.weihl.belles.data.local.entity.User
  * @author Weihl Created by 2019/11/28
  *
  */
-@Database(entities = [Belles::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [Belles::class, User::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val bellesDao: BellesDao

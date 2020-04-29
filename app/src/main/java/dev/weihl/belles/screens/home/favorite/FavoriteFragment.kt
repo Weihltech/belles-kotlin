@@ -38,7 +38,7 @@ class FavoriteFragment : Fragment() {
                     .addHeader("Referer","https://www.mm131.net/xinggan/5262_39.html").build())
 
 
-            Glide.with(it).load(glideUrl).into(binding.imageView)
+            Glide.with(it).load(glideUrl).thumbnail().into(binding.imageView)
 
         }
 

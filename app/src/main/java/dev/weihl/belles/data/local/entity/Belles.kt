@@ -38,6 +38,9 @@ data class Belles(
     var details: String,// json
 
     @ColumnInfo(name = "date")
-    var date: Long
+    var date: Long,
+
+    @ColumnInfo(name = "referer")
+    var referer: String
 
 )

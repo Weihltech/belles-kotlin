@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.data.pref.allowCrawlerMmnetWork
 import dev.weihl.belles.work.bean.WorkBelles
 import dev.weihl.belles.work.bean.WorkExtraImg
 import org.jsoup.Jsoup
@@ -24,9 +25,9 @@ class CrawlerMmnetWork(applicationContext: Context) {
     }
 
     fun run() {
-
-        xingganTab()
-
+        if (allowCrawlerMmnetWork(context)) {
+            xingganTab()
+        }
     }
 
     private fun xingganTab() {
@@ -55,7 +56,8 @@ class CrawlerMmnetWork(applicationContext: Context) {
                         it.tab,
                         "no",
                         it.details,
-                        System.currentTimeMillis()
+                        System.currentTimeMillis(),
+                        it.referer
                     )
                 )
             }
@@ -93,7 +95,8 @@ class CrawlerMmnetWork(applicationContext: Context) {
                         src,
                         "$height@$width",
                         "xinggan",
-                        ""
+                        "",
+                        url
                     )
                     bellesList.add(workBelles)
                     println(
@@ -101,7 +104,8 @@ class CrawlerMmnetWork(applicationContext: Context) {
                                 " ; title = " + workBelles.title +
                                 " ; thumb = " + workBelles.thumb +
                                 " ; thumbWh = " + workBelles.thumbWh +
-                                " ; href = " + workBelles.href
+                                " ; href = " + workBelles.href +
+                                " ; referer = " + workBelles.referer
                     )
                 }
             }

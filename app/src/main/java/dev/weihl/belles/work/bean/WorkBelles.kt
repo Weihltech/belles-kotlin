@@ -12,5 +12,6 @@ data class WorkBelles(
     var thumb: String,
     var thumbWh: String,
     var tab: String,// qingchun,xinggan,xiaoyuan
-    var details: String// json
+    var details: String,// json
+    var referer: String// referer
 )
