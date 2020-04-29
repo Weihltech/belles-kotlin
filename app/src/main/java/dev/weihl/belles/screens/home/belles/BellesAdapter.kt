@@ -22,6 +22,8 @@ import dev.weihl.belles.databinding.LayoutItemBellesBinding
 class BellesAdapter(private val callBack: BellesAdapterCallBack) :
     ListAdapter<Belles, BellesAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
         val bind = LayoutItemBellesBinding.inflate(
             LayoutInflater.from(parent.context),

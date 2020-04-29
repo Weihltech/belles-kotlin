@@ -43,8 +43,9 @@ class BellesFragment : Fragment() {
 
         Timber.d("onCreateView !")
         // data binding and view model
-        binding = DataBindingUtil
-            .inflate(inflater, R.layout.fragment_belles, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_belles, container, false
+        )
 
         val application = requireNotNull(this.activity).application
         val homeViewModelFactory = HomeViewModelFactory(application)
@@ -60,14 +61,12 @@ class BellesFragment : Fragment() {
             }
         })
         binding.bellesRecyclerView.adapter = adapter
-        binding.bellesRecyclerView.layoutManager = GridLayoutManager(application,2)
+        binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
 
         bellesModel.allBelles.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                Timber.d("allBelles.observe !")
-                adapter.submitList(it)
-                binding.bellesRecyclerView.scrollToPosition(0)
-            }
+            Timber.d("allBelles.observe !")
+            adapter.submitList(it)
+            binding.bellesRecyclerView.scrollToPosition(0)
         })
 
         return binding.root

@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.Transformations
 import dev.weihl.belles.BaseViewModel
 import dev.weihl.belles.data.local.dao.BellesDao
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -25,6 +27,8 @@ class BellesViewModel(
 
     var allBelles = dao.queryAllDescId()
 
+    var lastBelles = dao.queryLastBelles()
+
     var bellesSizeString = Transformations.map(allBelles) {
         return@map "Belles.Size() = ${it.size}"
     }
@@ -42,9 +46,9 @@ class BellesViewModel(
         }
     }
 
-    fun clearAllClick(){
+    fun clearAllClick() {
         uiScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 dao.deleteAll()
             }
         }

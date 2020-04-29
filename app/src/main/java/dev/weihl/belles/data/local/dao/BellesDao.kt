@@ -41,6 +41,6 @@ interface BellesDao {
     fun queryById(id: Long): Belles
 
     @Query("SELECT * FROM belles_table  ORDER BY id DESC LIMIT 1")
-    fun queryLastBelles(): Belles
+    fun queryLastBelles(): LiveData<Belles>
 
 }

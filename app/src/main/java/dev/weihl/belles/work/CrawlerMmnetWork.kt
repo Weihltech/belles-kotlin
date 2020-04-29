@@ -35,37 +35,27 @@ class CrawlerMmnetWork(applicationContext: Context) {
         val tab = "xinggan"
 
         val pageUrl = "$WEB_HOST$tab/"
-
-        val wBelles = targetTabPage(pageUrl)
-
-        wBelles.forEach {
-            it.details = tergetTabPageDetails(it.href)
-        }
-
-        // insert db
-        val bellesDao = AppDatabase.getInstance(context).bellesDao
-        wBelles.forEach {
-            if ("" != it.details) {
-                bellesDao.insert(
-                    Belles(
-                        0,
-                        it.title,
-                        it.href,
-                        it.thumb,
-                        it.thumbWh,
-                        it.tab,
-                        "no",
-                        it.details,
-                        System.currentTimeMillis(),
-                        it.referer
-                    )
-                )
-            }
-
-        }
+        targetTabPage(pageUrl)
 
     }
 
+    private fun installWorkBelles(it: WorkBelles) {
+        val bellesDao = AppDatabase.getInstance(context).bellesDao
+        bellesDao.insert(
+            Belles(
+                0,
+                it.title,
+                it.href,
+                it.thumb,
+                it.thumbWh,
+                it.tab,
+                "no",
+                it.details,
+                System.currentTimeMillis(),
+                it.referer
+            )
+        )
+    }
 
     private fun targetTabPage(pageUrl: String): ArrayList<WorkBelles> {
         println("targetTabPage !")
@@ -77,11 +67,10 @@ class CrawlerMmnetWork(applicationContext: Context) {
                 var url = pageUrl
                 if (page >= 1)
                     url = pageUrl + "list_3_" + page + ".html"
-
                 val document = Jsoup.connect(url).get()
                 val elements = document.getElementsByClass("list-left public-box")
-                val dd_elements = elements.get(0).getElementsByTag("dd")
-                for (element in dd_elements) {
+                val ddElements = elements.get(0).getElementsByTag("dd")
+                for (element in ddElements) {
                     val aEls = element.getElementsByTag("a")
                     val href = aEls.get(0).attr("href")
                     val imgEls = element.getElementsByTag("img")
@@ -107,6 +96,8 @@ class CrawlerMmnetWork(applicationContext: Context) {
                                 " ; href = " + workBelles.href +
                                 " ; referer = " + workBelles.referer
                     )
+                    workBelles.details = targetTabPageDetails(workBelles.href)
+                    installWorkBelles(workBelles)
                 }
             }
         } catch (e: Exception) {
@@ -117,7 +108,7 @@ class CrawlerMmnetWork(applicationContext: Context) {
     }
 
 
-    private fun tergetTabPageDetails(itemPageUrl: String): String {
+    private fun targetTabPageDetails(itemPageUrl: String): String {
 
         try {
             val referer = itemPageUrl.replace(".html", "")
@@ -150,9 +141,9 @@ class CrawlerMmnetWork(applicationContext: Context) {
 
     private fun findImgUlr(url: String): String {
         try {
-
             val document = Jsoup.connect(url).get()
-            return document.getElementsByClass("content-pic")[0].getElementsByTag("img")[0].attr("src")
+            return document.getElementsByClass("content-pic")[0]
+                .getElementsByTag("img")[0].attr("src")
         } catch (e: Exception) {
             println("Result = ${e.message}")
         }
