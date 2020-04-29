@@ -69,23 +69,18 @@ class CrawlerMmnetWork(applicationContext: Context) {
                     url = pageUrl + "list_3_" + page + ".html"
                 val document = Jsoup.connect(url).get()
                 val elements = document.getElementsByClass("list-left public-box")
-                val ddElements = elements.get(0).getElementsByTag("dd")
+                val ddElements = elements[0].getElementsByTag("dd")
                 for (element in ddElements) {
                     val aEls = element.getElementsByTag("a")
-                    val href = aEls.get(0).attr("href")
+                    val href = aEls[0].attr("href")
                     val imgEls = element.getElementsByTag("img")
-                    val src = imgEls.get(0).attr("src")
-                    val alt = imgEls.get(0).attr("alt")
-                    val width = imgEls.get(0).attr("width")
-                    val height = imgEls.get(0).attr("height")
+                    val imgElsFirst = imgEls[0]
+                    val src = imgElsFirst.attr("src")
+                    val alt = imgElsFirst.attr("alt")
+                    val width = imgElsFirst.attr("width")
+                    val height = imgElsFirst.attr("height")
                     val workBelles = WorkBelles(
-                        href,
-                        alt,
-                        src,
-                        "$height@$width",
-                        "xinggan",
-                        "",
-                        url
+                        href, alt, src, "$height@$width", "xinggan", "", url
                     )
                     bellesList.add(workBelles)
                     println(
