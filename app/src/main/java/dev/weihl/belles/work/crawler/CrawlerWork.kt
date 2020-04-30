@@ -1,10 +1,11 @@
-package dev.weihl.belles.work
+package dev.weihl.belles.work.crawler
 
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import dev.weihl.belles.work.crawler.mmnet.CrawlerMmnetWork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

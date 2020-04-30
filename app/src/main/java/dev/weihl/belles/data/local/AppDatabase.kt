@@ -5,8 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import dev.weihl.belles.data.local.dao.BellesDao
+import dev.weihl.belles.data.local.dao.CrawlerDao
 import dev.weihl.belles.data.local.dao.UserDao
 import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.data.local.entity.Crawler
 import dev.weihl.belles.data.local.entity.User
 
 /**
@@ -15,22 +17,28 @@ import dev.weihl.belles.data.local.entity.User
  * @author Weihl Created by 2019/11/28
  *
  */
-@Database(entities = [Belles::class, User::class], version = 2, exportSchema = false)
+@Database(entities = [
+    Belles::class,
+    User::class,
+    Crawler::class],
+    version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val bellesDao: BellesDao
     abstract val userDao: UserDao
+    abstract val crawlerDao: CrawlerDao
+
 
     companion object {
 
         private const val DATA_BASE_NAME = "belles_db.db"
 
         @Volatile
-        private var INSTANCT: AppDatabase? = null
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             synchronized(this) {
-                var instance = INSTANCT
+                var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
@@ -39,7 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                         .fallbackToDestructiveMigration()
                         .build()
-                    INSTANCT = instance
+                    INSTANCE = instance
                 }
                 return instance
             }

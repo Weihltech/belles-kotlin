@@ -3,6 +3,7 @@ package dev.weihl.belles.work
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.testing.TestListenableWorkerBuilder
+import dev.weihl.belles.work.crawler.CrawlerWork
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

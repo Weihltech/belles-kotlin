@@ -1,10 +1,12 @@
-package dev.weihl.belles.data.pref
+package dev.weihl.belles.work.crawler
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
+import dev.weihl.belles.common.WorkPrefName
+import dev.weihl.belles.common.WorkRuntime
 import dev.weihl.belles.currDateYyyyMmDd
 
 /**
@@ -14,30 +16,29 @@ import dev.weihl.belles.currDateYyyyMmDd
  *
  */
 
-const val workPrefName = "work"
-const val runtime = "runtime"
 
 private fun workPreferences(@NonNull context: Context): SharedPreferences {
-    return context.getSharedPreferences(workPrefName, MODE_PRIVATE)
+    return context.getSharedPreferences(WorkPrefName, MODE_PRIVATE)
 }
 
 private fun getCrawlerMmnetWorkTime(@NonNull context: Context): String? {
-    return workPreferences(context).getString(runtime, "")
+    return workPreferences(context)
+        .getString(WorkRuntime, "")
 }
 
-private fun setCrawlerMmnetWorkTime(@NonNull context: Context, time: String) {
+fun setCrawlerMmnetWorkTime(@NonNull context: Context, time: String) {
     return workPreferences(context).edit(commit = true) {
-        putString(runtime, time)
+        putString(WorkRuntime, time)
     }
 }
 
 fun allowCrawlerMmnetWork(@NonNull context: Context): Boolean {
     val currDate = currDateYyyyMmDd()
-    val workTime = getCrawlerMmnetWorkTime(context)
+    val workTime =
+        getCrawlerMmnetWorkTime(context)
     println("currDate = $currDate ; workTime = $workTime")
     if (currDate == workTime) {
         return false
     }
-    setCrawlerMmnetWorkTime(context, currDate)
     return true
 }

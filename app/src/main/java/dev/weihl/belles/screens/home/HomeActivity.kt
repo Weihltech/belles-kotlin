@@ -5,7 +5,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import dev.weihl.belles.R
 import dev.weihl.belles.screens.BasicActivity
-import dev.weihl.belles.work.CrawlerWork
+import dev.weihl.belles.work.crawler.CrawlerWork
+import dev.weihl.belles.work.crawler.mmnet.CrawlerMmnetWork
 import kotlinx.android.synthetic.main.activity_home.*
 
 /**
@@ -20,6 +21,7 @@ class HomeActivity : BasicActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         CrawlerWork.enqueue()
+        CrawlerMmnetWork
 
         navigation_view.setOnNavigationItemSelectedListener {
 

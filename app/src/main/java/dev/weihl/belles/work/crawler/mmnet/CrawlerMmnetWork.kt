@@ -1,12 +1,14 @@
-package dev.weihl.belles.work
+package dev.weihl.belles.work.crawler.mmnet
 
 import android.content.Context
 import com.google.gson.Gson
+import dev.weihl.belles.currDateYyyyMmDd
 import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.pref.allowCrawlerMmnetWork
 import dev.weihl.belles.work.bean.WorkBelles
 import dev.weihl.belles.work.bean.WorkExtraImg
+import dev.weihl.belles.work.crawler.allowCrawlerMmnetWork
+import dev.weihl.belles.work.crawler.setCrawlerMmnetWorkTime
 import org.jsoup.Jsoup
 
 /**
@@ -26,7 +28,13 @@ class CrawlerMmnetWork(applicationContext: Context) {
 
     fun run() {
         if (allowCrawlerMmnetWork(context)) {
+            loadInfo()
+
             xingganTab()
+
+            clearInfo()
+
+            setCrawlerMmnetWorkTime(context, currDateYyyyMmDd())
         }
     }
 
@@ -35,38 +43,34 @@ class CrawlerMmnetWork(applicationContext: Context) {
         val tab = "xinggan"
 
         val pageUrl = "$WEB_HOST$tab/"
-        targetTabPage(pageUrl)
-
+        targetTabPage(tab, pageUrl)
     }
 
-    private fun installWorkBelles(it: WorkBelles) {
+    private fun insertWorkBelles(it: WorkBelles) {
         val bellesDao = AppDatabase.getInstance(context).bellesDao
         bellesDao.insert(
             Belles(
-                0,
-                it.title,
-                it.href,
-                it.thumb,
-                it.thumbWh,
-                it.tab,
-                "no",
-                it.details,
-                System.currentTimeMillis(),
-                it.referer
+                0, it.title, it.href, it.thumb, it.thumbWh, it.tab, "no",
+                it.details, System.currentTimeMillis(), it.referer
             )
         )
     }
 
-    private fun targetTabPage(pageUrl: String): ArrayList<WorkBelles> {
+    private fun targetTabPage(tab: String, pageUrl: String): ArrayList<WorkBelles> {
         println("targetTabPage !")
 
-        var bellesList = ArrayList<WorkBelles>()
+        val bellesList = ArrayList<WorkBelles>()
         try {
 
             for (page in 0..1) {
                 var url = pageUrl
-                if (page >= 1)
+                if (page >= 1) {
                     url = pageUrl + "list_3_" + page + ".html"
+                }
+                if (containInfo(tab, pageUrl)) {
+                    println("has crawler ; pageUrl = $pageUrl")
+                    continue
+                }
                 val document = Jsoup.connect(url).get()
                 val elements = document.getElementsByClass("list-left public-box")
                 val ddElements = elements[0].getElementsByTag("dd")
@@ -92,8 +96,9 @@ class CrawlerMmnetWork(applicationContext: Context) {
                                 " ; referer = " + workBelles.referer
                     )
                     workBelles.details = targetTabPageDetails(workBelles.href)
-                    installWorkBelles(workBelles)
+                    insertWorkBelles(workBelles)
                 }
+                recordInfo(tab, pageUrl)
             }
         } catch (e: Exception) {
             println("targetTabPage !" + e.message)

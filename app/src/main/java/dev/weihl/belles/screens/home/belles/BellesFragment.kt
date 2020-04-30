@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
@@ -49,8 +48,7 @@ class BellesFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
         val homeViewModelFactory = HomeViewModelFactory(application)
-        bellesModel = ViewModelProviders.of(this, homeViewModelFactory)
-            .get(BellesViewModel::class.java)
+        bellesModel = homeViewModelFactory.create(BellesViewModel::class.java)
         binding.bellesViewModel = bellesModel
         binding.lifecycleOwner = this
 

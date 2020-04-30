@@ -1,4 +1,4 @@
-package dev.weihl.belles
+package dev.weihl.belles.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
