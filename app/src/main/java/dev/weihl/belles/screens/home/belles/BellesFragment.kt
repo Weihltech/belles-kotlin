@@ -28,7 +28,6 @@ import timber.log.Timber
 class BellesFragment : Fragment() {
 
     private lateinit var binding: FragmentBellesBinding
-    private lateinit var bellesModel: BellesViewModel
 
     init {
         Timber.tag("BellesFragment")
@@ -48,8 +47,7 @@ class BellesFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
         val homeViewModelFactory = HomeViewModelFactory(application)
-        bellesModel = homeViewModelFactory.create(BellesViewModel::class.java)
-        binding.bellesViewModel = bellesModel
+        binding.bellesViewModel = homeViewModelFactory.create(BellesViewModel::class.java)
         binding.lifecycleOwner = this
 
         // recycler view
@@ -61,7 +59,7 @@ class BellesFragment : Fragment() {
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
 
-        bellesModel.allBelles.observe(viewLifecycleOwner, Observer {
+        binding.bellesViewModel.allBelles.observe(viewLifecycleOwner, Observer {
             Timber.d("allBelles.observe !")
             adapter.submitList(it)
             binding.bellesRecyclerView.scrollToPosition(0)
