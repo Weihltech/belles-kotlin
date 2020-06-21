@@ -16,9 +16,9 @@ import java.lang.RuntimeException
 class HomeViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel?> create(targetClass: Class<T>): T {
 
-        if (modelClass.isAssignableFrom(BellesViewModel::class.java)) {
+        if (targetClass.isAssignableFrom(BellesViewModel::class.java)) {
             val dbDao = AppDatabase.getInstance(application).bellesDao
             return BellesViewModel(dbDao, application) as T
         }

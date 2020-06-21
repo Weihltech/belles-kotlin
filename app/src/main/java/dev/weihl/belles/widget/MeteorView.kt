@@ -88,8 +88,8 @@ class MeteorView(context: Context, attrs: AttributeSet?) : FrameLayout(context, 
     }
 
     private fun newStar(): AppCompatImageView {
-        var scale = (Math.random() * 2.0f + .1f).toFloat()
-        var newStar = AppCompatImageView(context).apply {
+        val scale = (Math.random() * 2.0f + .1f).toFloat()
+        val newStar = AppCompatImageView(context).apply {
             layoutParams = LayoutParams(STAR_SIZE, STAR_SIZE)
             setImageResource(android.R.drawable.star_big_on)
             y = -layoutParams.height.toFloat()
