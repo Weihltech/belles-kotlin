@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.screens.home.belles.BellesViewModel
-import java.lang.RuntimeException
 
 /**
  * @desc 首页 ViewModel Factory
@@ -20,7 +19,7 @@ class HomeViewModelFactory(
 
         if (targetClass.isAssignableFrom(BellesViewModel::class.java)) {
             val dbDao = AppDatabase.getInstance(application).bellesDao
-            return BellesViewModel(dbDao, application) as T
+            return BellesViewModel(application) as T
         }
 
         throw RuntimeException("Unknown ViewModel class")

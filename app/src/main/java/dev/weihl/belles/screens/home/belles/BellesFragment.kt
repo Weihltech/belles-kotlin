@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
-import dev.weihl.belles.screens.home.HomeViewModelFactory
 import timber.log.Timber
 
 /**
@@ -28,6 +28,8 @@ import timber.log.Timber
 class BellesFragment : Fragment() {
 
     private lateinit var binding: FragmentBellesBinding
+
+    private val bellesViewModel: BellesViewModel by activityViewModels()
 
     init {
         Timber.tag("BellesFragment")
@@ -46,8 +48,6 @@ class BellesFragment : Fragment() {
         )
 
         val application = requireNotNull(this.activity).application
-        val homeViewModelFactory = HomeViewModelFactory(application)
-        binding.bellesViewModel = homeViewModelFactory.create(BellesViewModel::class.java)
         binding.lifecycleOwner = this
 
         // recycler view
@@ -59,7 +59,7 @@ class BellesFragment : Fragment() {
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
 
-        binding.bellesViewModel.allBelles.observe(viewLifecycleOwner, Observer {
+        bellesViewModel.allBelles.observe(viewLifecycleOwner, Observer {
             Timber.d("allBelles.observe !")
             adapter.submitList(it)
             binding.bellesRecyclerView.scrollToPosition(0)
