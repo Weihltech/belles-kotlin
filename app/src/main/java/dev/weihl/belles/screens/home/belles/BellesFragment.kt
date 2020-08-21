@@ -2,11 +2,11 @@ package dev.weihl.belles.screens.home.belles
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
+import dev.weihl.belles.screens.browse.PhotosActivity
 import timber.log.Timber
 
 /**
@@ -53,7 +54,15 @@ class BellesFragment : Fragment() {
         // recycler view
         val adapter = BellesAdapter(object : BellesAdapterCallBack {
             override fun itemClick(itemBelles: Belles) {
-                Toast.makeText(application, itemBelles.href, Toast.LENGTH_LONG).show()
+//                Toast.makeText(application, itemBelles.href, Toast.LENGTH_LONG).show()
+//                val ps: List<WorkExtraImg> = Gson().fromJson(
+//                    itemBelles.details,
+//                    object : TypeToken<List<WorkExtraImg?>?>() {}.type
+//                )
+
+                val photoIntent = Intent(context, PhotosActivity::class.java)
+                photoIntent.putExtra("details", itemBelles.details)
+                startActivity(photoIntent)
             }
         })
         binding.bellesRecyclerView.adapter = adapter

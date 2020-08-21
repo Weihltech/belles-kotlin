@@ -95,7 +95,7 @@ class CrawlerMmnetWork(applicationContext: Context) {
                                 " ; href = " + workBelles.href +
                                 " ; referer = " + workBelles.referer
                     )
-                    workBelles.details = targetTabPageDetails(workBelles.href)
+                    workBelles.details = targetTabPageDetails(workBelles)
                     insertWorkBelles(workBelles)
                 }
                 recordInfo(tab, pageUrl)
@@ -108,9 +108,10 @@ class CrawlerMmnetWork(applicationContext: Context) {
     }
 
 
-    private fun targetTabPageDetails(itemPageUrl: String): String {
+    private fun targetTabPageDetails(workBelles: WorkBelles): String {
 
         try {
+            val itemPageUrl = workBelles.href;
             val referer = itemPageUrl.replace(".html", "")
             val document = Jsoup.connect(itemPageUrl).get()
             val firstImg = document.getElementsByClass("content-pic")[0]
@@ -129,6 +130,9 @@ class CrawlerMmnetWork(applicationContext: Context) {
                 }
             }
 
+            // 用大图第一个替换为高清缩略视图展示；
+            workBelles.thumb = array[0].url
+            workBelles.referer = array[0].referer
             val result = Gson().toJson(array)
             println("Result = $result")
             return result

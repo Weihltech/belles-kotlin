@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.databinding.LayoutItemBellesBinding
+import dev.weihl.belles.databinding.ItemBellesLayoutBinding
 
 
 /**
@@ -23,9 +23,8 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
     ListAdapter<Belles, BellesAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
-        val bind = LayoutItemBellesBinding.inflate(
+        val bind = ItemBellesLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -46,12 +45,12 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
                 )
             )
             .into(holder.bind.image)
-        holder.bind.desc.text = itemBelles.href
+        holder.bind.desc.text = itemBelles.title
     }
 
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var bind: LayoutItemBellesBinding
+        lateinit var bind: ItemBellesLayoutBinding
     }
 }
 
