@@ -3,6 +3,7 @@ package dev.weihl.belles.screens.home.belles
 import android.app.Application
 import androidx.lifecycle.Transformations
 import dev.weihl.belles.base.BaseViewModel
+import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.data.local.dao.BellesDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,13 +17,15 @@ import timber.log.Timber
  *
  */
 class BellesViewModel(
-    private val dao: BellesDao,
     application: Application
 ) : BaseViewModel(application) {
+
+    private lateinit var dao: BellesDao
 
     init {
         Timber.tag("BaseViewModel")
         Timber.d("init !")
+        dao = AppDatabase.getInstance(application).bellesDao
     }
 
     var allBelles = dao.queryAllDescId()
