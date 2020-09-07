@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
+import dev.weihl.belles.screens.BasicFragment
 import dev.weihl.belles.screens.browse.PhotosActivity
 import timber.log.Timber
 
@@ -26,7 +27,7 @@ import timber.log.Timber
  *
  *
  */
-class BellesFragment : Fragment() {
+class BellesFragment : BasicFragment() {
 
     private lateinit var binding: FragmentBellesBinding
 

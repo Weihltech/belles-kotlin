@@ -12,7 +12,7 @@ import dev.weihl.belles.R
 /**
  * A simple [Fragment] subclass.
  */
-class BasicFragment : Fragment() {
+open class BasicFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

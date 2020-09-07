@@ -1,4 +1,4 @@
-package dev.weihl.belles.base
+package dev.weihl.belles.screens
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

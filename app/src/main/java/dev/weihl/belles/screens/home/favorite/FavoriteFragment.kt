@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.R
 import dev.weihl.belles.databinding.FragmentCollectBinding
+import dev.weihl.belles.screens.BasicFragment
 
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : BasicFragment() {
 
     private lateinit var binding: FragmentCollectBinding
 
@@ -33,9 +33,11 @@ class FavoriteFragment : Fragment() {
 
         activity?.let {
 
-            val glideUrl = GlideUrl("https://img1.mmmw.net/pic/5262/39.jpg",
+            val glideUrl = GlideUrl(
+                "https://img1.mmmw.net/pic/5262/39.jpg",
                 LazyHeaders.Builder()
-                    .addHeader("Referer","https://www.mm131.net/xinggan/5262_39.html").build())
+                    .addHeader("Referer", "https://www.mm131.net/xinggan/5262_39.html").build()
+            )
 
 
             Glide.with(it).load(glideUrl).thumbnail().into(binding.imageView)
