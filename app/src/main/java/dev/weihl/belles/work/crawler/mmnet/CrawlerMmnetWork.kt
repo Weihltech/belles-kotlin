@@ -28,11 +28,8 @@ class CrawlerMmnetWork(applicationContext: Context) {
 
     fun run() {
         if (allowCrawlerMmnetWork(context)) {
-            loadInfo()
 
             xingganTab()
-
-            clearInfo()
 
             setCrawlerMmnetWorkTime(context, currDateYyyyMmDd())
         }

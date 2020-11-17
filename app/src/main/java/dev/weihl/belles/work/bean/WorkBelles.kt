@@ -14,4 +14,19 @@ data class WorkBelles(
     var tab: String,// qingchun,xinggan,xiaoyuan
     var details: String,// json
     var referer: String// referer
-)
+) {
+    override fun toString(): String {
+        return "WorkBelles(href='$href', title='$title', thumb='$thumb', thumbWh='$thumbWh', tab='$tab', details='$details', referer='$referer')"
+    }
+}
+
+data class WorkBellesImg(
+
+    var referer: String,
+    var url: String
+
+) {
+    override fun toString(): String {
+        return "WorkBellesImg(referer='$referer', url='$url')"
+    }
+}

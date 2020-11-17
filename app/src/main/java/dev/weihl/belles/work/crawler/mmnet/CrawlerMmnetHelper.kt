@@ -15,12 +15,6 @@ val crawlerDao = AppDatabase.getInstance(MainApp.getAppContext()).crawlerDao
 private val crawlerMmnetList: ArrayList<String> = ArrayList()
 private const val TAG = "MmnetTag"
 
-fun loadInfo() {
-    crawlerDao.loadCrawlerList(TAG).forEach {
-        crawlerMmnetList.add(it.content)
-    }
-}
-
 fun recordInfo(tab: String, page: String) {
     val content = newInfo(tab, page)
     val crawler = Crawler()
@@ -35,8 +29,4 @@ private fun newInfo(tab: String, page: String): String {
 
 fun containInfo(tab: String, page: String): Boolean {
     return crawlerMmnetList.contains(newInfo(tab, page))
-}
-
-fun clearInfo() {
-    crawlerMmnetList.clear()
 }

@@ -1,10 +1,9 @@
 package dev.weihl.belles.screens.home.belles
 
 import android.app.Application
-import androidx.lifecycle.Transformations
-import dev.weihl.belles.screens.BaseViewModel
 import dev.weihl.belles.data.local.AppDatabase
 import dev.weihl.belles.data.local.dao.BellesDao
+import dev.weihl.belles.screens.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,13 +27,13 @@ class BellesViewModel(
         dao = AppDatabase.getInstance(application).bellesDao
     }
 
-    var allBelles = dao.queryAllDescId()
-
-    var lastBelles = dao.queryLastBelles()
-
-    var bellesSizeString = Transformations.map(allBelles) {
-        return@map "Belles.Size() = ${it.size}"
-    }
+//    var allBelles = dao.queryAllDescId()
+//
+//    var lastBelles = dao.queryLastBelles()
+//
+//    var bellesSizeString = Transformations.map(allBelles) {
+//        return@map "Belles.Size() = ${it.size}"
+//    }
 
     fun addBellesClick() {
         uiScope.launch {
