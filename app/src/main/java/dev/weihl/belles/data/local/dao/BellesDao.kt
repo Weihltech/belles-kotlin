@@ -29,7 +29,7 @@ interface BellesDao {
     fun delete(id: Long)
 
     @Query("SELECT * FROM belles_table")
-    fun queryAll(): LiveData<List<Belles>>
+    fun queryAll(): List<Belles>?
 
     @Query("SELECT * FROM belles_table ORDER BY id DESC")
     fun queryAllDescId(): LiveData<List<Belles>>

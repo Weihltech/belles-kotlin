@@ -10,6 +10,8 @@ interface DataSource {
 
         fun queryBelles(sexyPage: SexyPage): Belles?
 
+        fun queryAllBelles(): ArrayList<Belles>?
+
         fun insertBelles(belles: Belles)
     }
 

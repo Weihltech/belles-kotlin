@@ -81,12 +81,14 @@ class BellesFragment : BasicFragment() {
 
         bellesViewModel.subBelles.observe(viewLifecycleOwner, Observer {
             Timber.d("refresh new Belles list !")
-            adapter.submitList(it)
+            adapter.submitList(it) {
+                adapter.notifyDataSetChanged()
+            }
             binding.swipeRefreshLayout.isRefreshing = false
         })
 
         // default
-        bellesViewModel.loadNextBelles()
+        bellesViewModel.defaultNextBelles()
         return binding.root
     }
 

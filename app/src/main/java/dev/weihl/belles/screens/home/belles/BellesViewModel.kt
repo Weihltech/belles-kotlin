@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.Repository
 import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,8 +22,9 @@ class BellesViewModel(
     application: Application
 ) : BaseViewModel(application) {
 
-    private var mPage = 0
+    private var page = 0
     private val bellesRepository: BellesRepository
+    private val context = application
 
     init {
         Timber.tag("BaseViewModel")
@@ -30,6 +32,7 @@ class BellesViewModel(
     }
 
     val subBelles = MutableLiveData<List<Belles>>()
+    private val allBells = ArrayList<Belles>()
 //    var allBelles = dao.queryAllDescId()
 //
 //    var lastBelles = dao.queryLastBelles()
@@ -59,21 +62,43 @@ class BellesViewModel(
 
     fun loadNextBelles() {
         netScope.launch {
-            ++mPage
-            Timber.d("loadNextBelles ! page = $mPage")
-            bellesRepository.loadSexyDetails(mPage,
+            if (isNetworkAvailable(context)) {
+                ++page
+                if (page == 1) {
+                    // 连通网络后，属于第一页时，清空可能存在的本地数据列表
+                    allBells.clear()
+                }
+            } else {
+                // 断网后，清空列表，加载所有列表
+                allBells.clear()
+            }
+            Timber.d("loadNextBelles ! page = $page")
+
+            bellesRepository.loadSexyDetails(page,
                 object : Repository.CallBack {
                     override fun onResultSexyBelles(list: ArrayList<Belles>?) {
                         if (list == null || list.isEmpty()) {
                             return
                         }
                         // update event
+                        allBells.addAll(0, list)
                         uiScope.launch {
-                            subBelles.value = list
+                            subBelles.value = allBells
                         }
                     }
                 })
         }
+    }
+
+    fun defaultNextBelles() {
+        if (allBells.size <= 0) {
+            loadNextBelles()
+        } else {
+            uiScope.launch {
+                subBelles.value = allBells
+            }
+        }
+
     }
 
 }

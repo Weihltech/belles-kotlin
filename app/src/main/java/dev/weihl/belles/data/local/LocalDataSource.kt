@@ -29,6 +29,10 @@ class LocalDataSource(context: Context) : DataSource.Local {
         return bellesDao().queryBellesByHref(sexyPage.href)
     }
 
+    override fun queryAllBelles(): ArrayList<Belles>? {
+        return bellesDao().queryAll() as ArrayList
+    }
+
     override fun insertBelles(belles: Belles) {
         bellesDao().insert(belles)
     }

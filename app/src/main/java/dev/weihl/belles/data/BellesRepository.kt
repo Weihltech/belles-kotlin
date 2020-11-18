@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import dev.weihl.belles.data.local.LocalDataSource
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.RemoteDataSource
+import dev.weihl.belles.isNetworkAvailable
 import timber.log.Timber
 
 class BellesRepository(application: Context) : Repository {
@@ -23,6 +24,12 @@ class BellesRepository(application: Context) : Repository {
     }
 
     override fun loadSexyDetails(page: Int, @NonNull callBack: Repository.CallBack) {
+
+        // not net work ；query all belles return
+        if (!isNetworkAvailable(mContext)) {
+            callBack.onResultSexyBelles(localDataSource.queryAllBelles())
+            return
+        }
 
         // load page list ,group
         Timber.d("loadSexyPageList !")
