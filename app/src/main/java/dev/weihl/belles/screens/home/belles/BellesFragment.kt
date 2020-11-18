@@ -55,15 +55,15 @@ class BellesFragment : BasicFragment() {
         // recycler view
         val adapter = BellesAdapter(object : BellesAdapterCallBack {
             override fun itemClick(itemBelles: Belles) {
-//                Toast.makeText(application, itemBelles.href, Toast.LENGTH_LONG).show()
-//                val ps: List<WorkExtraImg> = Gson().fromJson(
-//                    itemBelles.details,
-//                    object : TypeToken<List<WorkExtraImg?>?>() {}.type
-//                )
-
                 val photoIntent = Intent(context, PhotosActivity::class.java)
                 photoIntent.putExtra("details", itemBelles.details)
                 startActivity(photoIntent)
+            }
+
+            override fun favoriteClick(itemBelles: Belles) {
+                bellesViewModel.markFavorites(itemBelles)
+                val adapter = binding.bellesRecyclerView.adapter
+                adapter?.notifyDataSetChanged()
             }
         })
         binding.bellesRecyclerView.adapter = adapter
@@ -73,11 +73,6 @@ class BellesFragment : BasicFragment() {
             Timber.d("loadNextBelles !")
             bellesViewModel.loadNextBelles()
         }
-//        bellesViewModel.allBelles.observe(viewLifecycleOwner, Observer {
-//            Timber.d("allBelles.observe !")
-//            adapter.submitList(it)
-//            binding.bellesRecyclerView.scrollToPosition(0)
-//        })
 
         bellesViewModel.subBelles.observe(viewLifecycleOwner, Observer {
             Timber.d("refresh new Belles list !")

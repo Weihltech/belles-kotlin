@@ -7,9 +7,7 @@ import dev.weihl.belles.data.Repository
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -41,27 +39,13 @@ class BellesViewModel(
 //        return@map "Belles.Size() = ${it.size}"
 //    }
 
-    fun addBellesClick() {
-        uiScope.launch {
-            // new Belles and Insert
-            withContext(Dispatchers.IO) {
-//                val belles = Belles()
-//                belles.title = "title"//"Title:${allBelles.value?.size}"
-//                belles.href = "Last Belles , new and insert BellesDatabase ! " +
-//                        "last.index = ${allBelles.value?.size}"
-//                dao.insert(belles)
-            }
-        }
-    }
-
-
     override fun onCleared() {
         super.onCleared()
         Timber.d("onCleared !")
     }
 
     fun loadNextBelles() {
-        netScope.launch {
+        ioScope.launch {
             if (isNetworkAvailable(context)) {
                 ++page
                 if (page == 1) {
@@ -74,9 +58,9 @@ class BellesViewModel(
             }
             Timber.d("loadNextBelles ! page = $page")
 
-            bellesRepository.loadSexyDetails(page,
+            bellesRepository.loadSexyBellesList(page,
                 object : Repository.CallBack {
-                    override fun onResultSexyBelles(list: ArrayList<Belles>?) {
+                    override fun onResult(list: ArrayList<Belles>?) {
                         if (list == null || list.isEmpty()) {
                             return
                         }
@@ -103,6 +87,12 @@ class BellesViewModel(
             }
         }
 
+    }
+
+    fun markFavorites(itemBelles: Belles) {
+        ioScope.launch {
+            bellesRepository.markFavorites(itemBelles)
+        }
     }
 
 }

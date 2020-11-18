@@ -37,6 +37,26 @@ class LocalDataSource(context: Context) : DataSource.Local {
         bellesDao().insert(belles)
     }
 
+    override fun updateBelles(belles: Belles) {
+        val localBelles = bellesDao().queryById(belles.id)
+        if (localBelles != null) {
+            localBelles.favorite = belles.favorite
+            localBelles.date = System.currentTimeMillis()
+            localBelles.details = belles.details
+            localBelles.href = belles.href
+            localBelles.tab = belles.tab
+            localBelles.thumb = belles.thumb
+            localBelles.title = belles.title
+            localBelles.thumbWh = belles.thumbWh
+            bellesDao().update(localBelles)
+        }
+
+    }
+
+    override fun queryAllFavoriteBelles(): ArrayList<Belles> {
+        return bellesDao().queryAllFavoriteBelles("yes") as ArrayList<Belles>
+    }
+
     private fun bellesDao(): BellesDao {
         return AppDatabase.getInstance(mContext).bellesDao
     }

@@ -32,7 +32,7 @@ data class Belles(
     var tab: String,// qingchun,xinggan,xiaoyuan
 
     @ColumnInfo(name = "favorite")
-    var favorite: String,// yes or no
+    var favorite: String = "yes",// yes or no
 
     @ColumnInfo(name = "details")
     var details: String,// json [{"referer":"","url":""}]

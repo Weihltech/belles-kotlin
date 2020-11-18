@@ -1,4 +1,4 @@
-package dev.weihl.belles.screens.home.belles
+package dev.weihl.belles.screens.home.favorite
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.databinding.ItemBellesLayoutBinding
+import dev.weihl.belles.databinding.ItemFavoriteLayoutBinding
 
 
 /**
@@ -20,12 +20,12 @@ import dev.weihl.belles.databinding.ItemBellesLayoutBinding
  * @author Weihl Created by 2019/12/3
  *
  */
-class BellesAdapter(private val callBack: BellesAdapterCallBack) :
-    ListAdapter<Belles, BellesAdapter.BellesItemHolder>(BellesDiffCallback()) {
+class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
+    ListAdapter<Belles, FavoriteAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
-        val bind = ItemBellesLayoutBinding.inflate(
+        val bind = ItemFavoriteLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -55,11 +55,12 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
                 R.drawable.ic_favorites_mark
             else R.drawable.ic_favorites
         )
+
     }
 
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var bind: ItemBellesLayoutBinding
+        lateinit var bind: ItemFavoriteLayoutBinding
     }
 }
 
@@ -74,7 +75,7 @@ class BellesDiffCallback :
     }
 }
 
-interface BellesAdapterCallBack {
+interface FavoriteAdapterCallBack {
 
     fun itemClick(itemBelles: Belles)
 

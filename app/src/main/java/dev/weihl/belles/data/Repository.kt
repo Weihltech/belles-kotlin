@@ -9,9 +9,12 @@ import dev.weihl.belles.data.local.entity.Belles
 interface Repository {
 
     interface CallBack {
-        fun onResultSexyBelles(list: ArrayList<Belles>?)
+        fun onResult(list: ArrayList<Belles>?)
     }
 
-    fun loadSexyDetails(page: Int, @NonNull callBack: CallBack)
+    fun loadSexyBellesList(page: Int, @NonNull callBack: CallBack)
 
+    fun markFavorites(belles: Belles)
+
+    fun queryAllFavoriteBelles(@NonNull callBack: CallBack)
 }

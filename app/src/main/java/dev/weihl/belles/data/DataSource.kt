@@ -13,6 +13,10 @@ interface DataSource {
         fun queryAllBelles(): ArrayList<Belles>?
 
         fun insertBelles(belles: Belles)
+
+        fun updateBelles(belles: Belles)
+
+        fun queryAllFavoriteBelles(): ArrayList<Belles>
     }
 
     interface Remote {

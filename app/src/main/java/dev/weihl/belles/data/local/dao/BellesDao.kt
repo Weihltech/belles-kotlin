@@ -38,12 +38,15 @@ interface BellesDao {
     fun queryMaxId(): Belles
 
     @Query("SELECT * FROM belles_table WHERE id = :id")
-    fun queryById(id: Long): Belles
+    fun queryById(id: Long): Belles?
 
     @Query("SELECT * FROM belles_table  ORDER BY id DESC LIMIT 1")
     fun queryLastBelles(): LiveData<Belles>
 
     @Query("SELECT * FROM belles_table WHERE href = :href ORDER BY id DESC LIMIT 1")
     fun queryBellesByHref(href: String): Belles?
+
+    @Query("SELECT * FROM belles_table WHERE favorite = :favorite ")
+    fun queryAllFavoriteBelles(favorite: String): List<Belles>?
 
 }

@@ -23,11 +23,11 @@ class BellesRepository(application: Context) : Repository {
 
     }
 
-    override fun loadSexyDetails(page: Int, @NonNull callBack: Repository.CallBack) {
+    override fun loadSexyBellesList(page: Int, @NonNull callBack: Repository.CallBack) {
 
         // not net work ；query all belles return
         if (!isNetworkAvailable(mContext)) {
-            callBack.onResultSexyBelles(localDataSource.queryAllBelles())
+            callBack.onResult(localDataSource.queryAllBelles())
             return
         }
 
@@ -35,7 +35,7 @@ class BellesRepository(application: Context) : Repository {
         Timber.d("loadSexyPageList !")
         val sexyPageList = remoteDataSource.loadSexyPageList(page)
         if (sexyPageList.isEmpty()) {
-            callBack.onResultSexyBelles(null)
+            callBack.onResult(null)
             Timber.d("loadSexyPageList is Null")
             return
         }
@@ -76,7 +76,21 @@ class BellesRepository(application: Context) : Repository {
             Timber.d("loadSexyPageList insert remote Belles !")
         }
 
-        callBack.onResultSexyBelles(bellesList)
+        callBack.onResult(bellesList)
+    }
+
+    override fun markFavorites(@NonNull belles: Belles) {
+        if ("yes" == belles.favorite) {
+            belles.favorite = "no"
+        } else {
+            belles.favorite = "yes"
+        }
+        localDataSource.updateBelles(belles)
+    }
+
+    override fun queryAllFavoriteBelles(callBack: Repository.CallBack) {
+        val favoriteList = localDataSource.queryAllFavoriteBelles()
+        callBack.onResult(favoriteList)
     }
 
 }

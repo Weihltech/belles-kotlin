@@ -5,7 +5,7 @@
 
         <variable
             name="bellesAdapterCallBack"
-            type="dev.weihl.belles.screens.home.belles.BellesAdapterCallBack" />
+            type="dev.weihl.belles.screens.home.favorite.FavoriteAdapterCallBack" />
 
         <variable
             name="itemBelles"
