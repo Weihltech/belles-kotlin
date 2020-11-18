@@ -81,6 +81,10 @@ class BellesViewModel(
                             return
                         }
                         // update event
+                        if (allBells.isNotEmpty()) {
+                            allBells[0].date = -1L
+                        }
+
                         allBells.addAll(0, list)
                         uiScope.launch {
                             subBelles.value = allBells

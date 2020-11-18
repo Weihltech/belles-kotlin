@@ -40,6 +40,18 @@
             android:textColor="#F1F1F1"
             android:textSize="16sp" />
 
+
+        <TextView
+            android:id="@+id/tag_recent"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FF5722"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="最近浏览"
+            android:textColor="#FFFFFF" />
+
     </RelativeLayout>
 
 

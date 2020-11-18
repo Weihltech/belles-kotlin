@@ -46,6 +46,8 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
             )
             .into(holder.bind.image)
         holder.bind.desc.text = itemBelles.title
+
+        holder.bind.tagRecent.visibility = if (itemBelles.date == -1L) View.VISIBLE else View.GONE
     }
 
 
