@@ -2,12 +2,9 @@ package dev.weihl.belles.data.remote
 
 import android.content.Context
 import androidx.annotation.NonNull
-import com.google.gson.Gson
-import dev.weihl.belles.data.local.AppDatabase
-import dev.weihl.belles.data.local.dao.BellesDao
+import dev.weihl.belles.data.SexyImage
+import dev.weihl.belles.data.SexyPage
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.work.bean.WorkBelles
-import dev.weihl.belles.work.bean.WorkBellesImg
 import org.jsoup.Jsoup
 import timber.log.Timber
 
@@ -24,7 +21,7 @@ class SexyRequest(applicationContext: Context) {
     }
 
     init {
-        Timber.tag("CrawlerSexyWork")
+        Timber.tag("SexyRequest")
     }
 
     interface CallBack {
@@ -38,53 +35,16 @@ class SexyRequest(applicationContext: Context) {
         return "$WEB_HOST/$SEXY/list_6_$page.html";
     }
 
-    private fun bellesDao(): BellesDao {
-        return AppDatabase.getInstance(context).bellesDao
-    }
+//    private fun bellesDao(): BellesDao {
+//        return AppDatabase.getInstance(context).bellesDao
+//    }
 
-    fun load(page: Int, @NonNull callBack: CallBack) {
 
-        val bellesList = ArrayList<Belles>()
-        val workBellesList = loadGroupPageList(page)
-        for (workBelles in workBellesList) {
-
-            val belles = bellesDao().queryBellesByHref(workBelles.href)
-            if (belles != null) {
-                bellesList.add(belles)
-                continue
-            }
-
-            val imgList = loadPageDetailList(workBelles.href)
-            workBelles.details = Gson().toJson(imgList)
-            Timber.d(workBelles.toString())
-            insertWorkBelles(workBelles)
-
-            bellesList.add(
-                Belles(
-                    0,
-                    workBelles.title,
-                    workBelles.href,
-                    workBelles.thumb,
-                    workBelles.thumbWh,
-                    workBelles.tab,
-                    "no",
-                    workBelles.details,
-                    System.currentTimeMillis(),
-                    workBelles.referer
-                )
-            )
-
-        }
-
-        callBack.result(bellesList)
-    }
-
-    fun loadGroupPageList(page: Int): ArrayList<WorkBelles> {
+    fun loadSexyPageList(page: Int): ArrayList<SexyPage> {
         val url = getSexyUrl(page)
         Timber.d("Load Group Url : $url")
 
-
-        val bellesList = ArrayList<WorkBelles>()
+        val bellesList = ArrayList<SexyPage>()
         val document = Jsoup.connect(url).get()
         val elements = document.getElementsByClass("list-left public-box")
         val ddElements = elements[0].getElementsByTag("dd")
@@ -94,25 +54,22 @@ class SexyRequest(applicationContext: Context) {
             val imgEls = element.getElementsByTag("img")
             try {
                 val imgElsFirst = imgEls[0]
-                val src = imgElsFirst.attr("src")
                 val alt = imgElsFirst.attr("alt")
-                val width = imgElsFirst.attr("width")
-                val height = imgElsFirst.attr("height")
-                val workBelles = WorkBelles(
-                    href, alt, src, "$height@$width", "xinggan", "", url
-                )
-                bellesList.add(workBelles)
-                Timber.d(workBelles.toString())
+//                val src = imgElsFirst.attr("src")
+//                val width = imgElsFirst.attr("width")
+//                val height = imgElsFirst.attr("height")
+                val sexyPage = SexyPage(SEXY, href, alt)
+                bellesList.add(sexyPage)
+                Timber.d(sexyPage.toString())
             } catch (ex: IndexOutOfBoundsException) {
                 continue
             }
-
-            break
         }
         return bellesList
     }
 
-    fun loadPageDetailList(pageUrl: String): ArrayList<WorkBellesImg> {
+    fun loadSexyPageDetailList(@NonNull sexyPage: SexyPage): ArrayList<SexyImage> {
+        val pageUrl = sexyPage.href
         Timber.d("Load Page Detail Url : $pageUrl")
 
         val document = Jsoup.connect(pageUrl).get()
@@ -124,16 +81,17 @@ class SexyRequest(applicationContext: Context) {
 
         val count = Integer.valueOf(pageNum)
         Timber.d("size : $count")
-        val bellesImgList = ArrayList<WorkBellesImg>()
-        bellesImgList.add(WorkBellesImg(pageUrl, img))
+        val bellesImgList = ArrayList<SexyImage>()
+        bellesImgList.add(SexyImage(pageUrl, img))
 
         img = img.substring(0, img.lastIndex - 4)
         for (index in 2..count) {
-            val workBellesImg = WorkBellesImg(
-                pageUrl.replace(".html", "_${index}.html"),
-                "${img}${index}.jpg"
+            bellesImgList.add(
+                SexyImage(
+                    pageUrl.replace(".html", "_${index}.html"),
+                    "${img}${index}.jpg"
+                )
             )
-            bellesImgList.add(workBellesImg)
         }
 
         for (workBellesImg in bellesImgList) {
@@ -143,13 +101,4 @@ class SexyRequest(applicationContext: Context) {
         return bellesImgList
     }
 
-    private fun insertWorkBelles(it: WorkBelles) {
-        val bellesDao = AppDatabase.getInstance(context).bellesDao
-        bellesDao.insert(
-            Belles(
-                0, it.title, it.href, it.thumb, it.thumbWh, it.tab, "no",
-                it.details, System.currentTimeMillis(), it.referer
-            )
-        )
-    }
 }

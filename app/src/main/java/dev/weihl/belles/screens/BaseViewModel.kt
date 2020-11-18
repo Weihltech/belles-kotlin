@@ -17,6 +17,7 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     private var viewModelJob = Job()
     val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    val netScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
 
     override fun onCleared() {

@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.SexyRequest
 import dev.weihl.belles.databinding.FragmentBellesBinding
 import dev.weihl.belles.screens.BasicFragment
 import dev.weihl.belles.screens.browse.PhotosActivity
@@ -69,23 +69,24 @@ class BellesFragment : BasicFragment() {
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
 
-        Thread(Runnable {
-            SexyRequest(application).load(1, object : SexyRequest.CallBack {
-                override fun result(bellesList: ArrayList<Belles>) {
-                    Timber.d("allBelles.observe !")
-                    adapter.submitList(bellesList)
-                    binding.bellesRecyclerView.scrollToPosition(0)
-                }
-
-            })
-        }).start()
-
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            Timber.d("loadNextBelles !")
+            bellesViewModel.loadNextBelles()
+        }
 //        bellesViewModel.allBelles.observe(viewLifecycleOwner, Observer {
 //            Timber.d("allBelles.observe !")
 //            adapter.submitList(it)
 //            binding.bellesRecyclerView.scrollToPosition(0)
 //        })
 
+        bellesViewModel.subBelles.observe(viewLifecycleOwner, Observer {
+            Timber.d("refresh new Belles list !")
+            adapter.submitList(it)
+            binding.swipeRefreshLayout.isRefreshing = false
+        })
+
+        // default
+        bellesViewModel.loadNextBelles()
         return binding.root
     }
 

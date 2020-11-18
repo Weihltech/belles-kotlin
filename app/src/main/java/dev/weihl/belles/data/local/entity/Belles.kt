@@ -35,7 +35,7 @@ data class Belles(
     var favorite: String,// yes or no
 
     @ColumnInfo(name = "details")
-    var details: String,// json
+    var details: String,// json [{"referer":"","url":""}]
 
     @ColumnInfo(name = "date")
     var date: Long,

@@ -44,6 +44,6 @@ interface BellesDao {
     fun queryLastBelles(): LiveData<Belles>
 
     @Query("SELECT * FROM belles_table WHERE href = :href ORDER BY id DESC LIMIT 1")
-    fun queryBellesByHref(href: String): Belles
+    fun queryBellesByHref(href: String): Belles?
 
 }
