@@ -46,7 +46,7 @@ interface BellesDao {
     @Query("SELECT * FROM belles_table WHERE href = :href ORDER BY id DESC LIMIT 1")
     fun queryBellesByHref(href: String): Belles?
 
-    @Query("SELECT * FROM belles_table WHERE favorite = :favorite ")
+    @Query("SELECT * FROM belles_table WHERE favorite = :favorite ORDER BY id DESC")
     fun queryAllFavoriteBelles(favorite: String): List<Belles>?
 
 }
