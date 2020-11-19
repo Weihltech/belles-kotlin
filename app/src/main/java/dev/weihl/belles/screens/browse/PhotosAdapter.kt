@@ -20,11 +20,6 @@ class PhotosAdapter(
 ) :
     RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
 
-    // view holder
-    class PhotosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var bind: ItemPhotosLayoutBinding
-
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotosViewHolder {
         val bind = ItemPhotosLayoutBinding.inflate(
@@ -57,7 +52,11 @@ class PhotosAdapter(
 //            .placeholder(R.drawable.ic_action_load)
             .thumbnail(0.1f)
             .into(holder.bind.image)
+    }
 
+    // view holder
+    class PhotosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        lateinit var bind: ItemPhotosLayoutBinding
     }
 
 }

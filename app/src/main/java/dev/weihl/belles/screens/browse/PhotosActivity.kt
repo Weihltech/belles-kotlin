@@ -1,6 +1,7 @@
 package dev.weihl.belles.screens.browse
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.widget.Toast
 import dev.weihl.belles.MainApp
 import dev.weihl.belles.R
@@ -37,5 +38,13 @@ class PhotosActivity : BasicActivity() {
                 Toast.makeText(MainApp.getAppContext(), "AAAA", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        return view_pager.dispatchTouchEvent(ev)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return true
     }
 }

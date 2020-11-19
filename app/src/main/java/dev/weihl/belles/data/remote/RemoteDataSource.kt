@@ -16,10 +16,20 @@ class RemoteDataSource(application: Context) : DataSource.Remote {
     }
 
     override fun loadSexyPageList(page: Int): ArrayList<SexyPage> {
-        return SexyRequest(mContext).loadSexyPageList(page)
+        try {
+            return SexyRequest(mContext).loadSexyPageList(page)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return ArrayList()
     }
 
     override fun loadSexyImageList(sexyPage: SexyPage): ArrayList<SexyImage> {
-        return SexyRequest(mContext).loadSexyPageDetailList(sexyPage)
+        try {
+            return SexyRequest(mContext).loadSexyPageDetailList(sexyPage)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return ArrayList()
     }
 }
