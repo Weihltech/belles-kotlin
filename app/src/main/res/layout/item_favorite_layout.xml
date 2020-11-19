@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,51 +15,134 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{()->bellesAdapterCallBack.itemClick(itemBelles)}"
         android:padding="4dp">
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/cardview_dark_background"
-            android:scaleType="fitXY" />
-
-        <TextView
-            android:id="@+id/desc"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_alignParentBottom="true"
-            android:background="#67232323"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:padding="6dp"
-            android:singleLine="true"
-            android:text="TextView"
-            android:textColor="#F1F1F1"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/tag_recent"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FF5722"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="最近浏览"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:background="#D103A9F4"
+                android:drawableLeft="@drawable/ic_mark"
+                android:drawablePadding="12dp"
+                android:paddingLeft="6dp"
+                android:singleLine="true"
+                android:text="沉鱼落雁，闭月羞花"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                tools:background="#7D6161">
+
+                <ImageView
+                    android:id="@+id/img_left"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_alignParentBottom="true"
+                    android:scaleType="centerCrop"
+                    tools:background="#000000" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="73dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@id/img_left"
+                    android:paddingLeft="3dp"
+                    android:paddingBottom="3dp">
+
+                    <ImageView
+                        android:id="@+id/img_right_1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="1.5dp"
+                        android:layout_toRightOf="@id/img_left"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        tools:background="#000000" />
+
+                    <ImageView
+                        android:id="@+id/img_right_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="1.5dp"
+                        android:layout_toRightOf="@id/img_left"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        tools:background="#000000" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/img_left"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="3dp">
+
+                    <ImageView
+                        android:id="@+id/img_right_3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="1.5dp"
+                        android:layout_toRightOf="@id/img_left"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        tools:background="#000000" />
+
+                    <ImageView
+                        android:id="@+id/img_right_4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="1.5dp"
+                        android:layout_toRightOf="@id/img_left"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        tools:background="#000000" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/img_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="3dp"
+                android:scaleType="centerCrop"
+                tools:background="#000000" />
+
+
+        </LinearLayout>
 
         <View
             android:id="@+id/tag_favorite"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
+            android:layout_margin="16dp"
             android:background="@drawable/ic_favorites"
             android:clickable="true"
             android:onClick="@{()->bellesAdapterCallBack.favoriteClick(itemBelles)}" />

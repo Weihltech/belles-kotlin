@@ -2,7 +2,6 @@ package dev.weihl.belles.data
 
 import android.content.Context
 import androidx.annotation.NonNull
-import com.google.gson.Gson
 import dev.weihl.belles.data.local.LocalDataSource
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.RemoteDataSource
@@ -65,7 +64,7 @@ class BellesRepository(application: Context) : Repository {
                 "120@120",
                 sexyPage.tab,
                 "no",
-                Gson().toJson(sexyImageList),
+                sexyImageList2Json(sexyImageList),
                 System.currentTimeMillis(),
                 sexyPage.href
             )

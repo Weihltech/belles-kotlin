@@ -2,12 +2,10 @@ package dev.weihl.belles.screens.browse
 
 import android.os.Bundle
 import android.widget.Toast
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dev.weihl.belles.MainApp
 import dev.weihl.belles.R
+import dev.weihl.belles.data.json2SexyImageList
 import dev.weihl.belles.screens.BasicActivity
-import dev.weihl.belles.work.bean.WorkExtraImg
 import kotlinx.android.synthetic.main.activity_photos.*
 
 class PhotosActivity : BasicActivity() {
@@ -17,10 +15,16 @@ class PhotosActivity : BasicActivity() {
         setContentView(R.layout.activity_photos)
 
         val photosJson = intent.getStringExtra("details")
-        val photoList: List<WorkExtraImg> = Gson().fromJson(
-            photosJson,
-            object : TypeToken<List<WorkExtraImg?>?>() {}.type
-        )
+        if (photosJson == null || photosJson.isEmpty()) {
+            finish()
+            return
+        }
+
+        val photoList = json2SexyImageList(photosJson)
+        if (photoList == null || photoList.isEmpty()) {
+            finish()
+            return
+        }
 
         view_pager.adapter = PhotosAdapter(photoList, photosAdapterCallBack())
 

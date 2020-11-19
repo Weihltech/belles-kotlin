@@ -70,7 +70,7 @@ class BellesFragment : BasicFragment() {
         })
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
-        binding.bellesRecyclerView.addItemDecoration(SpaceItemDecoration(dp2Px(application, 6), 2))
+        binding.bellesRecyclerView.addItemDecoration(SpaceItemDecoration(dp2Px(application, 4), 2))
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             Timber.d("loadNextBelles !")

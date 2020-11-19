@@ -1,5 +1,12 @@
 package dev.weihl.belles.data
 
+import androidx.annotation.NonNull
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+
+private val gson = Gson()
+
 /**
  * 所有性感页面集合
  */
@@ -21,3 +28,19 @@ data class SexyImage(
     var referer: String,
     var url: String
 )
+
+fun sexyImageList2Json(@NonNull list: ArrayList<SexyImage>): String {
+    return gson.toJson(list)
+}
+
+fun json2SexyImageList(@NonNull json: String): ArrayList<SexyImage>? {
+    try {
+        return Gson().fromJson(
+            json,
+            object : TypeToken<List<SexyImage?>?>() {}.type
+        )
+    } catch (ex: Exception) {
+        // nothing
+    }
+    return null
+}

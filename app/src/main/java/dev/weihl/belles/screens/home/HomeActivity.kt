@@ -32,5 +32,9 @@ class HomeActivity : BasicActivity() {
 
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
 
 }
