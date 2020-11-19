@@ -118,4 +118,7 @@ dependencies {
     androidTestImplementation 'androidx.work:work-testing:2.4.0'
 
     implementation 'org.jsoup:jsoup:1.12.2'
+
+    // image, sc
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 }
