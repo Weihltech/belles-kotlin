@@ -63,3 +63,13 @@ fun isNetworkAvailable(@NonNull context: Context): Boolean {
     }
     return false
 }
+
+fun dp2Px(@NonNull context: Context, dp: Int): Int {
+    val scale = context.resources.displayMetrics.density
+    return (dp * scale + 0.5f).toInt()
+}
+
+fun px2Dp(@NonNull context: Context, px: Int): Int {
+    val scale = context.resources.displayMetrics.density
+    return (px / scale + 0.5f).toInt()
+}

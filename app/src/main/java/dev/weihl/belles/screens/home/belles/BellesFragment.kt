@@ -13,8 +13,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.R
+import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
+import dev.weihl.belles.dp2Px
 import dev.weihl.belles.screens.BasicFragment
 import dev.weihl.belles.screens.browse.PhotosActivity
 import timber.log.Timber
@@ -68,6 +70,7 @@ class BellesFragment : BasicFragment() {
         })
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
+        binding.bellesRecyclerView.addItemDecoration(SpaceItemDecoration(dp2Px(application, 6), 2))
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             Timber.d("loadNextBelles !")

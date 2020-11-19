@@ -21,6 +21,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/belles_recyclerView"
                 android:layout_width="match_parent"
+                android:background="#E0DFDF"
                 android:layout_height="0dp" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
