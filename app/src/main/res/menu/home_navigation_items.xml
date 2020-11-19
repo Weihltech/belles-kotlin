@@ -5,7 +5,7 @@
     <item
         android:id="@+id/bellesFragment"
         android:icon="@drawable/ic_recent"
-        android:title="@string/menu_recent" />
+        android:title="@string/menu_belles" />
     <item
         android:id="@+id/favoriteFragment"
         android:icon="@drawable/ic_favorites"

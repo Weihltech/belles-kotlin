@@ -56,7 +56,11 @@ class FavoriteFragment : BasicFragment() {
         )
 
         favoriteViewModel.subBelles.observe(viewLifecycleOwner, Observer {
-            Timber.d("refresh new Belles list ! ${it.size}")
+            binding.empty.visibility = if (it == null || it.isEmpty()) {
+                View.VISIBLE
+                return@Observer
+            } else View.GONE
+
             adapter.submitList(it) {
                 adapter.notifyDataSetChanged()
             }

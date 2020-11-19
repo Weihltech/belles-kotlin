@@ -22,6 +22,7 @@ class HomeActivity : BasicActivity() {
         navigation_view.setOnNavigationItemSelectedListener {
 
             if (currFragmentId != it.itemId) {
+                tool_bar.title = it.title
                 NavigationUI.onNavDestinationSelected(
                     it, nav_host!!.findNavController()
                 )
