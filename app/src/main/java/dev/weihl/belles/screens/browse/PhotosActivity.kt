@@ -2,8 +2,6 @@ package dev.weihl.belles.screens.browse
 
 import android.os.Bundle
 import android.view.MotionEvent
-import android.widget.Toast
-import dev.weihl.belles.MainApp
 import dev.weihl.belles.R
 import dev.weihl.belles.data.json2SexyImageList
 import dev.weihl.belles.screens.BasicActivity
@@ -41,7 +39,7 @@ class PhotosActivity : BasicActivity() {
     private fun photosAdapterCallBack(): PhotosAdapterCallBack {
         return object : PhotosAdapterCallBack {
             override fun itemClick() {
-                Toast.makeText(MainApp.getAppContext(), "AAAA", Toast.LENGTH_LONG).show()
+                // Nothing
             }
         }
     }
@@ -49,43 +47,50 @@ class PhotosActivity : BasicActivity() {
 
     private val eventDown = arrayOf(0f, 0f)
     private val eventMove = arrayOf(0f, 0f)
-    private var exitAction = false
-    private var hasCount = false
+    private var verticalSliding = false
+    private var hasJudgeSliding = false
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
 
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 eventDown[0] = event.x
                 eventDown[1] = event.y
-                Timber.d("ACTION_DOWN ")
-                return false
+                Timber.d("ACTION_DOWN ${eventDown.contentToString()}")
             }
             MotionEvent.ACTION_UP -> {
-                exitAction = false
-                hasCount = false
-                Timber.d("ACTION_UP   : exitAction = $exitAction ; hasCount = $hasCount")
+                hasJudgeSliding = false
+                verticalSliding = false
+                Timber.d("ACTION_UP   ")
             }
             MotionEvent.ACTION_MOVE -> {
-                if (!hasCount) {
-                    eventMove[0] = event.x
-                    eventMove[1] = event.y
+                eventMove[0] = event.x
+                eventMove[1] = event.y
 
+                if (!hasJudgeSliding) {
                     val offsetX = abs(eventDown[0] - eventMove[0])
                     val offsetY = abs(eventDown[1] - eventMove[1])
-                    exitAction = offsetY - offsetX > 0
-                    hasCount = true
 
-                    Timber.d("ACTION_MOVE   : exitAction,hasCount = $exitAction,$hasCount")
+                    Timber.d("ACTION_MOVE ${eventMove.contentToString()} ； [ offsetX：$offsetX , offsetY:$offsetY ]")
+                    // 单位计算 >10
+                    if (offsetX > 10 || offsetY > 10) {
+                        hasJudgeSliding = true
+                        if (offsetY - offsetX > 2) {
+                            // 此时，垂直滑动，角度 大于 45°；
+                            Timber.d("ACTION_MOVE  is 垂直滑动 !")
+                            verticalSliding = true
+                        }
+                    }
                 }
+
             }
         }
 
-        if (hasCount && exitAction) {
-            Toast.makeText(MainApp.getAppContext(), "移动图片", Toast.LENGTH_LONG).show()
+        if (hasJudgeSliding && verticalSliding) {
+            Timber.d("ACTION_MOVE(垂直控制) :${eventMove.contentToString()}")
             return true
         }
 
-        return view_pager.dispatchTouchEvent(event)
+        return super.dispatchTouchEvent(event)
     }
 
     override fun onBackPressed() {
