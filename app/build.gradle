@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+// 此插件，直接将 acitvity 对应的 xml.layout 变成属性变量引用
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'androidx.navigation.safeargs'
-
 
 
 android {

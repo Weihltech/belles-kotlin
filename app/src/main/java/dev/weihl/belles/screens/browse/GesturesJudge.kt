@@ -1,6 +1,7 @@
 package dev.weihl.belles.screens.browse
 
 import android.view.MotionEvent
+import androidx.annotation.NonNull
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -12,18 +13,20 @@ private val eventDown = arrayOf(0f, 0f)
 private val eventMove = arrayOf(0f, 0f)
 private var verticalSliding = false
 private var hasJudgeSliding = false
-fun judgeTouchEvent(event: MotionEvent?): Boolean {
+fun judgeTouchEvent(event: MotionEvent?, @NonNull callBack: TouchMoveCallBack): Boolean {
 
     when (event?.action) {
         MotionEvent.ACTION_DOWN -> {
             eventDown[0] = event.x
             eventDown[1] = event.y
+            callBack.onDown()
             Timber.d("ACTION_DOWN ${eventDown.contentToString()}")
         }
         MotionEvent.ACTION_UP -> {
             hasJudgeSliding = false
             verticalSliding = false
             Timber.d("ACTION_UP   ")
+            callBack.onUp()
         }
         MotionEvent.ACTION_MOVE -> {
             eventMove[0] = event.x
@@ -50,8 +53,23 @@ fun judgeTouchEvent(event: MotionEvent?): Boolean {
 
     if (hasJudgeSliding && verticalSliding) {
         Timber.d("ACTION_MOVE(垂直控制) :${eventMove.contentToString()}")
+        callBack.onVerticalMove(eventDown, eventMove)
         return true
     }
 
     return false
+}
+
+interface TouchMoveCallBack {
+    fun onVerticalMove(downXY: Array<Float>, moveXY: Array<Float>) {
+
+    }
+
+    fun onDown() {
+
+    }
+
+    fun onUp() {
+
+    }
 }

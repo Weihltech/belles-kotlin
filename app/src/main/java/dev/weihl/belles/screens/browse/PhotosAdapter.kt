@@ -29,6 +29,7 @@ class PhotosAdapter(
         bind.photosAdapterCallBack = callBack
         val viewHolder = PhotosViewHolder(bind.root)
         viewHolder.bind = bind
+        viewHolder.bind.image.setOnOutsidePhotoTapListener { callBack.photoOutsideClick() }
         return viewHolder
 
     }
@@ -52,6 +53,7 @@ class PhotosAdapter(
 //            .placeholder(R.drawable.ic_action_load)
             .thumbnail(0.1f)
             .into(holder.bind.image)
+
     }
 
     // view holder
@@ -63,5 +65,5 @@ class PhotosAdapter(
 
 interface PhotosAdapterCallBack {
 
-    fun itemClick()
+    fun photoOutsideClick()
 }
