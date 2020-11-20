@@ -47,9 +47,9 @@ class SexyRequest(applicationContext: Context) : BellesRequest() {
 //                val src = imgElsFirst.attr("src")
 //                val width = imgElsFirst.attr("width")
 //                val height = imgElsFirst.attr("height")
-                val sexyPage = BellesPage(SEXY, href, alt)
-                bellesList.add(sexyPage)
-                Timber.d(sexyPage.toString())
+                val bellesPage = BellesPage(SEXY, href, alt)
+                bellesList.add(bellesPage)
+                Timber.d(bellesPage.toString())
             } catch (ex: IndexOutOfBoundsException) {
                 continue
             }

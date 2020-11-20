@@ -16,7 +16,7 @@ data class BellesPage(
     val title: String
 ) {
     override fun toString(): String {
-        return "SexyPage(tab='$tab', href='$href', title='$title')"
+        return "BellesPage(tab='$tab', href='$href', title='$title')"
     }
 }
 
