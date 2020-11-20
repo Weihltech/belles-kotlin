@@ -2,7 +2,7 @@ package dev.weihl.belles.data.local
 
 import android.content.Context
 import dev.weihl.belles.data.DataSource
-import dev.weihl.belles.data.SexyPage
+import dev.weihl.belles.data.BellesPage
 import dev.weihl.belles.data.local.dao.BellesDao
 import dev.weihl.belles.data.local.entity.Belles
 import timber.log.Timber
@@ -21,12 +21,12 @@ class LocalDataSource(context: Context) : DataSource.Local {
         Timber.tag("LocalRepository")
     }
 
-    override fun hasPageDetail(sexyPage: SexyPage) {
+    override fun hasPageDetail(bellesPage: BellesPage) {
         TODO("Not yet implemented")
     }
 
-    override fun queryBelles(sexyPage: SexyPage): Belles? {
-        return bellesDao().queryBellesByHref(sexyPage.href)
+    override fun queryBelles(bellesPage: BellesPage): Belles? {
+        return bellesDao().queryBellesByHref(bellesPage.href)
     }
 
     override fun queryAllBelles(): ArrayList<Belles>? {

@@ -2,11 +2,11 @@ package dev.weihl.belles.work.crawler.mmnet
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import dev.weihl.belles.data.remote.SexyRequest
+import dev.weihl.belles.data.remote.request.SexyRequest
 import org.junit.Before
 import org.junit.Test
 
-class SexyRequestTest {
+class SexyBellesRequestTest {
 
     private lateinit var context: Context
 
@@ -17,13 +17,15 @@ class SexyRequestTest {
 
     @Test
     fun load_group_page_list() {
-        val sexyCrawler = SexyRequest(context)
-        assert(sexyCrawler.loadSexyPageList(2).isNotEmpty())
+        val sexyCrawler =
+            SexyRequest(context)
+        assert(sexyCrawler.loadPageList(2).isNotEmpty())
     }
 
     @Test
     fun load_page_detail_list() {
-        val sexyCrawler = SexyRequest(context)
+        val sexyCrawler =
+            SexyRequest(context)
         val pageUrl = "https://www.mm131.net/xinggan/5689.html";
     }
 

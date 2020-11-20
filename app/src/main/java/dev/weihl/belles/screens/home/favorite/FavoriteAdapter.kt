@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.R
-import dev.weihl.belles.data.SexyImage
+import dev.weihl.belles.data.BellesImage
 import dev.weihl.belles.data.json2SexyImageList
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.ItemFavoriteLayoutBinding
@@ -58,7 +58,7 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
 
     }
 
-    private fun dispatchImg(holder: BellesItemHolder, imgList: ArrayList<SexyImage>) {
+    private fun dispatchImg(holder: BellesItemHolder, imgList: ArrayList<BellesImage>) {
         loop@ for (index in 0..imgList.size) {
             when (index) {
                 0 -> {

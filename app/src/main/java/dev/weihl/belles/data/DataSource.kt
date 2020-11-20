@@ -6,9 +6,9 @@ interface DataSource {
 
     interface Local {
 
-        fun hasPageDetail(sexyPage: SexyPage)
+        fun hasPageDetail(bellesPage: BellesPage)
 
-        fun queryBelles(sexyPage: SexyPage): Belles?
+        fun queryBelles(bellesPage: BellesPage): Belles?
 
         fun queryAllBelles(): ArrayList<Belles>?
 
@@ -20,9 +20,9 @@ interface DataSource {
     }
 
     interface Remote {
-        fun loadSexyPageList(page: Int): ArrayList<SexyPage>
+        fun loadSexyPageList(page: Int): ArrayList<BellesPage>
 
-        fun loadSexyImageList(sexyPage: SexyPage): ArrayList<SexyImage>
+        fun loadSexyImageList(bellesPage: BellesPage): ArrayList<BellesImage>
     }
 
 }

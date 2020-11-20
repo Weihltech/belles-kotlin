@@ -1,19 +1,17 @@
-package dev.weihl.belles.data.remote
+package dev.weihl.belles.data.remote.request
 
 import android.content.Context
 import androidx.annotation.NonNull
-import dev.weihl.belles.data.SexyImage
-import dev.weihl.belles.data.SexyPage
-import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.data.BellesImage
+import dev.weihl.belles.data.BellesPage
+import dev.weihl.belles.data.remote.BellesRequest
 import org.jsoup.Jsoup
 import timber.log.Timber
 
 /**
  *
  */
-class SexyRequest(applicationContext: Context) {
-
-    private var context: Context = applicationContext
+class SexyRequest(applicationContext: Context) : BellesRequest() {
 
     companion object {
         private val WEB_HOST = "https://www.mm131.net"
@@ -24,27 +22,18 @@ class SexyRequest(applicationContext: Context) {
         Timber.tag("SexyRequest")
     }
 
-    interface CallBack {
-        fun result(bellesList: ArrayList<Belles>)
-    }
-
-    private fun getSexyUrl(page: Int): String {
+    override fun getPageUrl(page: Int): String {
         if (page < 2) {
             return "$WEB_HOST/$SEXY/";
         }
         return "$WEB_HOST/$SEXY/list_6_$page.html";
     }
 
-//    private fun bellesDao(): BellesDao {
-//        return AppDatabase.getInstance(context).bellesDao
-//    }
-
-
-    fun loadSexyPageList(page: Int): ArrayList<SexyPage> {
-        val url = getSexyUrl(page)
+    override fun loadPageList(page: Int): ArrayList<BellesPage> {
+        val url = getPageUrl(page)
         Timber.d("Load Group Url : $url")
 
-        val bellesList = ArrayList<SexyPage>()
+        val bellesList = ArrayList<BellesPage>()
         val document = Jsoup.connect(url).get()
         val elements = document.getElementsByClass("list-left public-box")
         val ddElements = elements[0].getElementsByTag("dd")
@@ -58,7 +47,7 @@ class SexyRequest(applicationContext: Context) {
 //                val src = imgElsFirst.attr("src")
 //                val width = imgElsFirst.attr("width")
 //                val height = imgElsFirst.attr("height")
-                val sexyPage = SexyPage(SEXY, href, alt)
+                val sexyPage = BellesPage(SEXY, href, alt)
                 bellesList.add(sexyPage)
                 Timber.d(sexyPage.toString())
             } catch (ex: IndexOutOfBoundsException) {
@@ -68,8 +57,8 @@ class SexyRequest(applicationContext: Context) {
         return bellesList
     }
 
-    fun loadSexyPageDetailList(@NonNull sexyPage: SexyPage): ArrayList<SexyImage> {
-        val pageUrl = sexyPage.href
+    override fun loadPageImageList(@NonNull bellesPage: BellesPage): ArrayList<BellesImage> {
+        val pageUrl = bellesPage.href
         Timber.d("Load Page Detail Url : $pageUrl")
 
         val document = Jsoup.connect(pageUrl).get()
@@ -81,13 +70,13 @@ class SexyRequest(applicationContext: Context) {
 
         val count = Integer.valueOf(pageNum)
         Timber.d("size : $count")
-        val bellesImgList = ArrayList<SexyImage>()
-        bellesImgList.add(SexyImage(pageUrl, img))
+        val bellesImgList = ArrayList<BellesImage>()
+        bellesImgList.add(BellesImage(pageUrl, img))
 
         img = img.substring(0, img.lastIndex - 4)
         for (index in 2..count) {
             bellesImgList.add(
-                SexyImage(
+                BellesImage(
                     pageUrl.replace(".html", "_${index}.html"),
                     "${img}${index}.jpg"
                 )
