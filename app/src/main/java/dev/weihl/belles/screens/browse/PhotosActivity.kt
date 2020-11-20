@@ -68,7 +68,7 @@ class PhotosActivity : BasicActivity() {
             return super.dispatchTouchEvent(event)
         }
 
-        return judgeTouchEvent(event, touchMoveCallBack()) || super.dispatchTouchEvent(event)
+        return judgeTouchEvent(event, touchMoveCallBack) || super.dispatchTouchEvent(event)
     }
 
     private fun isScalePhotos(): Boolean {
@@ -82,49 +82,48 @@ class PhotosActivity : BasicActivity() {
         ) as PhotosAdapter.PhotosViewHolder
     }
 
-    private fun touchMoveCallBack(): TouchMoveCallBack {
-        return object : TouchMoveCallBack {
+    private val touchMoveCallBack = object : TouchMoveCallBack {
 
-            private var alpha = 1f
+        private var alpha = 1f
 
-            init {
-                Timber.tag("touchMoveCallBack")
-            }
+        init {
+            Timber.tag("touchMoveCallBack")
+        }
 
-            override fun onDown() {
+        override fun onDown() {
+            alpha = 1f
+        }
+
+        override fun onVerticalMove(downXY: Array<Float>, moveXY: Array<Float>) {
+            val offsetY = (moveXY[1] - downXY[1]) * 0.001f
+            alpha -= offsetY
+            if (alpha < 0) {
+                alpha = 0f
+            } else if (alpha > 1) {
                 alpha = 1f
             }
+            Timber.d("move . alpha $alpha ; offsetY $offsetY")
 
-            override fun onVerticalMove(downXY: Array<Float>, moveXY: Array<Float>) {
-                val offsetY = (moveXY[1] - downXY[1]) * 0.001f
-                alpha -= offsetY
-                if (alpha < 0) {
-                    alpha = 0f
-                } else if (alpha > 1) {
-                    alpha = 1f
-                }
-                Timber.d("alpha $alpha ; offsetY $offsetY")
+            doTouchMoveAction()
+        }
 
+        override fun onUp() {
+            Timber.d("up . alpha $alpha ")
+            if (alpha < 0.4f) {
+                finish()
+                Timber.d("up . finish ")
+            } else {
+                alpha = 1.0f
                 doTouchMoveAction()
             }
+        }
 
-            override fun onUp() {
-                Timber.d("alpha $alpha ")
-                if (alpha < 0.4f) {
-                    finish()
-                } else {
-                    alpha = 1.0f
-                    doTouchMoveAction()
-                }
-            }
-
-            private fun doTouchMoveAction() {
-                val viewHolder = getCurrentViewHolder()
-                viewHolder.bind.imageLayout.alpha = alpha
-                viewHolder.bind.image.scaleX = alpha
-                viewHolder.bind.image.scaleY = alpha
-                binding.tvNum.alpha = alpha
-            }
+        private fun doTouchMoveAction() {
+            val viewHolder = getCurrentViewHolder()
+            viewHolder.bind.imageLayout.alpha = alpha
+            viewHolder.bind.image.scaleX = alpha
+            viewHolder.bind.image.scaleY = alpha
+            binding.tvNum.alpha = alpha
         }
     }
 
