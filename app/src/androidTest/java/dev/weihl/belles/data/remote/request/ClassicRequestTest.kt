@@ -2,6 +2,7 @@ package dev.weihl.belles.data.remote.request
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import dev.weihl.belles.data.BellesPage
 import junit.framework.TestCase
 import org.junit.Before
 
@@ -29,6 +30,11 @@ class ClassicRequestTest : TestCase() {
     }
 
     fun testLoadPageImageList() {
+        val url = "https://www.tupianzj.com/meinv/20200309/205965.html"
+        val bellesPage = BellesPage("", url, "")
+        val classicRequest = ClassicRequest(context)
+        classicRequest.loadPageImageList(bellesPage)
+
 
     }
 }

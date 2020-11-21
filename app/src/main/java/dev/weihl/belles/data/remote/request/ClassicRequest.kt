@@ -5,6 +5,7 @@ import dev.weihl.belles.data.BellesImage
 import dev.weihl.belles.data.BellesPage
 import dev.weihl.belles.data.remote.BellesRequest
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import timber.log.Timber
 
 /**
@@ -19,9 +20,9 @@ class ClassicRequest(context: Context) : BellesRequest() {
 
 
     companion object {
-        private val WEB_HOST_BASIC = "https://www.tupianzj.com"
-        private val WEB_HOST = "${WEB_HOST_BASIC}/meinv"
-        private val GuZhuang = "guzhuang"
+        private const val WEB_HOST_BASIC = "https://www.tupianzj.com"
+        private const val WEB_HOST = "${WEB_HOST_BASIC}/meinv"
+        private const val GuZhuang = "guzhuang"
     }
 
     init {
@@ -70,31 +71,44 @@ class ClassicRequest(context: Context) : BellesRequest() {
 
         val document = Jsoup.connect(pageUrl).get()
         val elements = document.getElementsByClass("pages")
-        val pageNum = elements[0].getElementsByClass("page-ch")[0]
-            .text().replace("共", "").replace("页", "")
-        var img = document.getElementsByClass("content-pic")[0]
-            .getElementsByTag("img")[0].attr("src")
+        val pageCount = elements[0].text()[1].toString().toInt()
+        Timber.d("Data : ${elements[0].text()} ; $pageCount")
 
-        val count = Integer.valueOf(pageNum)
-        Timber.d("size : $count")
-        val bellesImgList = ArrayList<BellesImage>()
-        bellesImgList.add(BellesImage(pageUrl, img))
-
-        img = img.substring(0, img.lastIndex - 4)
-        for (index in 2..count) {
-            bellesImgList.add(
-                BellesImage(
-                    pageUrl.replace(".html", "_${index}.html"),
-                    "${img}${index}.jpg"
-                )
-            )
+        // sub page list
+        val pageList = ArrayList<BellesPage>()
+        // other all sub page , pageCount
+        for (index in 2..pageCount) {
+            val subPageUrl = bellesPage.href.replace(".html", "_$index.html")
+            val tempPage = BellesPage(GuZhuang, subPageUrl, bellesPage.title)
+            pageList.add(tempPage)
         }
 
-        for (workBellesImg in bellesImgList) {
-            Timber.d("${workBellesImg.referer} ; ${workBellesImg.url}")
+        val bellesImageList = ArrayList<BellesImage>()
+        // current big pic
+        val currentBigPic = findBigPic(document)
+        val currentBellesImage = BellesImage(bellesPage.href, currentBigPic)
+        bellesImageList.add(currentBellesImage)
+        Timber.d(currentBellesImage.toString())
+        for (subPage in pageList) {
+            val subDocument = Jsoup.connect(subPage.href).get()
+            val subBigPic = findBigPic(subDocument)
+            val bellesImage = BellesImage(subPage.href, subBigPic)
+            Timber.d(bellesImage.toString())
+            bellesImageList.add(bellesImage)
         }
 
-        return bellesImgList
+        return bellesImageList
+    }
+
+    private fun findBigPic(document: Document): String {
+        val bigPicElement = document.getElementById("bigpicimg")
+        return bigPicElement.attr("src")
+    }
+
+    private fun printBellesPage(pageList: ArrayList<BellesPage>) {
+        for (page in pageList) {
+            Timber.d(page.toString())
+        }
     }
 
 
