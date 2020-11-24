@@ -1,18 +1,25 @@
 package dev.weihl.belles.screens.browse
 
+import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.MotionEvent
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dev.weihl.belles.R
 import dev.weihl.belles.data.json2SexyImageList
 import dev.weihl.belles.databinding.ActivityPhotosBinding
+import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 import dev.weihl.belles.screens.BasicActivity
 import timber.log.Timber
 
+
 class PhotosActivity : BasicActivity() {
 
+    // x, y
+    private val centerPoint = arrayOf(0f, 0f)
     private lateinit var binding: ActivityPhotosBinding
 
     private lateinit var recyclerView: RecyclerView
@@ -23,6 +30,7 @@ class PhotosActivity : BasicActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        countCenterPoint()
 
         binding = DataBindingUtil.inflate(
             layoutInflater,
@@ -52,6 +60,20 @@ class PhotosActivity : BasicActivity() {
             }
         })
         binding.btnBack.setOnClickListener { finish() }
+
+        // 显示动画
+
+        // finish 动画
+    }
+
+    private fun countCenterPoint() {
+        val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val dm = DisplayMetrics()
+        wm.defaultDisplay.getMetrics(dm)
+        val width = dm.widthPixels
+        val height = dm.heightPixels
+        centerPoint[0] = (width / 2).toFloat()
+        centerPoint[1] = (height / 2).toFloat()
     }
 
     private fun photosAdapterCallBack(): PhotosAdapterCallBack {
@@ -72,62 +94,75 @@ class PhotosActivity : BasicActivity() {
     }
 
     private fun isScalePhotos(): Boolean {
-        val viewHolder = getCurrentViewHolder()
-        return viewHolder.bind.image.scale != viewHolder.bind.image.minimumScale
+        val bind = getCurrentItemViewBind()
+        return bind.image.scale != bind.image.minimumScale
     }
 
-    private fun getCurrentViewHolder(): PhotosAdapter.PhotosViewHolder {
-        return recyclerView.getChildViewHolder(
+    private fun getCurrentItemViewBind(): ItemPhotosLayoutBinding {
+        return (recyclerView.getChildViewHolder(
             recyclerView.getChildAt(0)
-        ) as PhotosAdapter.PhotosViewHolder
+        ) as PhotosAdapter.PhotosViewHolder).bind
     }
 
     private val touchMoveCallBack = object : TouchMoveCallBack {
 
-        private var alpha = 1f
+        private lateinit var itemViewBind: ItemPhotosLayoutBinding
 
-        init {
-            Timber.tag("touchMoveCallBack")
+        // x, y
+        private val movePoint = arrayOf(0f, 0f)
+
+        private fun countMoveRatio(downXY: Array<Float>, moveXY: Array<Float>) {
+            val offsetY = (moveXY[1] - downXY[1]) * 0.001f
+            var moveRatio = 1 - offsetY
+            moveRatio = if (moveRatio < 0) 0f else if (moveRatio > 1) 1f else moveRatio
+            setMoveRatio(moveRatio)
+        }
+
+        private fun setMoveRatio(moveRatio: Float) {
+            itemViewBind.image.setTag(R.id.value, moveRatio)
+            // refresh param
+            binding.tvNum.alpha = moveRatio
+            itemViewBind.image.scaleX = moveRatio
+            itemViewBind.image.scaleY = moveRatio
+            itemViewBind.imageBackground.alpha = moveRatio
+        }
+
+        private fun countMovePoint(downXY: Array<Float>, moveXY: Array<Float>) {
+            movePoint[0] = moveXY[0] - centerPoint[0]
+            movePoint[1] = moveXY[1] - centerPoint[1]
+            setMovePoint(movePoint)
+        }
+
+        private fun setMovePoint(point: Array<Float>) {
+            itemViewBind.image.x = point[0]
+            itemViewBind.image.y = point[1]
         }
 
         override fun onDown() {
-            alpha = 1f
+            itemViewBind = getCurrentItemViewBind()
         }
 
         override fun onVerticalMove(downXY: Array<Float>, moveXY: Array<Float>) {
-            val offsetY = (moveXY[1] - downXY[1]) * 0.001f
-            alpha -= offsetY
-            if (alpha < 0) {
-                alpha = 0f
-            } else if (alpha > 1) {
-                alpha = 1f
-            }
-            Timber.d("move . alpha $alpha ; offsetY $offsetY")
-
-            doTouchMoveAction()
+            countMoveRatio(downXY, moveXY)
+            countMovePoint(downXY, moveXY)
         }
 
         override fun onUp() {
-            Timber.d("up . alpha $alpha ")
-            if (alpha < 0.4f) {
+            val ratio = itemViewBind.image.getTag(R.id.value) as Float
+            Timber.d("up . ratio $ratio ")
+            if (ratio < 0.4f) {
                 finish()
                 Timber.d("up . finish ")
             } else {
-                alpha = 1.0f
-                doTouchMoveAction()
+                setMoveRatio(1f)
+                setMovePoint(centerPoint)
             }
         }
 
-        private fun doTouchMoveAction() {
-            val viewHolder = getCurrentViewHolder()
-            viewHolder.bind.imageLayout.alpha = alpha
-            viewHolder.bind.image.scaleX = alpha
-            viewHolder.bind.image.scaleY = alpha
-            binding.tvNum.alpha = alpha
-        }
     }
 
     override fun onBackPressed() {
         finish()
     }
 }
+

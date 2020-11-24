@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <View
-            android:id="@+id/image_layout"
+            android:id="@+id/image_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000000" />
