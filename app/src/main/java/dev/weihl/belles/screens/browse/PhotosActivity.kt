@@ -95,18 +95,23 @@ class PhotosActivity : BasicActivity() {
 
     private fun isScalePhotos(): Boolean {
         val bind = getCurrentItemViewBind()
-        return bind.image.scale != bind.image.minimumScale
+        return bind?.image?.scale != bind?.image?.minimumScale
     }
 
-    private fun getCurrentItemViewBind(): ItemPhotosLayoutBinding {
-        return (recyclerView.getChildViewHolder(
-            recyclerView.getChildAt(0)
-        ) as PhotosAdapter.PhotosViewHolder).bind
+    private fun getCurrentItemViewBind(): ItemPhotosLayoutBinding? {
+        try {
+            return (recyclerView.getChildViewHolder(
+                recyclerView.getChildAt(0)
+            ) as PhotosAdapter.PhotosViewHolder).bind
+        } catch (e: Exception) {
+            // nothing
+        }
+        return null
     }
 
     private val touchMoveCallBack = object : TouchMoveCallBack {
 
-        private lateinit var itemViewBind: ItemPhotosLayoutBinding
+        private var itemViewBind: ItemPhotosLayoutBinding? = null
 
         // x, y
         private val movePoint = arrayOf(0f, 0f)
@@ -119,12 +124,12 @@ class PhotosActivity : BasicActivity() {
         }
 
         private fun setMoveRatio(moveRatio: Float) {
-            itemViewBind.image.setTag(R.id.value, moveRatio)
             // refresh param
             binding.tvNum.alpha = moveRatio
-            itemViewBind.image.scaleX = moveRatio
-            itemViewBind.image.scaleY = moveRatio
-            itemViewBind.imageBackground.alpha = moveRatio
+            itemViewBind?.image?.setTag(R.id.value, moveRatio)
+            itemViewBind?.image?.scaleX = moveRatio
+            itemViewBind?.image?.scaleY = moveRatio
+            itemViewBind?.imageBackground?.alpha = moveRatio
         }
 
         private fun countMovePoint(downXY: Array<Float>, moveXY: Array<Float>) {
@@ -134,8 +139,8 @@ class PhotosActivity : BasicActivity() {
         }
 
         private fun setMovePoint(point: Array<Float>) {
-            itemViewBind.image.x = point[0]
-            itemViewBind.image.y = point[1]
+            itemViewBind?.image?.x = point[0]
+            itemViewBind?.image?.y = point[1]
         }
 
         override fun onDown() {
@@ -143,20 +148,24 @@ class PhotosActivity : BasicActivity() {
         }
 
         override fun onVerticalMove(downXY: Array<Float>, moveXY: Array<Float>) {
+            if (itemViewBind == null) {
+                return
+            }
             countMoveRatio(downXY, moveXY)
             countMovePoint(downXY, moveXY)
         }
 
         override fun onUp() {
-            val ratio = itemViewBind.image.getTag(R.id.value) as Float
+            val ratio = itemViewBind?.image?.getTag(R.id.value) as Float
             Timber.d("up . ratio $ratio ")
-            if (ratio < 0.4f) {
+            if (ratio < 0.3f) {
                 finish()
                 Timber.d("up . finish ")
             } else {
                 setMoveRatio(1f)
-                setMovePoint(centerPoint)
+                setMovePoint(arrayOf(0f, 0f))
             }
+            itemViewBind = null
         }
 
     }

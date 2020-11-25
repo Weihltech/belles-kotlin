@@ -23,10 +23,12 @@ fun judgeTouchEvent(event: MotionEvent?, @NonNull callBack: TouchMoveCallBack): 
             Timber.d("ACTION_DOWN ${eventDown.contentToString()}")
         }
         MotionEvent.ACTION_UP -> {
+            if (hasJudgeSliding && verticalSliding) {
+                callBack.onUp()
+            }
             hasJudgeSliding = false
             verticalSliding = false
             Timber.d("ACTION_UP   ")
-            callBack.onUp()
         }
         MotionEvent.ACTION_MOVE -> {
             eventMove[0] = event.x
