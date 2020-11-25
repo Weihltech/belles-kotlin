@@ -3,7 +3,6 @@ package dev.weihl.belles.screens.browse
 import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -66,7 +65,7 @@ class PhotosActivity : BasicActivity() {
 
         // 显示动画
         globalXY = intent.getIntArrayExtra("globalXY")
-
+        Timber.d(globalXY?.contentToString())
 
         // finish 动画
     }
@@ -122,7 +121,7 @@ class PhotosActivity : BasicActivity() {
         private val movePoint = arrayOf(0f, 0f)
 
         private fun countMoveRatio(downXY: Array<Float>, moveXY: Array<Float>) {
-            val offsetY = (moveXY[1] - downXY[1]) * 0.001f
+            val offsetY = (moveXY[1] - downXY[1]) * 0.0005f
             var moveRatio = 1 - offsetY
             moveRatio = if (moveRatio < 0) 0f else if (moveRatio > 1) 1f else moveRatio
             setMoveRatio(moveRatio)
@@ -163,48 +162,52 @@ class PhotosActivity : BasicActivity() {
         override fun onUp() {
             val ratio = itemViewBind?.image?.getTag(R.id.value) as Float
             Timber.d("up . ratio $ratio ")
-            if (ratio < 0.3f) {
+            if (ratio < 0.5f) {
                 doAnimFinish()
                 Timber.d("up . finish ")
             } else {
                 setMoveRatio(1f)
                 setMovePoint(arrayOf(0f, 0f))
             }
-            itemViewBind = null
         }
 
         private fun doAnimFinish() {
             if (globalXY == null) {
                 finish()
             } else {
+
+                val targetX = globalXY!![0].minus(centerPoint[0] - 300)
+                val targetY = globalXY!![1].minus(centerPoint[1] - 300)
+
                 val x = itemViewBind?.image?.x
-                val xValueAnimator = x?.toInt()?.let {
-                    ValueAnimator.ofFloat(
-                        it.toFloat(),
-                        globalXY!![0].toFloat()
-                    )
+                Timber.d("x :>># $x")
+                val xValueAnimator = x?.let {
+                    ValueAnimator.ofFloat(it, targetX.toFloat())
                 }
                 xValueAnimator?.addUpdateListener {
-                    itemViewBind?.image?.x = it.animatedValue as Float
+                    val value = it.animatedValue as Float
+                    itemViewBind?.image?.x = value
+                    Timber.d("x :>>@ ${itemViewBind?.image?.x}")
                 }
-                xValueAnimator?.duration = 1000
+                xValueAnimator?.duration = 400
+                xValueAnimator?.start()
 
                 val y = itemViewBind?.image?.y
-                val yValueAnimator = y?.toInt()?.let {
-                    ValueAnimator.ofFloat(
-                        it.toFloat(),
-                        globalXY!![1].toFloat()
-                    )
+                Timber.d("y :>># $y")
+                val yValueAnimator = y?.let {
+                    ValueAnimator.ofFloat(it, targetY.toFloat())
                 }
                 yValueAnimator?.addUpdateListener {
                     itemViewBind?.image?.y = it.animatedValue as Float
+                    Timber.d("y :>>@ ${itemViewBind?.image?.y}")
                 }
-                yValueAnimator?.duration = 1000
+                yValueAnimator?.duration = 400
 
-                xValueAnimator?.start()
                 yValueAnimator?.start()
 
-//                Handler().postDelayed({ finish() }, 1100)
+                binding.root.postDelayed({
+                    finish()
+                }, 300)
             }
         }
 
