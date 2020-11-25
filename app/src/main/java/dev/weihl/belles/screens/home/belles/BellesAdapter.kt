@@ -38,6 +38,8 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
     override fun onBindViewHolder(holder: BellesItemHolder, position: Int) {
         val itemBelles = getItem(position)
         holder.bind.itemBelles = itemBelles
+        holder.bind.position = position
+
         Glide.with(holder.bind.image.context)
             .load(
                 GlideUrl(
@@ -76,7 +78,7 @@ class BellesDiffCallback :
 
 interface BellesAdapterCallBack {
 
-    fun itemClick(itemBelles: Belles)
+    fun itemClick(itemBelles: Belles, position: Int)
 
     fun favoriteClick(itemBelles: Belles)
 }

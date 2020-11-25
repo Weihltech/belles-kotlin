@@ -10,6 +10,10 @@
         <variable
             name="itemBelles"
             type="dev.weihl.belles.data.local.entity.Belles" />
+
+        <variable
+            name="position"
+            type="int" />
     </data>
 
     <RelativeLayout
@@ -18,7 +22,7 @@
         android:background="#FFFFFF"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{()->bellesAdapterCallBack.itemClick(itemBelles)}"
+        android:onClick="@{()->bellesAdapterCallBack.itemClick(itemBelles,position)}"
         android:padding="3dp">
 
         <ImageView

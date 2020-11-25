@@ -3,6 +3,7 @@ package dev.weihl.belles.screens.home.belles
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ class BellesFragment : BasicFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         Timber.d("onCreateView !")
         // data binding and view model
@@ -56,9 +57,18 @@ class BellesFragment : BasicFragment() {
 
         // recycler view
         val adapter = BellesAdapter(object : BellesAdapterCallBack {
-            override fun itemClick(itemBelles: Belles) {
+            override fun itemClick(itemBelles: Belles, position: Int) {
+                val globalVisibleRect = Rect()
+                val clickView = binding.bellesRecyclerView
+                    .layoutManager?.findViewByPosition(position)
+                clickView?.getLocalVisibleRect(globalVisibleRect)
+                val globalXY = IntArray(2)
+                clickView?.getLocationOnScreen(globalXY)
+                Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
+
                 val photoIntent = Intent(context, PhotosActivity::class.java)
                 photoIntent.putExtra("details", itemBelles.details)
+                photoIntent.putExtra("globalXY", globalXY)
                 startActivity(photoIntent)
             }
 

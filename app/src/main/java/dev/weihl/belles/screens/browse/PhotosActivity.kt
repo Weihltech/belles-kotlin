@@ -1,7 +1,9 @@
 package dev.weihl.belles.screens.browse
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -23,6 +25,7 @@ class PhotosActivity : BasicActivity() {
     private lateinit var binding: ActivityPhotosBinding
 
     private lateinit var recyclerView: RecyclerView
+    private var globalXY: IntArray? = null
 
     init {
         Timber.tag("PhotosActivity")
@@ -62,6 +65,8 @@ class PhotosActivity : BasicActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         // 显示动画
+        globalXY = intent.getIntArrayExtra("globalXY")
+
 
         // finish 动画
     }
@@ -159,13 +164,48 @@ class PhotosActivity : BasicActivity() {
             val ratio = itemViewBind?.image?.getTag(R.id.value) as Float
             Timber.d("up . ratio $ratio ")
             if (ratio < 0.3f) {
-                finish()
+                doAnimFinish()
                 Timber.d("up . finish ")
             } else {
                 setMoveRatio(1f)
                 setMovePoint(arrayOf(0f, 0f))
             }
             itemViewBind = null
+        }
+
+        private fun doAnimFinish() {
+            if (globalXY == null) {
+                finish()
+            } else {
+                val x = itemViewBind?.image?.x
+                val xValueAnimator = x?.toInt()?.let {
+                    ValueAnimator.ofFloat(
+                        it.toFloat(),
+                        globalXY!![0].toFloat()
+                    )
+                }
+                xValueAnimator?.addUpdateListener {
+                    itemViewBind?.image?.x = it.animatedValue as Float
+                }
+                xValueAnimator?.duration = 1000
+
+                val y = itemViewBind?.image?.y
+                val yValueAnimator = y?.toInt()?.let {
+                    ValueAnimator.ofFloat(
+                        it.toFloat(),
+                        globalXY!![1].toFloat()
+                    )
+                }
+                yValueAnimator?.addUpdateListener {
+                    itemViewBind?.image?.y = it.animatedValue as Float
+                }
+                yValueAnimator?.duration = 1000
+
+                xValueAnimator?.start()
+                yValueAnimator?.start()
+
+//                Handler().postDelayed({ finish() }, 1100)
+            }
         }
 
     }
