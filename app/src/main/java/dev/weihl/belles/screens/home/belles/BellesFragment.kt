@@ -30,7 +30,7 @@ import timber.log.Timber
  *
  *
  */
-class BellesFragment : BasicFragment() {
+class BellesFragment : BasicFragment(), BellesAdapterCallBack {
 
     private lateinit var binding: FragmentBellesBinding
 
@@ -56,28 +56,7 @@ class BellesFragment : BasicFragment() {
         binding.lifecycleOwner = this
 
         // recycler view
-        val adapter = BellesAdapter(object : BellesAdapterCallBack {
-            override fun itemClick(itemBelles: Belles, position: Int) {
-                val globalVisibleRect = Rect()
-                val clickView = binding.bellesRecyclerView
-                    .layoutManager?.findViewByPosition(position)
-                clickView?.getLocalVisibleRect(globalVisibleRect)
-                val globalXY = IntArray(2)
-                clickView?.getLocationOnScreen(globalXY)
-                Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
-
-                val photoIntent = Intent(context, PhotosActivity::class.java)
-                photoIntent.putExtra("details", itemBelles.details)
-                photoIntent.putExtra("globalXY", globalXY)
-                startActivity(photoIntent)
-            }
-
-            override fun favoriteClick(itemBelles: Belles) {
-                bellesViewModel.markFavorites(itemBelles)
-                val adapter = binding.bellesRecyclerView.adapter
-                adapter?.notifyDataSetChanged()
-            }
-        })
+        val adapter = BellesAdapter(this)
         binding.bellesRecyclerView.adapter = adapter
         binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
         binding.bellesRecyclerView.addItemDecoration(SpaceItemDecoration(dp2Px(application, 4), 2))
@@ -100,12 +79,31 @@ class BellesFragment : BasicFragment() {
         return binding.root
     }
 
+    override fun itemClick(itemBelles: Belles, position: Int) {
+        val globalVisibleRect = Rect()
+        val clickView = binding.bellesRecyclerView
+            .layoutManager?.findViewByPosition(position)
+        clickView?.getLocalVisibleRect(globalVisibleRect)
+        val globalXY = IntArray(2)
+        clickView?.getLocationOnScreen(globalXY)
+        Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
+
+        val photoIntent = Intent(context, PhotosActivity::class.java)
+        photoIntent.putExtra("details", itemBelles.details)
+        photoIntent.putExtra("globalXY", globalXY)
+        photoIntent.putExtra("globalRect", globalVisibleRect)
+        startActivity(photoIntent)
+    }
+
+    override fun favoriteClick(itemBelles: Belles) {
+        bellesViewModel.markFavorites(itemBelles)
+        val adapter = binding.bellesRecyclerView.adapter
+        adapter?.notifyDataSetChanged()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated !")
-
-
     }
 
     override fun onDestroy() {
