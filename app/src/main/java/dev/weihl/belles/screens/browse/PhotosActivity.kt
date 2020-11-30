@@ -72,6 +72,12 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
     }
 
     private fun initPhotoParamData() {
+
+        val simple = intent.getBooleanExtra("simple", false)
+        if (simple) {
+            return
+        }
+
         // 全屏
         val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val dm = DisplayMetrics()

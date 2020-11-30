@@ -40,6 +40,7 @@ class FavoriteFragment : BasicFragment() {
             override fun itemClick(itemBelles: Belles) {
                 val photoIntent = Intent(context, PhotosActivity::class.java)
                 photoIntent.putExtra("details", itemBelles.details)
+                photoIntent.putExtra("simple",true)
                 startActivity(photoIntent)
             }
 

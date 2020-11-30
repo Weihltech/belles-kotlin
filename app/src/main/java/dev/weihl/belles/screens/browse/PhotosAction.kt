@@ -90,14 +90,17 @@ val touchMoveCallBack = object : TouchMoveCallBack {
     }
 
     override fun onUp() {
-        val ratio = itemViewBind?.image?.getTag(R.id.value) as Float
-        Timber.d("up . ratio $ratio ")
-        if (ratio < 0.6f) {
-            doAnimFinish(itemViewBind)
-            Timber.d("up . finish ")
-        } else {
-            setMoveRatio(1f)
-            setMovePoint(arrayOf(0f, 0f))
+        val ratioObj = itemViewBind?.image?.getTag(R.id.value)
+        if(ratioObj != null){
+            val ratio = ratioObj as Float
+            Timber.d("up . ratio $ratio ")
+            if (ratio < 0.6f) {
+                doAnimFinish(itemViewBind)
+                Timber.d("up . finish ")
+            } else {
+                setMoveRatio(1f)
+                setMovePoint(arrayOf(0f, 0f))
+            }
         }
     }
 
