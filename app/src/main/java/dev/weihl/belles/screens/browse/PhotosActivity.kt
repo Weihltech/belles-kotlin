@@ -32,8 +32,7 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        countCenterPoint()
-
+        initPhotoParamData()
         binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.activity_photos, null, false
@@ -68,15 +67,12 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         })
         binding.btnBack.setOnClickListener { finish() }
 
-        photoGlobalXY = intent.getIntArrayExtra("globalXY")
-        photoGlobalRect = intent.getParcelableExtra("globalRect")
-        actionCallBack = this
-
         // start anim
 
     }
 
-    private fun countCenterPoint() {
+    private fun initPhotoParamData() {
+        // 全屏
         val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val dm = DisplayMetrics()
         wm.defaultDisplay.getRealMetrics(dm)
@@ -84,12 +80,27 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         val height = dm.heightPixels
         centerPoint[0] = (width / 2).toFloat()
         centerPoint[1] = (height / 2).toFloat()
+        pxiWidth = centerPoint[0] * 2
+        pxiHeight = centerPoint[1] * 2
+
+        // 图片参数 数据
+        photoGlobalXY = intent.getIntArrayExtra("globalXY")
+        photoGlobalX = photoGlobalXY?.get(0)?.toFloat()!!
+        photoGlobalY = photoGlobalXY?.get(1)?.toFloat()!!
+
+        photoGlobalRect = intent.getParcelableExtra("globalRect")
+        photoGlobalWidth = photoGlobalRect?.width()?.plus(30)!!
+        photoGlobalHeight = photoGlobalRect?.height()?.plus(30)!!
+        actionCallBack = this
     }
 
     private fun photosAdapterCallBack(): PhotosAdapterCallBack {
         return object : PhotosAdapterCallBack {
             override fun photoOutsideClick() {
-                finish()
+                if (!isScalePhotos()) {
+//                    doAnimFinish(getCurrentItemViewBind())
+                    finish()
+                }
             }
         }
     }

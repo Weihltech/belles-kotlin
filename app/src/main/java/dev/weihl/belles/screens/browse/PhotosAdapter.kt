@@ -3,6 +3,7 @@ package dev.weihl.belles.screens.browse
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -29,7 +30,10 @@ class PhotosAdapter(
         bind.photosAdapterCallBack = callBack
         val viewHolder = PhotosViewHolder(bind.root)
         viewHolder.bind = bind
-        viewHolder.bind.image.setOnOutsidePhotoTapListener { callBack.photoOutsideClick() }
+        viewHolder.bind.image.setOnPhotoTapListener { _: ImageView, _: Float, _: Float ->
+            callBack.photoOutsideClick()
+        }
+//        viewHolder.bind.image.setOnOutsidePhotoTapListener { callBack.photoOutsideClick() }
         return viewHolder
 
     }
