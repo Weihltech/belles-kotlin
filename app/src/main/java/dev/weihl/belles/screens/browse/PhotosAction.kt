@@ -2,6 +2,7 @@ package dev.weihl.belles.screens.browse
 
 import android.animation.ValueAnimator
 import android.graphics.Rect
+import android.os.Handler
 import android.view.View
 import android.widget.RelativeLayout
 import dev.weihl.belles.R
@@ -21,6 +22,7 @@ interface PhotosActionCallBack {
     fun getCurrentItemViewBind(): ItemPhotosLayoutBinding?
     fun getIndicatorView(): View?
     fun finish()
+    fun getHandler(): Handler
 }
 
 var actionCallBack: PhotosActionCallBack? = null
@@ -38,10 +40,12 @@ val touchMoveCallBack = object : TouchMoveCallBack {
 
     // x, y
     private val movePoint = arrayOf(0f, 0f)
+    private var downTime: Long = 0L
+    private var moveRatio: Float = 0f
 
     private fun countMoveRatio(downXY: Array<Float>, moveXY: Array<Float>) {
         val offsetY = (moveXY[1] - downXY[1]) * 0.0005f
-        var moveRatio = 1 - offsetY
+        moveRatio = 1 - offsetY
         moveRatio = if (moveRatio < 0) 0f else if (moveRatio > 1) 1f else moveRatio
         setMoveRatio(moveRatio)
     }
@@ -67,6 +71,7 @@ val touchMoveCallBack = object : TouchMoveCallBack {
     }
 
     override fun onDown() {
+        downTime = System.currentTimeMillis()
         itemViewBind = actionCallBack?.getCurrentItemViewBind()
     }
 
@@ -79,6 +84,10 @@ val touchMoveCallBack = object : TouchMoveCallBack {
     }
 
     override fun onUp() {
+        if (System.currentTimeMillis() - downTime < 700) {
+            doAnimFinish()
+            return
+        }
         val ratio = itemViewBind?.image?.getTag(R.id.value) as Float
         Timber.d("up . ratio $ratio ")
         if (ratio < 0.5f) {
@@ -95,36 +104,39 @@ val touchMoveCallBack = object : TouchMoveCallBack {
             actionCallBack?.finish()
         } else {
 
-            val targetX = photoGlobalXY!![0].minus(centerPoint[0] - 300)
-            val targetY = photoGlobalXY!![1].minus(centerPoint[1] - 300)
+            val targetX = photoGlobalXY?.get(0)?.toFloat()!!
+            val targetY = photoGlobalXY?.get(1)?.toFloat()!!
 
             val x = itemViewBind?.image?.x
-            Timber.d("x :>># $x")
-            val xValueAnimator = x?.let {
-                ValueAnimator.ofFloat(it, targetX.toFloat())
-            }
-            xValueAnimator?.addUpdateListener {
-                val value = it.animatedValue as Float
-                itemViewBind?.image?.x = value
-                Timber.d("x :>>@ ${itemViewBind?.image?.x}")
-            }
-            xValueAnimator?.duration = 400
-            xValueAnimator?.start()
-
             val y = itemViewBind?.image?.y
-            Timber.d("y :>># $y")
-            val yValueAnimator = y?.let {
-                ValueAnimator.ofFloat(it, targetY.toFloat())
-            }
-            yValueAnimator?.addUpdateListener {
-                itemViewBind?.image?.y = it.animatedValue as Float
-                Timber.d("y :>>@ ${itemViewBind?.image?.y}")
-            }
-            yValueAnimator?.duration = 400
 
-            yValueAnimator?.start()
+            itemViewBind?.let {
+                if (x != null && y != null) {
+                    translateAnimation(it.image, x, y, targetX, targetY)
+                }
 
-            actionCallBack?.getIndicatorView()?.postDelayed({
+//                val pxiWidth = centerPoint[0] * 2
+//                val pxiHeight = centerPoint[1] * 2
+//                val width = photoGlobalRect?.width()?.plus(10)
+//                val height = photoGlobalRect?.height()?.plus(10)
+//                val srcRadio = (pxiWidth * moveRatio).div(pxiWidth)
+//                val targetRadio = width?.div(pxiWidth)
+//                targetRadio?.let { tr ->
+//                    val rAnim = ValueAnimator.ofFloat(srcRadio, tr)
+//                    rAnim.duration = 300
+//                    rAnim.addUpdateListener { aniVal ->
+//                        it.image.layoutParams = RelativeLayout.LayoutParams(
+//                            ((aniVal.animatedValue as Float * pxiWidth).toInt()),
+//                            ((aniVal.animatedValue as Float * pxiHeight).toInt())
+//                        )
+//                        Timber.d("????＞＞＞＞＞＞　${it.image.layoutParams.width}")
+//                    }
+//                    rAnim.start()
+//                }
+
+            }
+
+            actionCallBack?.getHandler()?.postDelayed({
                 actionCallBack?.finish()
             }, 300)
         }
@@ -133,56 +145,52 @@ val touchMoveCallBack = object : TouchMoveCallBack {
 }
 
 fun photoEnlargeAnim() {
+
     Timber.d("PhotosAction  photoGlobalRect:${photoGlobalRect.toString()}")
     Timber.d("PhotosAction photoGlobalXY:${photoGlobalXY?.contentToString()}")
 
+
+    // 映射到 Item缩略图 坐标
     val itemLayoutBind = actionCallBack?.getCurrentItemViewBind()
     itemLayoutBind?.image?.x = photoGlobalXY?.get(0)?.toFloat()!!
     itemLayoutBind?.image?.y = photoGlobalXY?.get(1)?.toFloat()!!
 
-    val width = photoGlobalRect?.width()
-    val height = photoGlobalRect?.height()
-
-    itemLayoutBind?.image?.layoutParams = RelativeLayout.LayoutParams(width!!, height!!)
-
-    // 图中心 向 屏幕中心 移动
-    val targetX = centerPoint[0] - width / 2
-    val targetY = centerPoint[1] - height / 2
-    itemLayoutBind?.image?.let {
-        translateAnimation(
-            it,
-            photoGlobalXY!![0].toFloat(), photoGlobalXY!![1].toFloat(),
-            0f, 0f
-        )
+    // 映射 Item缩略图 大小
+    val width = photoGlobalRect?.width()?.plus(10)
+    val height = photoGlobalRect?.height()?.plus(10)
+    width?.let {
+        height?.let {
+            itemLayoutBind?.image?.layoutParams = RelativeLayout.LayoutParams(width, height)
+        }
     }
 
-//    actionCallBack?.getIndicatorView()?.postDelayed({
-//        itemLayoutBind?.image?.layoutParams = RelativeLayout.LayoutParams((centerPoint[0] * 2).toInt(),
-//            (centerPoint[1] * 2).toInt())
-//    },1000)
+    // 移动到原点过程中，将图片放大到全屏
+    actionCallBack?.getHandler()?.postDelayed({
 
-    // 填充整个屏幕
-    itemLayoutBind?.image?.let {
-        enlargeAnimation(
-            it, (centerPoint[0] * 2).toInt(), (centerPoint[1] * 2).toInt()
-        )
-    }
+        // 移动到原点
+        itemLayoutBind?.image?.let {
+            translateAnimation(
+                it,
+                photoGlobalXY!![0].toFloat(), photoGlobalXY!![1].toFloat(),
+                0f, 0f
+            )
+        }
+
+        val pxiWidth = centerPoint[0] * 2
+        val pxiHeight = centerPoint[1] * 2
+        val radio = width?.div(pxiWidth)
+        radio?.let {
+            val rAnim = ValueAnimator.ofFloat(it, 1f)
+            rAnim.duration = 300
+            rAnim.addUpdateListener { aniVal ->
+                itemLayoutBind?.image?.layoutParams = RelativeLayout.LayoutParams(
+                    ((aniVal.animatedValue as Float * pxiWidth).toInt()),
+                    ((aniVal.animatedValue as Float * pxiHeight).toInt())
+                )
+            }
+            rAnim.start()
+        }
+    }, 100)
 
 
-    // 放大到全局
-
-}
-
-fun enlargeAnimation(view: View, toWith: Int, toHeight: Int) {
-    val rAnim = ValueAnimator.ofFloat(0f, 1f)
-    rAnim.duration = 300
-    rAnim.addUpdateListener {
-        val w = it.animatedValue as Float * toWith
-        val h = it.animatedValue as Float * toHeight
-        view.layoutParams = RelativeLayout.LayoutParams(
-            w.toInt(),
-            h.toInt()
-        )
-    }
-    rAnim.start()
 }

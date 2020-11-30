@@ -1,8 +1,8 @@
 package dev.weihl.belles.screens.browse
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
@@ -23,6 +23,8 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
     private lateinit var binding: ActivityPhotosBinding
 
     private lateinit var recyclerView: RecyclerView
+
+    var markPhotoEnlargeAnim: Boolean = true
 
     init {
         Timber.tag("PhotosActivity")
@@ -58,7 +60,10 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
                 val numTxt = "${binding.viewPager.currentItem + 1} · ${adapter.itemCount}"
                 binding.tvNum.text = numTxt
 
-                photoEnlargeAnim()
+                if (markPhotoEnlargeAnim) {
+                    markPhotoEnlargeAnim = false
+                    photoEnlargeAnim()
+                }
             }
         })
         binding.btnBack.setOnClickListener { finish() }
@@ -74,7 +79,7 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
     private fun countCenterPoint() {
         val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val dm = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(dm)
+        wm.defaultDisplay.getRealMetrics(dm)
         val width = dm.widthPixels
         val height = dm.heightPixels
         centerPoint[0] = (width / 2).toFloat()
@@ -114,8 +119,12 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         return null
     }
 
-    override fun getIndicatorView(): View? {
+    override fun getIndicatorView(): View {
         return binding.tvNum
+    }
+
+    override fun getHandler(): Handler {
+        return binding.root.handler
     }
 
     override fun onBackPressed() {
