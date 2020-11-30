@@ -97,10 +97,9 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
     private fun photosAdapterCallBack(): PhotosAdapterCallBack {
         return object : PhotosAdapterCallBack {
             override fun photoOutsideClick() {
-                if (!isScalePhotos()) {
-//                    doAnimFinish(getCurrentItemViewBind())
-                    finish()
-                }
+//                if (!isScalePhotos()) {
+//                    finish()
+//                }
             }
         }
     }

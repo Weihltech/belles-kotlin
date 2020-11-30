@@ -71,8 +71,11 @@ class ClassicRequest(context: Context) : BellesRequest() {
 
         val document = Jsoup.connect(pageUrl).get()
         val elements = document.getElementsByClass("pages")
-        val pageCount = elements[0].text()[1].toString().toInt()
-        Timber.d("Data : ${elements[0].text()} ; $pageCount")
+        val pageStr = elements[0].text().toString()
+        val pageCountStr = pageStr.substring(0, pageStr.indexOf("页"))
+            .replace("共", "")
+        val pageCount = pageCountStr.toString().toInt()
+        Timber.d("Data : $pageCountStr ; $pageCount")
 
         // sub page list
         val pageList = ArrayList<BellesPage>()

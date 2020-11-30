@@ -4,6 +4,7 @@ import android.content.Context
 import dev.weihl.belles.data.DataSource
 import dev.weihl.belles.data.BellesImage
 import dev.weihl.belles.data.BellesPage
+import dev.weihl.belles.data.remote.request.ClassicRequest
 import dev.weihl.belles.data.remote.request.SexyRequest
 import timber.log.Timber
 
@@ -18,7 +19,7 @@ class RemoteDataSource(application: Context) : DataSource.Remote {
 
     override fun loadSexyPageList(page: Int): ArrayList<BellesPage> {
         try {
-            return SexyRequest(mContext).loadPageList(page)
+            return ClassicRequest(mContext).loadPageList(page)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -27,7 +28,7 @@ class RemoteDataSource(application: Context) : DataSource.Remote {
 
     override fun loadSexyImageList(bellesPage: BellesPage): ArrayList<BellesImage> {
         try {
-            return SexyRequest(mContext).loadPageImageList(bellesPage)
+            return ClassicRequest(mContext).loadPageImageList(bellesPage)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
