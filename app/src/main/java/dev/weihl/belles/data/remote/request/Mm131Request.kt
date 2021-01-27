@@ -8,10 +8,12 @@ import timber.log.Timber
 
 /**
  * 网站 www.mm131.net
+ *
+ * 实现 AlbumRequest 具体页面爬虫逻辑
  * @author Ngai
  * @since 2021/1/27
  */
-open class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String = "xinggan") :
+sealed class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String = "xinggan") :
     AlbumRequest(pageUrl, tab) {
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
@@ -61,3 +63,35 @@ open class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String =
         return 0
     }
 }
+
+/**
+ * tab 类型请求
+ */
+open class TabMm131Request(val page: Int, private val defaultTab: String) : Mm131Request() {
+
+    init {
+        pageUrl = "https://www.mm131.net/${defaultTab}/list_6_$page.html"
+        tab = defaultTab
+
+    }
+}
+
+// 性感美眉
+class SexyMm131Request(page: Int, defaultTab: String = "xinggan") :
+    TabMm131Request(page, defaultTab)
+
+// 清纯美眉
+class PureMm131Request(page: Int, defaultTab: String = "qingchun") :
+    TabMm131Request(page, defaultTab)
+
+// 校花美眉
+class CampusMm131Request(page: Int, defaultTab: String = "xiaohua") :
+    TabMm131Request(page, defaultTab)
+
+// 汽车美眉
+class CarMm131Request(page: Int, defaultTab: String = "chemo") :
+    TabMm131Request(page, defaultTab)
+
+// 旗袍美眉
+class QipaoMm131Request(page: Int, defaultTab: String = "qipao") :
+    TabMm131Request(page, defaultTab)
