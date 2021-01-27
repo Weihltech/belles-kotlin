@@ -1,3 +1,2 @@
-include ':remote'
 include ':app'
 rootProject.name='belles'
