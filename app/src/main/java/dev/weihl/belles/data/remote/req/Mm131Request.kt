@@ -1,7 +1,6 @@
-package dev.weihl.belles.data.remote.request.mm131
+package dev.weihl.belles.data.remote.req
 
 import dev.weihl.belles.data.BAlbum
-import dev.weihl.belles.data.remote.request.AlbumRequest
 import org.jsoup.nodes.Document
 import timber.log.Timber
 
@@ -18,7 +17,7 @@ sealed class Mm131Request(val page: Int) : AlbumRequest() {
     abstract val subTag: String
 
     override val pageUrl: String
-        get() = if (page < 2) "${HOST_URL}/${tab}/" else "${HOST_URL}/${tab}/${subTag}$page.html"
+        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${subTag}$page.html"
 
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
@@ -95,20 +94,20 @@ class PureMm131Request(
 // 校花美眉
 class CampusMm131Request(
     page: Int,
-    override val tab: String = "qingchun",
+    override val tab: String = "xiaohua",
     override val subTag: String = "list_2_"
 ) : Mm131Request(page)
 
 // 汽车美眉
 class CarMm131Request(
     page: Int,
-    override val tab: String = "qingchun",
+    override val tab: String = "chemo",
     override val subTag: String = "list_3_"
 ) : Mm131Request(page)
 
 // 旗袍美眉
 class QipaoMm131Request(
     page: Int,
-    override val tab: String = "qingchun",
+    override val tab: String = "qipao",
     override val subTag: String = "list_4_"
 ) : Mm131Request(page)

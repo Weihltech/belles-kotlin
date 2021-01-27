@@ -1,5 +1,6 @@
 package dev.weihl.belles.data.remote.request
 
+import dev.weihl.belles.data.remote.req.ArtTupianzjRequest
 import junit.framework.TestCase
 
 class TupianzjRequestTest : TestCase() {

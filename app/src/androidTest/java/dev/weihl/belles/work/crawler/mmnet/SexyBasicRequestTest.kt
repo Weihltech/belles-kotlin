@@ -2,7 +2,6 @@ package dev.weihl.belles.work.crawler.mmnet
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import dev.weihl.belles.data.remote.request.SexyRequest
 import org.junit.Before
 import org.junit.Test
 

@@ -3,7 +3,6 @@ package dev.weihl.belles.screens.home.favorite
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
-import dev.weihl.belles.data.Repository
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.screens.BaseViewModel
 import kotlinx.coroutines.launch
@@ -19,13 +18,7 @@ class FavoriteViewModel(
     application: Application
 ) : BaseViewModel(application) {
 
-    private val bellesRepository: BellesRepository
-    private val context = application
-
-    init {
-        Timber.tag("BaseViewModel")
-        bellesRepository = BellesRepository(application)
-    }
+    private val bellesRepository = BellesRepository
 
     val subBelles = MutableLiveData<List<Belles>>()
     private val allBells = ArrayList<Belles>()
@@ -44,17 +37,17 @@ class FavoriteViewModel(
     fun queryAllFavoriteBelles() {
         ioScope.launch {
             allBells.clear()
-            bellesRepository.queryAllFavoriteBelles(object : Repository.CallBack {
-                override fun onResult(list: ArrayList<Belles>?) {
-                    if (list != null) {
-                        uiScope.launch {
-                            allBells.addAll(list)
-                            subBelles.value = allBells
-                        }
-                    }
-                }
-
-            })
+//            bellesRepository.queryAllFavoriteBelles(object : Repository.CallBack {
+//                override fun onResult(list: ArrayList<Belles>?) {
+//                    if (list != null) {
+//                        uiScope.launch {
+//                            allBells.addAll(list)
+//                            subBelles.value = allBells
+//                        }
+//                    }
+//                }
+//
+//            })
         }
     }
 }

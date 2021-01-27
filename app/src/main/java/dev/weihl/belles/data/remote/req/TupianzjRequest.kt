@@ -1,4 +1,4 @@
-package dev.weihl.belles.data.remote.request
+package dev.weihl.belles.data.remote.req
 
 import dev.weihl.belles.data.BAlbum
 import org.jsoup.nodes.Document
@@ -17,7 +17,7 @@ sealed class TupianzjRequest(val page: Int) : AlbumRequest() {
     abstract val subTag: String
 
     override val pageUrl: String
-        get() = if (page < 2) "${HOST_URL}/${tab}/" else "${HOST_URL}/${tab}/${subTag}$page.html"
+        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${subTag}$page.html"
 
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
@@ -88,10 +88,10 @@ class ArtTupianzjRequest(
 ) : TupianzjRequest(page)
 
 // 性感美眉
-class SexyTupianzjRequest(
-    page: Int,
-    override val tab: String = "xinggan",
-    override val subTag: String = "list_176_"
-) : TupianzjRequest(page)
+//class SexyTupianzjRequest(
+//    page: Int,
+//    override val tab: String = "xinggan",
+//    override val subTag: String = "list_176_"
+//) : TupianzjRequest(page)
 
 

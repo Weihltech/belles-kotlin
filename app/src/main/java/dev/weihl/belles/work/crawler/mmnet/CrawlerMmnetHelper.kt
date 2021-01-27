@@ -11,7 +11,7 @@ import dev.weihl.belles.data.local.entity.Crawler
  *
  */
 
-val crawlerDao = AppDatabase.getInstance(MainApp.getAppContext()).crawlerDao
+val crawlerDao = AppDatabase.getInstance(MainApp.getContext()).crawlerDao
 private val crawlerMmnetList: ArrayList<String> = ArrayList()
 private const val TAG = "MmnetTag"
 

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull
 import androidx.core.text.HtmlCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import dev.weihl.belles.data.BellesImage
+import dev.weihl.belles.data.BImage
 import dev.weihl.belles.data.local.entity.Belles
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,18 +78,16 @@ fun px2Dp(@NonNull context: Context, px: Int): Int {
     return (px / scale + 0.5f).toInt()
 }
 
-fun sexyImageList2Json(@NonNull list: ArrayList<BellesImage>): String {
-    return GSON.toJson(list)
-}
-
-fun json2SexyImageList(@NonNull json: String): ArrayList<BellesImage>? {
-    try {
+//fun sexyImageList2Json(@NonNull list: ArrayList<BellesImage>): String {
+//    return GSON.toJson(list)
+//}
+//
+fun json2SexyImageList(@NonNull json: String): List<BImage> {
+    runCatching {
         return GSON.fromJson(
             json,
-            object : TypeToken<List<BellesImage?>?>() {}.type
+            object : TypeToken<List<BImage?>?>() {}.type
         )
-    } catch (ex: Exception) {
-        // nothing
     }
-    return null
+    return emptyList()
 }

@@ -4,20 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
-import dev.weihl.belles.data.BellesImage
+import dev.weihl.belles.data.BImage
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 
 /**
  * @author Ngai
  */
 class PhotosAdapter(
-    @NonNull private val photoList: ArrayList<BellesImage>,
-    @NonNull private val callBack: PhotosAdapterCallBack
+    private val photoList: List<BImage>,
+    private val callBack: PhotosAdapterCallBack
 ) :
     RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
 
@@ -42,7 +41,7 @@ class PhotosAdapter(
         return photoList.size
     }
 
-    private fun photo(position: Int): BellesImage {
+    private fun photo(position: Int): BImage {
         return photoList[position]
     }
 

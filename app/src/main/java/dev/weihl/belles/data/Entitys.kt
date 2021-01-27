@@ -1,11 +1,5 @@
 package dev.weihl.belles.data
 
-
-data class BellesPage(val tab: String, val href: String, val title: String)
-
-data class BellesImage(val referer: String, val url: String)
-
-
 /**
  * referer  图片归属，即网站会判断访问来源控制图片是否有效浏览
  * url      图片 url

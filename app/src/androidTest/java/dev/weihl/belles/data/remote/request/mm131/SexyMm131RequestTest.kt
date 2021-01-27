@@ -2,6 +2,7 @@ package dev.weihl.belles.data.remote.request.mm131
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import dev.weihl.belles.data.remote.req.PureMm131Request
 import junit.framework.TestCase
 import org.junit.Before
 

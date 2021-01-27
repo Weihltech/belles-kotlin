@@ -3,8 +3,8 @@ package dev.weihl.belles.screens.home.belles
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
-import dev.weihl.belles.data.Repository
 import dev.weihl.belles.data.local.entity.Belles
+import dev.weihl.belles.data.remote.req.AlbumTab
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
 import kotlinx.coroutines.launch
@@ -21,13 +21,9 @@ class BellesViewModel(
 ) : BaseViewModel(application) {
 
     private var page = 0
-    private val bellesRepository: BellesRepository
+    private val bellesRepository = BellesRepository
     private val context = application
 
-    init {
-        Timber.tag("BaseViewModel")
-        bellesRepository = BellesRepository(application)
-    }
 
     val subBelles = MutableLiveData<List<Belles>>()
     private val allBells = ArrayList<Belles>()
@@ -58,23 +54,21 @@ class BellesViewModel(
             }
             Timber.d("loadNextBelles ! page = $page")
 
-            bellesRepository.loadSexyBellesList(page,
-                object : Repository.CallBack {
-                    override fun onResult(list: ArrayList<Belles>?) {
-                        if (list == null || list.isEmpty()) {
-                            return
-                        }
-                        // update event
-                        if (allBells.isNotEmpty()) {
-                            allBells[0].date = -1L
-                        }
-
-                        allBells.addAll(0, list)
-                        uiScope.launch {
-                            subBelles.value = allBells
-                        }
+            Thread {
+                val bellesList = bellesRepository.loadAlbumList(AlbumTab.SEXY, 1)
+                if (bellesList.isNotEmpty()) {
+                    // update event
+                    if (allBells.isNotEmpty()) {
+                        allBells[0].date = -1L
                     }
-                })
+
+                    allBells.addAll(0, bellesList)
+                    uiScope.launch {
+                        subBelles.value = allBells
+                    }
+                }
+            }.start()
+
         }
     }
 

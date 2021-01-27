@@ -14,7 +14,7 @@ class MainApp : Application() {
 
     companion object {
         private lateinit var appContext: Context
-        fun getAppContext(): Context {
+        fun getContext(): Context {
             return appContext
         }
     }

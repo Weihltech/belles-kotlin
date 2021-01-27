@@ -40,14 +40,14 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         holder.bind.itemBelles = itemBelles
         holder.bind.position = position
 
-        Glide.with(holder.bind.image.context)
-            .load(
-                GlideUrl(
-                    itemBelles.thumb,
-                    LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
-                )
-            )
-            .into(holder.bind.image)
+//        Glide.with(holder.bind.image.context)
+//            .load(
+//                GlideUrl(
+//                    itemBelles.thumb,
+//                    LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
+//                )
+//            )
+//            .into(holder.bind.image)
         holder.bind.desc.text = itemBelles.title
 
         holder.bind.tagRecent.visibility = if (itemBelles.date == -1L) View.VISIBLE else View.GONE
