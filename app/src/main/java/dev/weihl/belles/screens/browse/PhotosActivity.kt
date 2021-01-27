@@ -11,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dev.weihl.belles.R
-import dev.weihl.belles.data.json2SexyImageList
 import dev.weihl.belles.databinding.ActivityPhotosBinding
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
+import dev.weihl.belles.json2SexyImageList
 import dev.weihl.belles.screens.BasicActivity
 import timber.log.Timber
 

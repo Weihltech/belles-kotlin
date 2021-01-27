@@ -9,6 +9,9 @@ import android.text.Html
 import android.text.Spanned
 import androidx.annotation.NonNull
 import androidx.core.text.HtmlCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dev.weihl.belles.data.BellesImage
 import dev.weihl.belles.data.local.entity.Belles
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,7 +25,8 @@ import java.util.*
  */
 
 @SuppressLint("SimpleDateFormat")
-val DATE_FORMAT = SimpleDateFormat("YYYY-MM-dd")
+private val DATE_FORMAT = SimpleDateFormat("YYYY-MM-dd")
+private val GSON = Gson()
 
 fun formatBelles(allBelles: List<Belles>): Spanned {
 
@@ -72,4 +76,20 @@ fun dp2Px(@NonNull context: Context, dp: Int): Int {
 fun px2Dp(@NonNull context: Context, px: Int): Int {
     val scale = context.resources.displayMetrics.density
     return (px / scale + 0.5f).toInt()
+}
+
+fun sexyImageList2Json(@NonNull list: ArrayList<BellesImage>): String {
+    return GSON.toJson(list)
+}
+
+fun json2SexyImageList(@NonNull json: String): ArrayList<BellesImage>? {
+    try {
+        return GSON.fromJson(
+            json,
+            object : TypeToken<List<BellesImage?>?>() {}.type
+        )
+    } catch (ex: Exception) {
+        // nothing
+    }
+    return null
 }

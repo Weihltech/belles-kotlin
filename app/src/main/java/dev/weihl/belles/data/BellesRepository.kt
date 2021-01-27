@@ -6,6 +6,7 @@ import dev.weihl.belles.data.local.LocalDataSource
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.RemoteDataSource
 import dev.weihl.belles.isNetworkAvailable
+import dev.weihl.belles.sexyImageList2Json
 import timber.log.Timber
 
 class BellesRepository(application: Context) : Repository {
