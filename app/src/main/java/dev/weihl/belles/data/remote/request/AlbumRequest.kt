@@ -11,37 +11,51 @@ import org.jsoup.nodes.Document
  * @author Ngai
  * @since 2021/1/27
  */
-abstract class AlbumRequest(var pageUrl: String, var tab: String) {
+abstract class AlbumRequest() {
 
-    private fun pageDocument(pageUrl: String): Document {
+    abstract val pageUrl: String
+
+    abstract val tab: String
+
+    protected fun pageDocument(pageUrl: String): Document {
+        println(pageUrl)
         return Jsoup.connect(pageUrl).get()
     }
 
     fun loadAlbumList(): List<BAlbum> {
-        return analysisPageDocument(pageDocument(pageUrl))
+        runCatching { return analysisPageDocument(pageDocument(pageUrl)) }
+        return mutableListOf()
     }
 
-    abstract fun analysisPageDocument(pageDocument: Document): List<BAlbum>
+    // 需要用到 jsoup 爬虫相关知识
+    protected abstract fun analysisPageDocument(pageDocument: Document): List<BAlbum>
 
     // 通过专辑连接，分析并提取专辑图片数据，并填充到专辑对象中
     fun syncAlbumDetails(bAlbum: BAlbum) {
-        // 通过发现在对应规律，采用拼装方式，将图片集合起来
-        val albumDocument = pageDocument(bAlbum.href)
-        val pageNum = analysisAlbumPageNum(albumDocument)
-        val albumCover = analysisAlbumCover(albumDocument)
-        val albumCoverSimilar = analysisAlbumCoverSimilar(albumCover)
-        bAlbum.list.add(BImage(bAlbum.href, albumCover))
-        for (index in 2..pageNum) {
-            val iHref = bAlbum.href.replace(".html", "_${index}.html")
-            val iUrl = "${albumCoverSimilar}${index}.jpg"
-            bAlbum.list.add(BImage(iHref, iUrl))
+        runCatching {
+            // 通过发现在对应规律，采用拼装方式，将图片集合起来
+            val albumDocument = pageDocument(bAlbum.href)
+            val pageNum = analysisAlbumPageNum(albumDocument)
+            val albumCover = analysisAlbumCover(albumDocument)
+            bAlbum.list.add(BImage(bAlbum.href, albumCover))
+            for (index in 2..pageNum) {
+                val iHref = albumPageHref(albumDocument, bAlbum.href, index)
+                val iUrl = albumPageImage(iHref, albumCover, index)
+                bAlbum.list.add(BImage(iHref, iUrl))
+            }
         }
     }
 
-    abstract fun analysisAlbumCoverSimilar(albumDocument: String): String
+    protected abstract fun albumPageImage(
+        albumPageHref: String,
+        albumCover: String,
+        index: Int
+    ): String
 
-    abstract fun analysisAlbumCover(albumDocument: Document): String
+    protected abstract fun albumPageHref(albumDocument: Document, href: String, page: Int): String
 
-    abstract fun analysisAlbumPageNum(albumDocument: Document): Int
+    protected abstract fun analysisAlbumCover(albumDocument: Document): String
+
+    protected abstract fun analysisAlbumPageNum(albumDocument: Document): Int
 
 }

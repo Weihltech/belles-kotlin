@@ -17,7 +17,7 @@ class SexyMm131RequestTest : TestCase() {
 
     fun testSexyMm131Request() {
 
-        val request = PureMm131Request(2)
+        val request = PureMm131Request(0)
         assert(request.loadAlbumList().isNotEmpty())
 
         val albumList = request.loadAlbumList()

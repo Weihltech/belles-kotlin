@@ -13,8 +13,13 @@ import timber.log.Timber
  * @author Ngai
  * @since 2021/1/27
  */
-sealed class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String = "xinggan") :
-    AlbumRequest(pageUrl, tab) {
+sealed class Mm131Request(val page: Int) : AlbumRequest() {
+
+    abstract val subTag: String
+
+    override val pageUrl: String
+        get() = if (page < 2) "${HOST_URL}/${tab}/" else "${HOST_URL}/${tab}/${subTag}$page.html"
+
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
         val albumList = mutableListOf<BAlbum>()
@@ -35,16 +40,21 @@ sealed class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String
                 val iBAlbum = BAlbum(href, alt, tab)
                 albumList.add(iBAlbum)
                 Timber.d(iBAlbum.toString())
-            }.onFailure {
-                Timber.d(it)
             }
-
         }
 
         return albumList
     }
 
-    override fun analysisAlbumCoverSimilar(albumCover: String): String {
+    override fun albumPageImage(albumPageHref: String, albumCover: String, index: Int): String {
+        return "${analysisAlbumCoverSimilar(albumCover)}${index}.jpg"
+    }
+
+    override fun albumPageHref(albumDocument: Document, href: String, page: Int): String {
+        return href.replace(".html", "_${page}.html")
+    }
+
+    private fun analysisAlbumCoverSimilar(albumCover: String): String {
         return albumCover.substring(0, albumCover.lastIndex - 4)
     }
 
@@ -62,36 +72,43 @@ sealed class Mm131Request(pageUrl: String = "https://www.mm131.net", tab: String
         }
         return 0
     }
-}
 
-/**
- * tab 类型请求
- */
-open class TabMm131Request(val page: Int, private val defaultTab: String) : Mm131Request() {
-
-    init {
-        pageUrl = "https://www.mm131.net/${defaultTab}/list_6_$page.html"
-        tab = defaultTab
-
+    companion object {
+        private const val HOST_URL: String = "https://www.mm131.net"
     }
 }
 
 // 性感美眉
-class SexyMm131Request(page: Int, defaultTab: String = "xinggan") :
-    TabMm131Request(page, defaultTab)
+class SexyMm131Request(
+    page: Int,
+    override val tab: String = "xinggan",
+    override val subTag: String = "list_6_"
+) : Mm131Request(page)
 
 // 清纯美眉
-class PureMm131Request(page: Int, defaultTab: String = "qingchun") :
-    TabMm131Request(page, defaultTab)
+class PureMm131Request(
+    page: Int,
+    override val tab: String = "qingchun",
+    override val subTag: String = "list_1_"
+) : Mm131Request(page)
 
 // 校花美眉
-class CampusMm131Request(page: Int, defaultTab: String = "xiaohua") :
-    TabMm131Request(page, defaultTab)
+class CampusMm131Request(
+    page: Int,
+    override val tab: String = "qingchun",
+    override val subTag: String = "list_2_"
+) : Mm131Request(page)
 
 // 汽车美眉
-class CarMm131Request(page: Int, defaultTab: String = "chemo") :
-    TabMm131Request(page, defaultTab)
+class CarMm131Request(
+    page: Int,
+    override val tab: String = "qingchun",
+    override val subTag: String = "list_3_"
+) : Mm131Request(page)
 
 // 旗袍美眉
-class QipaoMm131Request(page: Int, defaultTab: String = "qipao") :
-    TabMm131Request(page, defaultTab)
+class QipaoMm131Request(
+    page: Int,
+    override val tab: String = "qingchun",
+    override val subTag: String = "list_4_"
+) : Mm131Request(page)
