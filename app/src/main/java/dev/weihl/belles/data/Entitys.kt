@@ -1,9 +1,28 @@
 package dev.weihl.belles.data
 
 
-// 所有性感页面集合
 data class BellesPage(val tab: String, val href: String, val title: String)
 
-
-// 性感页面，对应的图片
 data class BellesImage(val referer: String, val url: String)
+
+
+/**
+ * referer  图片归属，即网站会判断访问来源控制图片是否有效浏览
+ * url      图片 url
+ */
+data class BImage(val referer: String, val url: String)
+
+/**
+ * href   专辑页面
+ * title  专辑标题
+ * tab    专辑项
+ * cover  封面 url
+ * list   专辑图片
+ */
+data class BAlbum(
+    val href: String,
+    val title: String,
+    val tab: String,
+    val cover: String = "",
+    val list: MutableList<BImage> = mutableListOf()
+)

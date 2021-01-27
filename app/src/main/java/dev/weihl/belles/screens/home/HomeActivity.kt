@@ -3,7 +3,6 @@ package dev.weihl.belles.screens.home
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.vsoontech.remote.RemoteChannel
 import dev.weihl.belles.R
 import dev.weihl.belles.screens.BasicActivity
 import kotlinx.android.synthetic.main.activity_home.*
@@ -31,33 +30,6 @@ class HomeActivity : BasicActivity() {
             currFragmentId = it.itemId
             true
         }
-
-
-    }
-
-    private val qrCodeInfoChannel = object : RemoteChannel() {
-        override var reqClass: Any = 1
-        override var respClass: Any = 2
-
-        override fun onMessage(resp: Any) {
-
-
-        }
-
-    }
-
-    override fun onBackPressed() {
-        finish()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        qrCodeInfoChannel.connect()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        qrCodeInfoChannel.disconnect()
     }
 
 }
