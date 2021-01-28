@@ -12,20 +12,10 @@ object BellesRepository : DataSource.Repository {
     private val mContext = MainApp.getContext()
     private var localDB: LocalDataSource = LocalDataSource(mContext)
     private val GSON = Gson()
-
-    // 只有浏览过，才初始化当前项数据 request
-    private var sexyRequest: AlbumPageRequest? = null
-    private var pureRequest: AlbumPageRequest? = null
-    private var campusRequest: AlbumPageRequest? = null
-    private var carMmRequest: AlbumPageRequest? = null
-    private var qipaoRequest: AlbumPageRequest? = null
-    private var classicRequest: AlbumPageRequest? = null
-    private var artRequest: AlbumPageRequest? = null
-
     private val albumRequestMap = HashMap<String, AlbumPageRequest>()
 
     override fun nextAlbumList(anEnum: EnumAlbum): List<Belles> {
-        TODO("Not yet implemented")
+        return loadAlbumList(anEnum, selectAlbumRequest(anEnum).nextPage)
     }
 
     override fun loadAlbumList(anEnum: EnumAlbum, page: Int): List<Belles> {

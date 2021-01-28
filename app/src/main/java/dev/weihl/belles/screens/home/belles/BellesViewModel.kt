@@ -7,7 +7,6 @@ import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.req.EnumAlbum
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
-import timber.log.Timber
 
 /**
  * @desc ViewMode
@@ -23,20 +22,13 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     // 专辑项
     private var anEnum: EnumAlbum = EnumAlbum.SEXY
 
-    // 页面
-    private var _page = 0
-    private val page: Int
-        get() = ++_page
-
     // 页面数据
-    private val _bellesList = ArrayList<Belles>()
+    private val _bellesListMap = HashMap<EnumAlbum, ArrayList<Belles>>()
     val bellesList = MutableLiveData<List<Belles>>()
 
     fun switchAlbumTab(enumAlbum: EnumAlbum) {
         anEnum = enumAlbum
-        _page = 0
         loadNextBelles()
-
     }
 
     fun loadNextBelles() {
@@ -45,20 +37,16 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
             return
         }
 
-        Timber.d("loadNextBelles ! page = $page")
-
         Thread {
-            val pageBellesList = repository.loadAlbumList(anEnum, _page)
+            val pageBellesList = repository.nextAlbumList(anEnum)
             if (pageBellesList.isNotEmpty()) {
-
                 // update event,标记上次看到这里
-                if (_bellesList.isNotEmpty()) {
-                    _bellesList[0].date = -1L
+                _bellesListMap[anEnum]?.let {
+                    it[0].date = -1L
+                    it.addAll(0, pageBellesList)
                 }
-
-                _bellesList.addAll(0, pageBellesList)
             }
-            bellesList.postValue(_bellesList)
+            bellesList.postValue(_bellesListMap[anEnum])
         }.start()
     }
 
