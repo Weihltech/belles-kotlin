@@ -15,12 +15,14 @@ object BellesRepository : DataSource.Repository {
     private val albumRequestMap = HashMap<String, AlbumPageRequest>()
 
     override fun nextAlbumList(anEnum: EnumAlbum): List<Belles> {
-        return loadAlbumList(anEnum, selectAlbumRequest(anEnum).nextPage)
+        return loadAlbumList(anEnum, findAlbumRequest(anEnum).nextPage)
     }
 
     override fun loadAlbumList(anEnum: EnumAlbum, page: Int): List<Belles> {
 
-        val albumRequest = findAlbumRequest(anEnum, page)
+        val albumRequest = findAlbumRequest(anEnum)
+        albumRequest.page = page
+
         val sexyAlbumList = albumRequest.loadAlbumList()
         // 取网络数据
         val sexyBelles = mutableListOf<Belles>()
@@ -45,13 +47,12 @@ object BellesRepository : DataSource.Repository {
         return sexyBelles
     }
 
-    private fun findAlbumRequest(anEnum: EnumAlbum, page: Int): AlbumPageRequest {
+    private fun findAlbumRequest(anEnum: EnumAlbum): AlbumPageRequest {
         var request = albumRequestMap[anEnum.tab]
         if (request == null) {
             request = selectAlbumRequest(anEnum)
             albumRequestMap[anEnum.tab] = request
         }
-        request.page = page
         return request
     }
 

@@ -4,6 +4,7 @@ import dev.weihl.belles.data.BAlbum
 import dev.weihl.belles.data.BImage
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import timber.log.Timber
 
 
 /**
@@ -11,14 +12,14 @@ import org.jsoup.nodes.Document
  * @author Ngai
  * @since 2021/1/27
  */
-sealed class AlbumRequest() {
+sealed class AlbumRequest {
 
     abstract val pageUrl: String
 
     abstract val tab: String
 
     protected fun pageDocument(pageUrl: String): Document {
-        println(pageUrl)
+        Timber.d(pageUrl)
         return Jsoup.connect(pageUrl).get()
     }
 

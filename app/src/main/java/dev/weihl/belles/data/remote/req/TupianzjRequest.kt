@@ -32,10 +32,10 @@ sealed class TupianzjRequest : AlbumPageRequest() {
             runCatching {
                 val imgElsFirst = imgEls[0]
                 val alt = imgElsFirst.attr("alt")
-                //val src = imgElsFirst.attr("src")
+                val src = imgElsFirst.attr("src")
                 //val width = imgElsFirst.attr("width")
                 //val height = imgElsFirst.attr("height")
-                val iBAlbum = BAlbum("$HOST_URL$href", alt, tab)
+                val iBAlbum = BAlbum("$HOST_URL$href", alt, tab, src)
                 albumList.add(iBAlbum)
                 Timber.d(iBAlbum.toString())
             }
@@ -81,7 +81,7 @@ class ClassicTupianzjRequest(
 
 // 艺术美眉
 class ArtTupianzjRequest(
-    override val tab: String = EnumAlbum.ART.name,
+    override val tab: String = EnumAlbum.ART.tab,
     override val urlTag: String = EnumAlbum.ART.urlTag
 ) : TupianzjRequest()
 

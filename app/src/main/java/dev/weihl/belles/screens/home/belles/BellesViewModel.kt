@@ -23,12 +23,16 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     private var anEnum: EnumAlbum = EnumAlbum.SEXY
 
     // 页面数据
-    private val _bellesListMap = HashMap<EnumAlbum, ArrayList<Belles>>()
+    private val _bellesListMap = HashMap<EnumAlbum, MutableList<Belles>>()
     val bellesList = MutableLiveData<List<Belles>>()
 
     fun switchAlbumTab(enumAlbum: EnumAlbum) {
         anEnum = enumAlbum
-        loadNextBelles()
+
+        // set empty list
+        if (_bellesListMap[anEnum] == null) {
+            _bellesListMap[anEnum] = mutableListOf()
+        }
     }
 
     fun loadNextBelles() {
@@ -42,7 +46,9 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
             if (pageBellesList.isNotEmpty()) {
                 // update event,标记上次看到这里
                 _bellesListMap[anEnum]?.let {
-                    it[0].date = -1L
+                    if (it.isNotEmpty()) {
+                        it[0].date = -1L
+                    }
                     it.addAll(0, pageBellesList)
                 }
             }

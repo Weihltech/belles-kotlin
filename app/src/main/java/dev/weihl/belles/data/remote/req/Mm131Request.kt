@@ -86,24 +86,24 @@ class SexyMm131Request(
 
 // 清纯美眉
 class PureMm131Request(
-    override val tab: String = EnumAlbum.PURE.name,
+    override val tab: String = EnumAlbum.PURE.tab,
     override val urlTag: String = EnumAlbum.PURE.urlTag
 ) : Mm131Request()
 
 // 校花美眉
 class CampusMm131Request(
-    override val tab: String = EnumAlbum.CAMPUS.name,
+    override val tab: String = EnumAlbum.CAMPUS.tab,
     override val urlTag: String = EnumAlbum.CAMPUS.urlTag
 ) : Mm131Request()
 
 // 汽车美眉
 class CarMm131Request(
-    override val tab: String = EnumAlbum.CAR_MM.name,
+    override val tab: String = EnumAlbum.CAR_MM.tab,
     override val urlTag: String = EnumAlbum.CAR_MM.urlTag
 ) : Mm131Request()
 
 // 旗袍美眉
 class QipaoMm131Request(
-    override val tab: String = EnumAlbum.QI_PAO.name,
+    override val tab: String = EnumAlbum.QI_PAO.tab,
     override val urlTag: String = EnumAlbum.QI_PAO.urlTag
 ) : Mm131Request()
