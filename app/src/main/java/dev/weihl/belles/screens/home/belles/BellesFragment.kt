@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
 import dev.weihl.belles.common.SpaceItemDecoration
@@ -55,6 +56,13 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         binding.bellesRecyclerView.addItemDecoration(
             SpaceItemDecoration(context.dp2Px(4), 2)
         )
+        binding.bellesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // (dy > 0) //下滑动作
+                // (dy < 0) //上滑动作
+                binding.albumLayout.visibility = if (dy < 0) View.GONE else View.VISIBLE
+            }
+        })
 
         // refresh action
         binding.swipeRefreshLayout.setOnRefreshListener {
