@@ -18,7 +18,7 @@ sealed class TupianzjRequest : AlbumPageRequest() {
     abstract val urlTag: String
 
     override val pageUrl: String
-        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${urlTag}$page.html"
+        get() = if (page < 2) "$HOST_URL/meinv/${tab}/" else "$HOST_URL/meinv/${tab}/${urlTag}$page.html"
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
         val albumList = mutableListOf<BAlbum>()
@@ -44,32 +44,46 @@ sealed class TupianzjRequest : AlbumPageRequest() {
         return albumList
     }
 
-    override fun albumPageImage(albumPageHref: String, albumCover: String, index: Int): String {
-        return analysisAlbumCover(pageDocument(albumPageHref))
+    override fun albumIncreasePageImage(
+        albumPageHref: String,
+        albumFirstImageUrl: String,
+        page: Int
+    ): String {
+        var cover = ""
+        runCatching {
+            cover = analysisAlbumPageImage(pageDocument(albumPageHref))
+        }
+        Timber.d("albumPageImage:${albumPageHref} ; cover：${cover}")
+        return cover
     }
 
-    override fun albumPageHref(albumDocument: Document, href: String, page: Int): String {
-        return href.replace(".html", "_$page.html")
+    override fun albumIncreasePageHref(
+        albumFirstDocument: Document,
+        albumFirstHref: String,
+        page: Int
+    ): String {
+        return albumFirstHref.replace(".html", "_$page.html")
     }
 
-    override fun analysisAlbumCover(albumDocument: Document): String {
-        val bigPicElement = albumDocument.getElementById("bigpicimg")
+    override fun analysisAlbumPageImage(albumFirstDocument: Document): String {
+        val bigPicElement = albumFirstDocument.getElementById("bigpicimg")
         return bigPicElement.attr("src")
     }
 
-    override fun analysisAlbumPageNum(albumDocument: Document): Int {
-        val elements = albumDocument.getElementsByClass("pages")
-        val pageStr = elements[0].text().toString()
-        val pageCountStr = pageStr.substring(0, pageStr.indexOf("页"))
-            .replace("共", "")
+    override fun analysisAlbumPageNum(albumFirstDocument: Document): Int {
         runCatching {
+            val elements = albumFirstDocument.getElementsByClass("pages")
+            val pageStr = elements[0].text().toString()
+            val pageCountStr = pageStr.substring(0, pageStr.indexOf("页"))
+                .replace("共", "")
+            Timber.d("PageNum:$pageCountStr")
             return pageCountStr.toInt()
         }
         return 0
     }
 
     companion object {
-        private const val HOST_URL: String = "https://www.tupianzj.com/meinv"
+        private const val HOST_URL: String = "https://www.tupianzj.com"
     }
 }
 

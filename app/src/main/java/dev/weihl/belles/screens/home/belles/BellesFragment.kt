@@ -4,7 +4,6 @@ package dev.weihl.belles.screens.home.belles
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
 import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.req.EnumAlbum
 import dev.weihl.belles.databinding.FragmentBellesBinding
 import dev.weihl.belles.dp2Px
+import dev.weihl.belles.drawableResources
 import dev.weihl.belles.screens.BasicFragment
 import dev.weihl.belles.screens.browse.PhotosActivity
 import timber.log.Timber
@@ -91,7 +92,8 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
                 val albumView = TextView(context).apply {
                     text = album.title
                     gravity = Gravity.CENTER
-                    background = ColorDrawable(Color.parseColor("#0297FA"))
+                    background = context.drawableResources(R.drawable.ic_round_bg)
+                    setTextColor(Color.WHITE)
                 }
                 albumView.setTag(R.id.value, album)
                 albumView.setOnClickListener(switchAlbumListener)
@@ -102,6 +104,10 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
 
     private val switchAlbumListener = View.OnClickListener {
         runCatching {
+            if (binding.swipeRefreshLayout.isRefreshing) {
+                Snackbar.make(it, "正在刷新中，请稍后...", 500).show()
+                return@runCatching
+            }
             val album = it.getTag(R.id.value) as EnumAlbum
             bellesViewModel.switchAlbumTab(album)
             binding.swipeRefreshLayout.isRefreshing = true

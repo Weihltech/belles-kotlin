@@ -1,4 +1,4 @@
-package dev.weihl.belles.data.remote.request.mm131
+package dev.weihl.belles.data.remote.request
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
@@ -18,13 +18,15 @@ class SexyMm131RequestTest : TestCase() {
 
     fun testSexyMm131Request() {
 
-        val request = PureMm131Request(0)
+        val request = PureMm131Request()
         assert(request.loadAlbumList().isNotEmpty())
 
         val albumList = request.loadAlbumList()
 
-        request.syncAlbumDetails(albumList[0])
-        println("SexyMm131@ " + albumList[0].toString())
+        albumList.forEach {
+            request.syncAlbumDetails(it)
+            println("SexyMm131@ $it")
+        }
 
     }
 

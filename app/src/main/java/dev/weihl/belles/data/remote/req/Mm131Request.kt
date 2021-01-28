@@ -46,25 +46,25 @@ sealed class Mm131Request : AlbumPageRequest() {
         return albumList
     }
 
-    override fun albumPageImage(albumPageHref: String, albumCover: String, index: Int): String {
-        return "${analysisAlbumCoverSimilar(albumCover)}${index}.jpg"
+    override fun albumIncreasePageImage(albumPageHref: String, albumFirstImageUrl: String, page: Int): String {
+        return "${analysisAlbumCoverSimilar(albumFirstImageUrl)}${page}.jpg"
     }
 
-    override fun albumPageHref(albumDocument: Document, href: String, page: Int): String {
-        return href.replace(".html", "_${page}.html")
+    override fun albumIncreasePageHref(albumFirstDocument: Document, albumFirstHref: String, page: Int): String {
+        return albumFirstHref.replace(".html", "_${page}.html")
     }
 
     private fun analysisAlbumCoverSimilar(albumCover: String): String {
         return albumCover.substring(0, albumCover.lastIndex - 4)
     }
 
-    override fun analysisAlbumCover(albumDocument: Document): String {
-        return albumDocument.getElementsByClass("content-pic")[0]
+    override fun analysisAlbumPageImage(albumFirstDocument: Document): String {
+        return albumFirstDocument.getElementsByClass("content-pic")[0]
             .getElementsByTag("img")[0].attr("src")
     }
 
-    override fun analysisAlbumPageNum(albumDocument: Document): Int {
-        val elements = albumDocument.getElementsByClass("content-page")
+    override fun analysisAlbumPageNum(albumFirstDocument: Document): Int {
+        val elements = albumFirstDocument.getElementsByClass("content-page")
         val pageNum = elements[0].getElementsByClass("page-ch")[0]
             .text().replace("共", "").replace("页", "")
         runCatching {

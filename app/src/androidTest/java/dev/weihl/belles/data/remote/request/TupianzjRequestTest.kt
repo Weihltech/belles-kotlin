@@ -1,6 +1,6 @@
 package dev.weihl.belles.data.remote.request
 
-import dev.weihl.belles.data.remote.req.ArtTupianzjRequest
+import dev.weihl.belles.data.remote.req.ClassicTupianzjRequest
 import junit.framework.TestCase
 
 class TupianzjRequestTest : TestCase() {
@@ -11,12 +11,15 @@ class TupianzjRequestTest : TestCase() {
 
     fun testTupianzjRequest() {
 
-        val request = ArtTupianzjRequest(0)
+        val request = ClassicTupianzjRequest()
         val albumList = request.loadAlbumList()
         assert(albumList.isNotEmpty())
 
-        request.syncAlbumDetails(albumList[0])
-        println("Tupianzj@ " + albumList[0])
+        albumList.forEach {
+            Thread.sleep(2000)
+            request.syncAlbumDetails(it)
+            println("TupianzjRequest@ $it")
+        }
 
     }
 }

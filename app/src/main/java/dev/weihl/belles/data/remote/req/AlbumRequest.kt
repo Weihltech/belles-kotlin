@@ -35,29 +35,37 @@ sealed class AlbumRequest {
     fun syncAlbumDetails(bAlbum: BAlbum) {
         runCatching {
             // 通过发现在对应规律，采用拼装方式，将图片集合起来
+            // 获取专辑第一页信息，数量，但此页面已经访问，先收集
             val albumDocument = pageDocument(bAlbum.href)
             val pageNum = analysisAlbumPageNum(albumDocument)
-            val albumCover = analysisAlbumCover(albumDocument)
-            bAlbum.list.add(BImage(bAlbum.href, albumCover))
+            val albumImageUrl = analysisAlbumPageImage(albumDocument)
+            bAlbum.list.add(BImage(bAlbum.href, albumImageUrl))
+            // 第二页面，才需要循环获取
             for (index in 2..pageNum) {
-                val iHref = albumPageHref(albumDocument, bAlbum.href, index)
-                val iUrl = albumPageImage(iHref, albumCover, index)
+                val iHref = albumIncreasePageHref(albumDocument, bAlbum.href, index)
+                val iUrl = albumIncreasePageImage(iHref, albumImageUrl, index)
                 bAlbum.list.add(BImage(iHref, iUrl))
             }
         }
     }
 
-    protected abstract fun albumPageImage(
+    // 通过首页图片 href ，规律发现后续 图片href，一般情况为数字递增
+    protected abstract fun albumIncreasePageImage(
         albumPageHref: String,
-        albumCover: String,
-        index: Int
+        albumFirstImageUrl: String,
+        page: Int
     ): String
 
-    protected abstract fun albumPageHref(albumDocument: Document, href: String, page: Int): String
+    // 通过首页，发现后续的 大图 href
+    protected abstract fun albumIncreasePageHref(
+        albumFirstDocument: Document,
+        albumFirstHref: String,
+        page: Int
+    ): String
 
-    protected abstract fun analysisAlbumCover(albumDocument: Document): String
+    protected abstract fun analysisAlbumPageImage(albumFirstDocument: Document): String
 
-    protected abstract fun analysisAlbumPageNum(albumDocument: Document): Int
+    protected abstract fun analysisAlbumPageNum(albumFirstDocument: Document): Int
 
 }
 

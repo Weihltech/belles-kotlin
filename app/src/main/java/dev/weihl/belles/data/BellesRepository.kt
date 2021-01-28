@@ -19,7 +19,6 @@ object BellesRepository : DataSource.Repository {
     }
 
     override fun loadAlbumList(anEnum: EnumAlbum, page: Int): List<Belles> {
-
         val albumRequest = findAlbumRequest(anEnum)
         albumRequest.page = page
 
@@ -33,7 +32,10 @@ object BellesRepository : DataSource.Repository {
                 Timber.d(localBelles.toString())
                 sexyBelles.add(0, localBelles)
             } else {
-                // snyc remote
+                // 并避免访问过快被拒绝访问 snyc remote；
+                if (anEnum == EnumAlbum.ART || anEnum == EnumAlbum.CLASSIC) {
+                    Thread.sleep(2000)
+                }
                 albumRequest.syncAlbumDetails(it)
                 // cover
                 val newBelles = coverBells(it)

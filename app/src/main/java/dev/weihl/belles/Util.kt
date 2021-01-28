@@ -2,12 +2,15 @@ package dev.weihl.belles
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
+import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -48,6 +51,10 @@ fun formatBelles(allBelles: List<Belles>): Spanned {
 
 fun currDateYyyyMmDd(): String {
     return DATE_FORMAT.format(Date())
+}
+
+fun Context.drawableResources(@DrawableRes resId: Int): Drawable? {
+    return AppCompatResources.getDrawable(this, resId)
 }
 
 /* 网络已连接，判断连接方式 */
