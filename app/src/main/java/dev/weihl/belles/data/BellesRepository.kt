@@ -13,9 +13,24 @@ object BellesRepository : DataSource.Repository {
     private var localDB: LocalDataSource = LocalDataSource(mContext)
     private val GSON = Gson()
 
-    override fun loadAlbumList(tab: AlbumTab, page: Int): List<Belles> {
+    // 只有浏览过，才初始化当前项数据 request
+    private var sexyRequest: AlbumPageRequest? = null
+    private var pureRequest: AlbumPageRequest? = null
+    private var campusRequest: AlbumPageRequest? = null
+    private var carMmRequest: AlbumPageRequest? = null
+    private var qipaoRequest: AlbumPageRequest? = null
+    private var classicRequest: AlbumPageRequest? = null
+    private var artRequest: AlbumPageRequest? = null
 
-        val albumRequest = switchAlbumRequest(tab, page)
+    private val albumRequestMap = HashMap<String, AlbumPageRequest>()
+
+    override fun nextAlbumList(anEnum: EnumAlbum): List<Belles> {
+        TODO("Not yet implemented")
+    }
+
+    override fun loadAlbumList(anEnum: EnumAlbum, page: Int): List<Belles> {
+
+        val albumRequest = findAlbumRequest(anEnum, page)
         val sexyAlbumList = albumRequest.loadAlbumList()
         // 取网络数据
         val sexyBelles = mutableListOf<Belles>()
@@ -40,44 +55,26 @@ object BellesRepository : DataSource.Repository {
         return sexyBelles
     }
 
-    private fun switchAlbumRequest(tab: AlbumTab, page: Int): AlbumRequest {
-        return when (tab) {
-            //AlbumTab.SEXY -> return SexyMm131Request(page)
-            AlbumTab.PURE -> PureMm131Request(page)
-            AlbumTab.CAMPUS -> CampusMm131Request(page)
-            AlbumTab.CAR_MM -> CarMm131Request(page)
-            AlbumTab.QI_PAO -> QipaoMm131Request(page)
-            AlbumTab.CLASSIC -> ClassicTupianzjRequest(page)
-            AlbumTab.ART -> ArtTupianzjRequest(page)
-            else -> SexyMm131Request(page)
+    private fun findAlbumRequest(anEnum: EnumAlbum, page: Int): AlbumPageRequest {
+        var request = albumRequestMap[anEnum.tab]
+        if (request == null) {
+            request = selectAlbumRequest(anEnum)
+            albumRequestMap[anEnum.tab] = request
         }
+        request.page = page
+        return request
     }
 
-    private fun sexyAlbumLoad(page: Int): List<Belles> {
-
-        val sexyRequest = SexyMm131Request(page)
-        val sexyAlbumList = sexyRequest.loadAlbumList()
-        // 取网络数据
-        val sexyBelles = mutableListOf<Belles>()
-        sexyAlbumList.forEach {
-            // 若有本地记录，则取本地数据
-            val localBelles = localDB.queryBelles(it.href)
-            if (localBelles != null) {
-                Timber.d(localBelles.toString())
-                sexyBelles.add(localBelles)
-            } else {
-                // snyc remote
-                sexyRequest.syncAlbumDetails(it)
-                // cover
-                val newBelles = coverBells(it)
-                sexyBelles.add(newBelles)
-                // save album
-                localDB.insertBelles(newBelles)
-                Timber.d(newBelles.toString())
-            }
+    private fun selectAlbumRequest(anEnum: EnumAlbum): AlbumPageRequest {
+        return when (anEnum) {
+            EnumAlbum.PURE -> PureMm131Request()
+            EnumAlbum.CAMPUS -> CampusMm131Request()
+            EnumAlbum.CAR_MM -> CarMm131Request()
+            EnumAlbum.QI_PAO -> QipaoMm131Request()
+            EnumAlbum.CLASSIC -> ClassicTupianzjRequest()
+            EnumAlbum.ART -> ArtTupianzjRequest()
+            else -> SexyMm131Request()
         }
-
-        return sexyBelles
     }
 
     private fun coverBells(bAlbum: BAlbum): Belles {

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.AlbumTab
+import dev.weihl.belles.data.remote.req.EnumAlbum
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
 import timber.log.Timber
@@ -21,7 +21,7 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     private val context = application
 
     // 专辑项
-    private var tab: AlbumTab = AlbumTab.SEXY
+    private var anEnum: EnumAlbum = EnumAlbum.SEXY
 
     // 页面
     private var _page = 0
@@ -32,8 +32,8 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     private val _bellesList = ArrayList<Belles>()
     val bellesList = MutableLiveData<List<Belles>>()
 
-    fun switchAlbumTab(albumTab: AlbumTab) {
-        tab = albumTab
+    fun switchAlbumTab(enumAlbum: EnumAlbum) {
+        anEnum = enumAlbum
         _page = 0
         loadNextBelles()
 
@@ -48,7 +48,7 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
         Timber.d("loadNextBelles ! page = $page")
 
         Thread {
-            val pageBellesList = repository.loadAlbumList(AlbumTab.SEXY, _page)
+            val pageBellesList = repository.loadAlbumList(anEnum, _page)
             if (pageBellesList.isNotEmpty()) {
 
                 // update event,标记上次看到这里

@@ -93,9 +93,4 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         adapter?.notifyDataSetChanged()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated !")
-    }
-
 }

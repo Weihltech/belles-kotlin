@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
  * @author Ngai
  * @since 2021/1/27
  */
-abstract class AlbumRequest() {
+sealed class AlbumRequest() {
 
     abstract val pageUrl: String
 
@@ -57,5 +57,15 @@ abstract class AlbumRequest() {
     protected abstract fun analysisAlbumCover(albumDocument: Document): String
 
     protected abstract fun analysisAlbumPageNum(albumDocument: Document): Int
+
+}
+
+abstract class AlbumPageRequest(var page: Int = 0) : AlbumRequest() {
+
+    // 游标
+    val nextPage: Int
+        get() = ++page
+    val prevPage: Int
+        get() = if (page <= 1) 0 else --page
 
 }

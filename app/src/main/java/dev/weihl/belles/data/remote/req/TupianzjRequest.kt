@@ -12,13 +12,13 @@ import timber.log.Timber
  * @author Ngai
  * @since 2021/1/27
  */
-sealed class TupianzjRequest(val page: Int) : AlbumRequest() {
+sealed class TupianzjRequest : AlbumPageRequest() {
 
-    abstract val subTag: String
+    // page url tag； switch page index tab to tag
+    abstract val urlTag: String
 
     override val pageUrl: String
-        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${subTag}$page.html"
-
+        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${urlTag}$page.html"
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
         val albumList = mutableListOf<BAlbum>()
@@ -75,17 +75,15 @@ sealed class TupianzjRequest(val page: Int) : AlbumRequest() {
 
 // 古装美眉
 class ClassicTupianzjRequest(
-    page: Int,
-    override val tab: String = "guzhuang",
-    override val subTag: String = "list_177_"
-) : TupianzjRequest(page)
+    override val tab: String = EnumAlbum.CLASSIC.tab,
+    override val urlTag: String = EnumAlbum.CLASSIC.urlTag
+) : TupianzjRequest()
 
 // 艺术美眉
 class ArtTupianzjRequest(
-    page: Int,
-    override val tab: String = "yishu",
-    override val subTag: String = "list_178_"
-) : TupianzjRequest(page)
+    override val tab: String = EnumAlbum.ART.name,
+    override val urlTag: String = EnumAlbum.ART.urlTag
+) : TupianzjRequest()
 
 // 性感美眉
 //class SexyTupianzjRequest(

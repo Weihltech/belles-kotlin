@@ -12,13 +12,14 @@ import timber.log.Timber
  * @author Ngai
  * @since 2021/1/27
  */
-sealed class Mm131Request(private val page: Int) : AlbumRequest() {
+sealed class Mm131Request : AlbumPageRequest() {
 
-    abstract val subTag: String
+    // 即 page url 类型切换拼装 标签
+    abstract val urlTag: String
 
+    // 根据游标创建 url
     override val pageUrl: String
-        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${subTag}$page.html"
-
+        get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${urlTag}$page.html"
 
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
         val albumList = mutableListOf<BAlbum>()
@@ -79,35 +80,30 @@ sealed class Mm131Request(private val page: Int) : AlbumRequest() {
 
 // 性感美眉
 class SexyMm131Request(
-    page: Int,
-    override val tab: String = "xinggan",
-    override val subTag: String = "list_6_"
-) : Mm131Request(page)
+    override val tab: String = EnumAlbum.SEXY.tab,
+    override val urlTag: String = EnumAlbum.SEXY.urlTag
+) : Mm131Request()
 
 // 清纯美眉
 class PureMm131Request(
-    page: Int,
-    override val tab: String = "qingchun",
-    override val subTag: String = "list_1_"
-) : Mm131Request(page)
+    override val tab: String = EnumAlbum.PURE.name,
+    override val urlTag: String = EnumAlbum.PURE.urlTag
+) : Mm131Request()
 
 // 校花美眉
 class CampusMm131Request(
-    page: Int,
-    override val tab: String = "xiaohua",
-    override val subTag: String = "list_2_"
-) : Mm131Request(page)
+    override val tab: String = EnumAlbum.CAMPUS.name,
+    override val urlTag: String = EnumAlbum.CAMPUS.urlTag
+) : Mm131Request()
 
 // 汽车美眉
 class CarMm131Request(
-    page: Int,
-    override val tab: String = "chemo",
-    override val subTag: String = "list_3_"
-) : Mm131Request(page)
+    override val tab: String = EnumAlbum.CAR_MM.name,
+    override val urlTag: String = EnumAlbum.CAR_MM.urlTag
+) : Mm131Request()
 
 // 旗袍美眉
 class QipaoMm131Request(
-    page: Int,
-    override val tab: String = "qipao",
-    override val subTag: String = "list_4_"
-) : Mm131Request(page)
+    override val tab: String = EnumAlbum.QI_PAO.name,
+    override val urlTag: String = EnumAlbum.QI_PAO.urlTag
+) : Mm131Request()

@@ -1,7 +1,7 @@
 package dev.weihl.belles.data
 
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.AlbumTab
+import dev.weihl.belles.data.remote.req.EnumAlbum
 
 interface DataSource {
 
@@ -23,7 +23,10 @@ interface DataSource {
 
     interface Repository {
 
-        fun loadAlbumList(tab: AlbumTab, page: Int): List<Belles>
+        //
+        fun nextAlbumList(anEnum: EnumAlbum): List<Belles>
+
+        fun loadAlbumList(anEnum: EnumAlbum, page: Int): List<Belles>
 
         fun markFavorites(belles: Belles)
 
