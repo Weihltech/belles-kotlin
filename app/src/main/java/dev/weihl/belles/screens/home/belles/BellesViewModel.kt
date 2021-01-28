@@ -26,13 +26,17 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     private val _bellesListMap = HashMap<EnumAlbum, MutableList<Belles>>()
     val bellesList = MutableLiveData<List<Belles>>()
 
-    fun switchAlbumTab(enumAlbum: EnumAlbum) {
+    fun switchAlbumTab(enumAlbum: EnumAlbum): Boolean {
         anEnum = enumAlbum
 
         // set empty list
-        if (_bellesListMap[anEnum] == null) {
+        if (_bellesListMap[anEnum].isNullOrEmpty()) {
             _bellesListMap[anEnum] = mutableListOf()
+            return false
+        } else {
+            bellesList.postValue(_bellesListMap[anEnum])
         }
+        return true
     }
 
     fun loadNextBelles() {

@@ -109,9 +109,11 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
                 return@runCatching
             }
             val album = it.getTag(R.id.value) as EnumAlbum
-            bellesViewModel.switchAlbumTab(album)
+            val hasData = bellesViewModel.switchAlbumTab(album)
             binding.swipeRefreshLayout.isRefreshing = true
-            bellesViewModel.loadNextBelles()
+            if (!hasData) {
+                bellesViewModel.loadNextBelles()
+            }
         }
     }
 
