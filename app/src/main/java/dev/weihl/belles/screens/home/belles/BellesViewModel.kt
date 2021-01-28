@@ -7,7 +7,6 @@ import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.req.AlbumTab
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -16,77 +15,55 @@ import timber.log.Timber
  * @author Weihl Created by 2019/11/22
  *
  */
-class BellesViewModel(
-    application: Application
-) : BaseViewModel(application) {
+class BellesViewModel(application: Application) : BaseViewModel(application) {
 
-    private var page = 0
-    private val bellesRepository = BellesRepository
+    private val repository = BellesRepository
     private val context = application
 
+    // 专辑项
+    private var tab: AlbumTab = AlbumTab.SEXY
 
-    val subBelles = MutableLiveData<List<Belles>>()
-    private val allBells = ArrayList<Belles>()
-//    var allBelles = dao.queryAllDescId()
-//
-//    var lastBelles = dao.queryLastBelles()
-//
-//    var bellesSizeString = Transformations.map(allBelles) {
-//        return@map "Belles.Size() = ${it.size}"
-//    }
+    // 页面
+    private var _page = 0
+    private val page: Int
+        get() = ++_page
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.d("onCleared !")
+    // 页面数据
+    private val _bellesList = ArrayList<Belles>()
+    val bellesList = MutableLiveData<List<Belles>>()
+
+    fun switchAlbumTab(albumTab: AlbumTab) {
+        tab = albumTab
+        _page = 0
+        loadNextBelles()
+
     }
 
     fun loadNextBelles() {
-        ioScope.launch {
-            if (isNetworkAvailable(context)) {
-                ++page
-                if (page == 1) {
-                    // 连通网络后，属于第一页时，清空可能存在的本地数据列表
-                    allBells.clear()
-                }
-            } else {
-                // 断网后，清空列表，加载所有列表
-                allBells.clear()
-            }
-            Timber.d("loadNextBelles ! page = $page")
 
-            Thread {
-                val bellesList = bellesRepository.loadAlbumList(AlbumTab.SEXY, 1)
-                if (bellesList.isNotEmpty()) {
-                    // update event
-                    if (allBells.isNotEmpty()) {
-                        allBells[0].date = -1L
-                    }
-
-                    allBells.addAll(0, bellesList)
-                    uiScope.launch {
-                        subBelles.value = allBells
-                    }
-                }
-            }.start()
-
-        }
-    }
-
-    fun defaultNextBelles() {
-        if (allBells.size <= 0) {
-            loadNextBelles()
-        } else {
-            uiScope.launch {
-                subBelles.value = allBells
-            }
+        if (!context.isNetworkAvailable()) {
+            return
         }
 
+        Timber.d("loadNextBelles ! page = $page")
+
+        Thread {
+            val pageBellesList = repository.loadAlbumList(AlbumTab.SEXY, _page)
+            if (pageBellesList.isNotEmpty()) {
+
+                // update event,标记上次看到这里
+                if (_bellesList.isNotEmpty()) {
+                    _bellesList[0].date = -1L
+                }
+
+                _bellesList.addAll(0, pageBellesList)
+            }
+            bellesList.postValue(_bellesList)
+        }.start()
     }
 
     fun markFavorites(itemBelles: Belles) {
-        ioScope.launch {
-            bellesRepository.markFavorites(itemBelles)
-        }
+        repository.markFavorites(itemBelles)
     }
 
 }

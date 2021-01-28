@@ -1,74 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="#FFFFFF"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="3dp">
 
-    <data>
-
-        <variable
-            name="bellesAdapterCallBack"
-            type="dev.weihl.belles.screens.home.belles.BellesAdapterCallBack" />
-
-        <variable
-            name="itemBelles"
-            type="dev.weihl.belles.data.local.entity.Belles" />
-
-        <variable
-            name="position"
-            type="int" />
-    </data>
-
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:background="#FFFFFF"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="@{()->bellesAdapterCallBack.itemClick(itemBelles,position)}"
-        android:padding="3dp">
+        android:layout_height="match_parent"
+        android:background="@color/cardview_dark_background"
+        android:scaleType="centerCrop" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/cardview_dark_background"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/desc"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:background="#67232323"
-            android:ellipsize="end"
-            android:gravity="left"
-            android:padding="6dp"
-            android:singleLine="true"
-            android:text="TextView"
-            android:textColor="#F1F1F1"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:background="#67232323"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:padding="6dp"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#F1F1F1"
+        android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/tag_recent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FF5722"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="最近浏览"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
+    <TextView
+        android:id="@+id/tag_recent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF5722"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="最近浏览"
+        android:textColor="#FFFFFF"
+        android:visibility="gone" />
 
-        <View
-            android:id="@+id/tag_favorite"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/ic_favorites"
-            android:clickable="true"
-            android:onClick="@{()->bellesAdapterCallBack.favoriteClick(itemBelles)}" />
+    <View
+        android:id="@+id/tag_favorite"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ic_favorites"
+        android:clickable="true" />
 
-    </RelativeLayout>
-
-
-</layout>
+</RelativeLayout>

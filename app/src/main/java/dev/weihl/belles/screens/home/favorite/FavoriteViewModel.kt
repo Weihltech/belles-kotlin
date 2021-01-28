@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.screens.BaseViewModel
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -29,25 +28,10 @@ class FavoriteViewModel(
     }
 
     fun markFavorites(itemBelles: Belles) {
-        ioScope.launch {
-            bellesRepository.markFavorites(itemBelles)
-        }
+        bellesRepository.markFavorites(itemBelles)
     }
 
     fun queryAllFavoriteBelles() {
-        ioScope.launch {
-            allBells.clear()
-//            bellesRepository.queryAllFavoriteBelles(object : Repository.CallBack {
-//                override fun onResult(list: ArrayList<Belles>?) {
-//                    if (list != null) {
-//                        uiScope.launch {
-//                            allBells.addAll(list)
-//                            subBelles.value = allBells
-//                        }
-//                    }
-//                }
-//
-//            })
-        }
+
     }
 }

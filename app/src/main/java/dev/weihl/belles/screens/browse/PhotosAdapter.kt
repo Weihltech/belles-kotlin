@@ -3,7 +3,6 @@ package dev.weihl.belles.screens.browse
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -14,24 +13,19 @@ import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 /**
  * @author Ngai
  */
-class PhotosAdapter(
-    private val photoList: List<BImage>,
-    private val callBack: PhotosAdapterCallBack
-) :
+class PhotosAdapter(private val photoList: List<BImage>) :
     RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotosViewHolder {
         val bind = ItemPhotosLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
-        bind.photosAdapterCallBack = callBack
         val viewHolder = PhotosViewHolder(bind.root)
         viewHolder.bind = bind
-        viewHolder.bind.image.setOnPhotoTapListener { _: ImageView, _: Float, _: Float ->
-            callBack.photoOutsideClick()
-        }
+//        viewHolder.bind.image.setOnPhotoTapListener { _: ImageView, _: Float, _: Float ->
+//            callBack.photoOutsideClick()
+//        }
 //        viewHolder.bind.image.setOnOutsidePhotoTapListener { callBack.photoOutsideClick() }
         return viewHolder
 
@@ -64,9 +58,4 @@ class PhotosAdapter(
         lateinit var bind: ItemPhotosLayoutBinding
     }
 
-}
-
-interface PhotosAdapterCallBack {
-
-    fun photoOutsideClick()
 }

@@ -51,8 +51,8 @@ fun currDateYyyyMmDd(): String {
 }
 
 /* 网络已连接，判断连接方式 */
-fun isNetworkAvailable(@NonNull context: Context): Boolean {
-    val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+fun Context.isNetworkAvailable(): Boolean {
+    val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val networkCapabilities =
             manager.getNetworkCapabilities(manager.activeNetwork)
@@ -68,13 +68,13 @@ fun isNetworkAvailable(@NonNull context: Context): Boolean {
     return false
 }
 
-fun dp2Px(@NonNull context: Context, dp: Int): Int {
-    val scale = context.resources.displayMetrics.density
+fun Context.dp2Px(dp: Int): Int {
+    val scale = resources.displayMetrics.density
     return (dp * scale + 0.5f).toInt()
 }
 
-fun px2Dp(@NonNull context: Context, px: Int): Int {
-    val scale = context.resources.displayMetrics.density
+fun Context.px2Dp(px: Int): Int {
+    val scale = resources.displayMetrics.density
     return (px / scale + 0.5f).toInt()
 }
 

@@ -24,13 +24,13 @@ object BellesRepository : DataSource.Repository {
             val localBelles = localDB.queryBelles(it.href)
             if (localBelles != null) {
                 Timber.d(localBelles.toString())
-                sexyBelles.add(localBelles)
+                sexyBelles.add(0, localBelles)
             } else {
                 // snyc remote
                 albumRequest.syncAlbumDetails(it)
                 // cover
                 val newBelles = coverBells(it)
-                sexyBelles.add(newBelles)
+                sexyBelles.add(0, newBelles)
                 // save album
                 localDB.insertBelles(newBelles)
                 Timber.d(newBelles.toString())

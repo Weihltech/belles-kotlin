@@ -24,22 +24,20 @@ import timber.log.Timber
 class BellesAdapter(private val callBack: BellesAdapterCallBack) :
     ListAdapter<Belles, BellesAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
         val bind = ItemBellesLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
         val viewHolder = BellesItemHolder(bind.root)
-        bind.bellesAdapterCallBack = callBack
         viewHolder.bind = bind
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: BellesItemHolder, position: Int) {
         val itemBelles = getItem(position)
-        holder.bind.itemBelles = itemBelles
-        holder.bind.position = position
+        //holder.bind.itemBelles = itemBelles
+        //holder.bind.position = position
 
         runCatching {
             Timber.d("image load referer:${itemBelles.referer} ; cover:${itemBelles.thumb}")
@@ -55,11 +53,31 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
                 R.drawable.ic_favorites_mark
             else R.drawable.ic_favorites
         )
-    }
 
+        holder.bind.tagFavorite.setTag(R.id.value, position)
+        holder.bind.root.setTag(R.id.value, position)
+        holder.bind.tagFavorite.setOnClickListener(onFavoriteClock)
+        holder.bind.root.setOnClickListener(onItemClock)
+    }
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var bind: ItemBellesLayoutBinding
+    }
+
+    private val onItemClock = View.OnClickListener() {
+        runCatching {
+            val position = it.getTag(R.id.value) as Int
+            val itemBelles = getItem(position)
+            callBack.itemClick(itemBelles, position)
+        }
+    }
+
+    private val onFavoriteClock = View.OnClickListener() {
+        runCatching {
+            val position = it.getTag(R.id.value) as Int
+            val itemBelles = getItem(position)
+            callBack.favoriteClick(itemBelles)
+        }
     }
 }
 

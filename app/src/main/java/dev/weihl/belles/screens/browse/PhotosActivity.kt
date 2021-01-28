@@ -7,52 +7,39 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import dev.weihl.belles.R
 import dev.weihl.belles.databinding.ActivityPhotosBinding
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 import dev.weihl.belles.json2SexyImageList
 import dev.weihl.belles.screens.BasicActivity
-import timber.log.Timber
 
 
 class PhotosActivity : BasicActivity(), PhotosActionCallBack {
 
     private lateinit var binding: ActivityPhotosBinding
-
     private lateinit var recyclerView: RecyclerView
-
-    var markPhotoEnlargeAnim: Boolean = true
-
-    init {
-        Timber.tag("PhotosActivity")
-    }
+    private var markPhotoEnlargeAnim: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initPhotoParamData()
-        binding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.activity_photos, null, false
-        )
+
+        binding = ActivityPhotosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val photosJson = intent.getStringExtra("details")
         if (photosJson == null || photosJson.isEmpty()) {
-            finish()
-            return
+            return finish()
         }
 
         val photoList = json2SexyImageList(photosJson)
-        if (photoList == null || photoList.isEmpty()) {
+        if (photoList.isEmpty()) {
             return finish()
-
         }
 
         recyclerView = binding.viewPager.getChildAt(0) as RecyclerView
-        binding.viewPager.adapter = PhotosAdapter(photoList, photosAdapterCallBack())
+        binding.viewPager.adapter = PhotosAdapter(photoList)
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val adapter = binding.viewPager.adapter as PhotosAdapter
@@ -68,7 +55,6 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         binding.btnBack.setOnClickListener { finish() }
 
         // start anim
-
     }
 
     private fun initPhotoParamData() {
@@ -100,15 +86,15 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         actionCallBack = this
     }
 
-    private fun photosAdapterCallBack(): PhotosAdapterCallBack {
-        return object : PhotosAdapterCallBack {
-            override fun photoOutsideClick() {
+//    private fun photosAdapterCallBack(): PhotosAdapterCallBack {
+//        return object : PhotosAdapterCallBack {
+//            override fun photoOutsideClick() {
 //                if (!isScalePhotos()) {
 //                    finish()
 //                }
-            }
-        }
-    }
+//            }
+//        }
+//    }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
 

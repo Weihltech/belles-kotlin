@@ -1,19 +1,16 @@
 package dev.weihl.belles.screens.home.belles
 
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import dev.weihl.belles.R
 import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentBellesBinding
@@ -33,13 +30,7 @@ import timber.log.Timber
 class BellesFragment : BasicFragment(), BellesAdapterCallBack {
 
     private lateinit var binding: FragmentBellesBinding
-
     private val bellesViewModel: BellesViewModel by activityViewModels()
-
-    init {
-        Timber.tag("BellesFragment")
-        Timber.d("init !")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,25 +39,23 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
 
         Timber.d("onCreateView !")
         // data binding and view model
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_belles, container, false
-        )
-
-        val application = requireNotNull(this.activity).application
-        binding.lifecycleOwner = this
+        binding = FragmentBellesBinding.inflate(inflater)
 
         // recycler view
+        val context = requireContext()
         val adapter = BellesAdapter(this)
         binding.bellesRecyclerView.adapter = adapter
-        binding.bellesRecyclerView.layoutManager = GridLayoutManager(application, 2)
-        binding.bellesRecyclerView.addItemDecoration(SpaceItemDecoration(dp2Px(application, 4), 2))
+        binding.bellesRecyclerView.layoutManager = GridLayoutManager(context, 2)
+        binding.bellesRecyclerView.addItemDecoration(
+            SpaceItemDecoration(context.dp2Px(4), 2)
+        )
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             Timber.d("loadNextBelles !")
             bellesViewModel.loadNextBelles()
         }
 
-        bellesViewModel.subBelles.observe(viewLifecycleOwner, Observer {
+        bellesViewModel.bellesList.observe(viewLifecycleOwner, Observer {
             Timber.d("refresh new Belles list !")
             adapter.submitList(it) {
                 adapter.notifyDataSetChanged()
@@ -74,8 +63,11 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
             binding.swipeRefreshLayout.isRefreshing = false
         })
 
-        // default
-        bellesViewModel.defaultNextBelles()
+        // load first data
+        if (adapter.itemCount <= 0) {
+            binding.swipeRefreshLayout.isRefreshing = true
+            bellesViewModel.loadNextBelles()
+        }
         return binding.root
     }
 
@@ -104,46 +96,6 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated !")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("onDestroy !")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Timber.d("onDetach !")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Timber.d("onAttach !")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onAttach !")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause !")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Timber.d("onCreate !")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart !")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop !")
     }
 
 }

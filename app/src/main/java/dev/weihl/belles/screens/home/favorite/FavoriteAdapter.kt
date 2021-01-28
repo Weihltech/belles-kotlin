@@ -33,7 +33,6 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
             parent, false
         )
         val viewHolder = BellesItemHolder(bind.root)
-        bind.bellesAdapterCallBack = callBack
         viewHolder.bind = bind
         viewHolder.context = parent.context
         return viewHolder
@@ -41,7 +40,6 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
 
     override fun onBindViewHolder(holder: BellesItemHolder, position: Int) {
         val itemBelles = getItem(position)
-        holder.bind.itemBelles = itemBelles
         holder.bind.title.text = itemBelles.title
         holder.bind.tagFavorite.setBackgroundResource(
             if (itemBelles.favorite == "yes")
@@ -56,6 +54,10 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
             glideLoad(holder.context, itemBelles.thumb, itemBelles.referer, holder.bind.imgLeft)
         }
 
+        holder.bind.tagFavorite.setTag(R.id.value, position)
+        holder.bind.root.setTag(R.id.value, position)
+        holder.bind.tagFavorite.setOnClickListener(onFavoriteClock)
+        holder.bind.root.setOnClickListener(onItemClock)
     }
 
     private fun dispatchImg(holder: BellesItemHolder, imgList: List<BImage>) {
@@ -114,6 +116,23 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         lateinit var bind: ItemFavoriteLayoutBinding
         lateinit var context: Context
     }
+
+    private val onItemClock = View.OnClickListener() {
+        runCatching {
+            val position = it.getTag(R.id.value) as Int
+            val itemBelles = getItem(position)
+            callBack.itemClick(itemBelles)
+        }
+    }
+
+    private val onFavoriteClock = View.OnClickListener() {
+        runCatching {
+            val position = it.getTag(R.id.value) as Int
+            val itemBelles = getItem(position)
+            callBack.favoriteClick(itemBelles)
+        }
+    }
+
 }
 
 class BellesDiffCallback :
