@@ -12,6 +12,7 @@ import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.R
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.ItemBellesLayoutBinding
+import timber.log.Timber
 
 
 /**
@@ -40,18 +41,15 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         holder.bind.itemBelles = itemBelles
         holder.bind.position = position
 
-//        Glide.with(holder.bind.image.context)
-//            .load(
-//                GlideUrl(
-//                    itemBelles.thumb,
-//                    LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
-//                )
-//            )
-//            .into(holder.bind.image)
+        runCatching {
+            Timber.d("image load referer:${itemBelles.referer} ; cover:${itemBelles.thumb}")
+            val referer = LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
+            val glideUrl = GlideUrl(itemBelles.thumb, referer)
+            Glide.with(holder.bind.image.context).load(glideUrl).into(holder.bind.image)
+        }
+
         holder.bind.desc.text = itemBelles.title
-
         holder.bind.tagRecent.visibility = if (itemBelles.date == -1L) View.VISIBLE else View.GONE
-
         holder.bind.tagFavorite.setBackgroundResource(
             if (itemBelles.favorite == "yes")
                 R.drawable.ic_favorites_mark

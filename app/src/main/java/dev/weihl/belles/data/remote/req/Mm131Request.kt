@@ -12,7 +12,7 @@ import timber.log.Timber
  * @author Ngai
  * @since 2021/1/27
  */
-sealed class Mm131Request(val page: Int) : AlbumRequest() {
+sealed class Mm131Request(private val page: Int) : AlbumRequest() {
 
     abstract val subTag: String
 
@@ -33,10 +33,10 @@ sealed class Mm131Request(val page: Int) : AlbumRequest() {
             runCatching {
                 val imgElsFirst = imgEls[0]
                 val alt = imgElsFirst.attr("alt")
-                //val src = imgElsFirst.attr("src")
+                val src = imgElsFirst.attr("src")
                 //val width = imgElsFirst.attr("width")
                 //val height = imgElsFirst.attr("height")
-                val iBAlbum = BAlbum(href, alt, tab)
+                val iBAlbum = BAlbum(href, alt, tab, src)
                 albumList.add(iBAlbum)
                 Timber.d(iBAlbum.toString())
             }

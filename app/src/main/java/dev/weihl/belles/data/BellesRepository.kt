@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import dev.weihl.belles.MainApp
 import dev.weihl.belles.data.local.LocalDataSource
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.AlbumTab
-import dev.weihl.belles.data.remote.req.SexyMm131Request
+import dev.weihl.belles.data.remote.req.*
+import timber.log.Timber
 
 object BellesRepository : DataSource.Repository {
 
@@ -15,11 +15,42 @@ object BellesRepository : DataSource.Repository {
 
     override fun loadAlbumList(tab: AlbumTab, page: Int): List<Belles> {
 
-        when (tab) {
-            AlbumTab.SEXY -> return sexyAlbumLoad(page)
+        val albumRequest = switchAlbumRequest(tab, page)
+        val sexyAlbumList = albumRequest.loadAlbumList()
+        // 取网络数据
+        val sexyBelles = mutableListOf<Belles>()
+        sexyAlbumList.forEach {
+            // 若有本地记录，则取本地数据
+            val localBelles = localDB.queryBelles(it.href)
+            if (localBelles != null) {
+                Timber.d(localBelles.toString())
+                sexyBelles.add(localBelles)
+            } else {
+                // snyc remote
+                albumRequest.syncAlbumDetails(it)
+                // cover
+                val newBelles = coverBells(it)
+                sexyBelles.add(newBelles)
+                // save album
+                localDB.insertBelles(newBelles)
+                Timber.d(newBelles.toString())
+            }
         }
 
-        return emptyList()
+        return sexyBelles
+    }
+
+    private fun switchAlbumRequest(tab: AlbumTab, page: Int): AlbumRequest {
+        return when (tab) {
+            //AlbumTab.SEXY -> return SexyMm131Request(page)
+            AlbumTab.PURE -> PureMm131Request(page)
+            AlbumTab.CAMPUS -> CampusMm131Request(page)
+            AlbumTab.CAR_MM -> CarMm131Request(page)
+            AlbumTab.QI_PAO -> QipaoMm131Request(page)
+            AlbumTab.CLASSIC -> ClassicTupianzjRequest(page)
+            AlbumTab.ART -> ArtTupianzjRequest(page)
+            else -> SexyMm131Request(page)
+        }
     }
 
     private fun sexyAlbumLoad(page: Int): List<Belles> {
@@ -32,6 +63,7 @@ object BellesRepository : DataSource.Repository {
             // 若有本地记录，则取本地数据
             val localBelles = localDB.queryBelles(it.href)
             if (localBelles != null) {
+                Timber.d(localBelles.toString())
                 sexyBelles.add(localBelles)
             } else {
                 // snyc remote
@@ -41,6 +73,7 @@ object BellesRepository : DataSource.Repository {
                 sexyBelles.add(newBelles)
                 // save album
                 localDB.insertBelles(newBelles)
+                Timber.d(newBelles.toString())
             }
         }
 
