@@ -28,10 +28,12 @@ open class BasicActivity : AppCompatActivity() {
         super.onResume()
 
         // 全面屏隐藏状态/导航栏，底部向上滑动显示状态/导航栏
-        window.decorView.systemUiVisibility = (SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or SYSTEM_UI_FLAG_FULLSCREEN
-                or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        //SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+        window.decorView.systemUiVisibility = (
+                SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        SYSTEM_UI_FLAG_FULLSCREEN or
+                        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                )
     }
 
 }

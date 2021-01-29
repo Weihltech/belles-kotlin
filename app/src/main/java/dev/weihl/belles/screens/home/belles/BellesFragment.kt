@@ -62,7 +62,7 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
                 // (dy > 0) //下滑动作
                 // (dy < 0) //上滑动作
                 if (abs(dy) > 10) {
-                    binding.albumLayout.visibility = if (dy < 0) View.GONE else View.VISIBLE
+                    binding.albumBar.visibility = if (dy < 0) View.GONE else View.VISIBLE
                 }
             }
         })
@@ -82,9 +82,9 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         })
 
         // Album tab layout
-        val childLayout = binding.albumLayout.getChildAt(0)
+        val childLayout = binding.albumLayout
         createAlbumTabs(childLayout as ViewGroup)
-        childLayout.getChildAt(1).callOnClick()
+        childLayout.getChildAt(0).callOnClick()
         return binding.root
     }
 
@@ -93,13 +93,14 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
             EnumAlbum.values().forEach { album ->
                 val context = requireContext()
                 val llp = LinearLayout.LayoutParams(
-                    context.dp2Px(56),
+                    context.dp2Px(60),
                     LinearLayout.LayoutParams.MATCH_PARENT
                 )
                 llp.leftMargin = context.dp2Px(6)
                 llp.rightMargin = context.dp2Px(6)
-                llp.topMargin = context.dp2Px(4)
-                llp.bottomMargin = context.dp2Px(4)
+                llp.topMargin = context.dp2Px(6)
+                llp.bottomMargin = context.dp2Px(12)
+                llp.gravity = Gravity.TOP
                 val albumView = TextView(context).apply {
                     text = album.title
                     gravity = Gravity.CENTER
