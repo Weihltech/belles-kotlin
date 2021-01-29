@@ -21,7 +21,7 @@ interface PhotosActionCallBack {
     fun getCurrentItemViewBind(): ItemPhotosLayoutBinding?
     fun getIndicatorView(): View?
     fun finish()
-    fun getHandler(): Handler
+    fun getHandler(): Handler?
 }
 
 var actionCallBack: PhotosActionCallBack? = null

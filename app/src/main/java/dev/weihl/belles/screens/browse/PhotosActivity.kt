@@ -125,7 +125,7 @@ class PhotosActivity : BasicActivity(), PhotosActionCallBack {
         return binding.tvNum
     }
 
-    override fun getHandler(): Handler {
+    override fun getHandler(): Handler? {
         return binding.root.handler
     }
 
