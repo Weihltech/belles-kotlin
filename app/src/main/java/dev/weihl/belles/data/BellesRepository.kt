@@ -27,7 +27,7 @@ object BellesRepository : DataSource.Repository {
         val sexyBelles = mutableListOf<Belles>()
         sexyAlbumList.forEach {
             // 若有本地记录，则取本地数据
-            val localBelles = localDB.queryBelles(it.href)
+            val localBelles = localDB.queryBellesByHref(it.href)
             if (localBelles != null) {
                 Timber.d(localBelles.toString())
                 sexyBelles.add(0, localBelles)
@@ -42,7 +42,6 @@ object BellesRepository : DataSource.Repository {
                 sexyBelles.add(0, newBelles)
                 // save album
                 localDB.insertBelles(newBelles)
-                Timber.d(newBelles.toString())
             }
         }
 
@@ -78,20 +77,20 @@ object BellesRepository : DataSource.Repository {
             bAlbum.cover,
             "",
             bAlbum.tab,
-            "no",
+            0,
             GSON.toJson(bAlbum.list),
             System.currentTimeMillis(),
             bAlbum.href
         )
     }
 
-    override fun markFavorites(belles: Belles) {
-        if ("yes" == belles.favorite) {
-            belles.favorite = "no"
-        } else {
-            belles.favorite = "yes"
+    override fun markFavorite(belles: Belles) {
+        belles.favorite = when (belles.favorite) {
+            0 -> 1
+            else -> 0
         }
-        localDB.updateBelles(belles)
+        Timber.d("markFavorite@ ${belles.title}")
+        Thread { localDB.updateBelles(belles) }.start()
     }
 
     override fun queryAllFavoriteBelles(): List<Belles>? {

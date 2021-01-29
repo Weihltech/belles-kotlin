@@ -21,7 +21,7 @@ import dev.weihl.belles.data.local.entity.User
     Belles::class,
     User::class,
     Crawler::class],
-    version = 3, exportSchema = false)
+    version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val bellesDao: BellesDao

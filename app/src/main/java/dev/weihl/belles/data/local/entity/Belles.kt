@@ -29,10 +29,10 @@ data class Belles(
     var thumbWh: String,
 
     @ColumnInfo(name = "tab")
-    var tab: String,// qingchun,xinggan,xiaoyuan
+    var tab: String,// EnumAlbum
 
     @ColumnInfo(name = "favorite")
-    var favorite: String = "yes",// yes or no
+    var favorite: Int = 0,// 非0 = yes
 
     @ColumnInfo(name = "details")
     var details: String,// json [{"referer":"","url":""}]

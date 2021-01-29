@@ -47,7 +47,7 @@ class CrawlerMmnetWork(applicationContext: Context) {
         val bellesDao = AppDatabase.getInstance(context).bellesDao
         bellesDao.insert(
             Belles(
-                0, it.title, it.href, it.thumb, it.thumbWh, it.tab, "no",
+                0, it.title, it.href, it.thumb, it.thumbWh, it.tab, 0,
                 it.details, System.currentTimeMillis(), it.referer
             )
         )

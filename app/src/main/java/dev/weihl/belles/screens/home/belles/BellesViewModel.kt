@@ -61,7 +61,7 @@ class BellesViewModel(application: Application) : BaseViewModel(application) {
     }
 
     fun markFavorites(itemBelles: Belles) {
-        repository.markFavorites(itemBelles)
+        repository.markFavorite(itemBelles)
     }
 
 }

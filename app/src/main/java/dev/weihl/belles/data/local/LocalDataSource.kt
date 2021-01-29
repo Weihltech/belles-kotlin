@@ -21,11 +21,13 @@ class LocalDataSource(context: Context) : DataSource.Local {
     }
 
     override fun insertBelles(belles: Belles) {
+        Timber.d("insert@ $belles")
         bellesDao().insert(belles)
     }
 
     override fun updateBelles(belles: Belles) {
-        val localBelles = bellesDao().queryById(belles.id)
+        val localBelles = queryBellesByHref(belles.href)
+        Timber.d("update@ ${belles.title} ;local:${localBelles?.title}")
         if (localBelles != null) {
             localBelles.favorite = belles.favorite
             localBelles.date = System.currentTimeMillis()
@@ -41,10 +43,11 @@ class LocalDataSource(context: Context) : DataSource.Local {
     }
 
     override fun queryAllFavoriteBelles(): List<Belles>? {
-        return bellesDao().queryAllFavoriteBelles("yes")
+        Timber.d("queryAllFavoriteBelles@ ")
+        return bellesDao().queryAllFavoriteBelles(1)
     }
 
-    override fun queryBelles(href: String): Belles? {
+    override fun queryBellesByHref(href: String): Belles? {
         return bellesDao().queryBellesByHref(href)
     }
 

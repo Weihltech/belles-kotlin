@@ -42,9 +42,10 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         val itemBelles = getItem(position)
         holder.bind.title.text = itemBelles.title
         holder.bind.tagFavorite.setBackgroundResource(
-            if (itemBelles.favorite == "yes")
-                R.drawable.ic_favorites_mark
-            else R.drawable.ic_favorites
+            when (itemBelles.favorite) {
+                0 -> R.drawable.ic_favorites
+                else -> R.drawable.ic_favorites_mark
+            }
         )
 
         val imgList = json2SexyImageList(itemBelles.details)

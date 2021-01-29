@@ -27,6 +27,7 @@ import dev.weihl.belles.drawableResources
 import dev.weihl.belles.screens.BasicFragment
 import dev.weihl.belles.screens.browse.PhotosActivity
 import timber.log.Timber
+import kotlin.math.abs
 
 /**
  * A simple [Fragment] subclass.
@@ -60,7 +61,9 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 // (dy > 0) //下滑动作
                 // (dy < 0) //上滑动作
-                binding.albumLayout.visibility = if (dy < 0) View.GONE else View.VISIBLE
+                if (abs(dy) > 10) {
+                    binding.albumLayout.visibility = if (dy < 0) View.GONE else View.VISIBLE
+                }
             }
         })
 
@@ -141,10 +144,10 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         startActivity(photoIntent)
     }
 
-    override fun favoriteClick(itemBelles: Belles) {
+    override fun favoriteClick(itemBelles: Belles, position: Int) {
         bellesViewModel.markFavorites(itemBelles)
-        val adapter = binding.bellesRecyclerView.adapter
-        adapter?.notifyDataSetChanged()
+        Timber.d("123@@${binding.bellesRecyclerView.adapter}")
+        binding.bellesRecyclerView.adapter?.notifyItemChanged(position)
     }
 
 }

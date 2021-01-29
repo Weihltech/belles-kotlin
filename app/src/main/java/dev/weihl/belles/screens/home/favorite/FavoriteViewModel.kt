@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.screens.BaseViewModel
-import timber.log.Timber
 
 /**
  * @desc ViewMode
@@ -13,25 +12,24 @@ import timber.log.Timber
  * @author Weihl Created by 2019/11/22
  *
  */
-class FavoriteViewModel(
-    application: Application
-) : BaseViewModel(application) {
+class FavoriteViewModel(application: Application) : BaseViewModel(application) {
 
-    private val bellesRepository = BellesRepository
+    private val repository = BellesRepository
 
-    val subBelles = MutableLiveData<List<Belles>>()
-    private val allBells = ArrayList<Belles>()
-
-    override fun onCleared() {
-        super.onCleared()
-        Timber.d("onCleared !")
-    }
+    val bellesList = MutableLiveData<List<Belles>>()
 
     fun markFavorites(itemBelles: Belles) {
-        bellesRepository.markFavorites(itemBelles)
+        repository.markFavorite(itemBelles)
     }
 
     fun queryAllFavoriteBelles() {
-
+        Thread {
+            val bList = repository.queryAllFavoriteBelles()
+            bList?.let {
+                bellesList.postValue(it)
+                return@Thread
+            }
+            bellesList.postValue(emptyList())
+        }.start()
     }
 }

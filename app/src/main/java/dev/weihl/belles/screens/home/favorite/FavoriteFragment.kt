@@ -49,7 +49,7 @@ class FavoriteFragment : BasicFragment() {
             SpaceItemDecoration(requireContext().dp2Px(1), 1)
         )
 
-        favoriteViewModel.subBelles.observe(viewLifecycleOwner, Observer {
+        favoriteViewModel.bellesList.observe(viewLifecycleOwner, Observer {
             binding.empty.visibility = if (it == null || it.isEmpty()) {
                 View.VISIBLE
                 return@Observer

@@ -49,22 +49,23 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         holder.bind.desc.text = itemBelles.title
         holder.bind.tagRecent.visibility = if (itemBelles.date == -1L) View.VISIBLE else View.GONE
         holder.bind.tagFavorite.setBackgroundResource(
-            if (itemBelles.favorite == "yes")
-                R.drawable.ic_favorites_mark
-            else R.drawable.ic_favorites
+            when (itemBelles.favorite) {
+                0 -> R.drawable.ic_favorites
+                else -> R.drawable.ic_favorites_mark
+            }
         )
 
         holder.bind.tagFavorite.setTag(R.id.value, position)
         holder.bind.root.setTag(R.id.value, position)
-        holder.bind.tagFavorite.setOnClickListener(onFavoriteClock)
-        holder.bind.root.setOnClickListener(onItemClock)
+        holder.bind.tagFavorite.setOnClickListener(onFavoriteClick)
+        holder.bind.root.setOnClickListener(onItemClick)
     }
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var bind: ItemBellesLayoutBinding
     }
 
-    private val onItemClock = View.OnClickListener() {
+    private val onItemClick = View.OnClickListener() {
         runCatching {
             val position = it.getTag(R.id.value) as Int
             val itemBelles = getItem(position)
@@ -72,11 +73,12 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         }
     }
 
-    private val onFavoriteClock = View.OnClickListener() {
+    private val onFavoriteClick = View.OnClickListener() {
         runCatching {
             val position = it.getTag(R.id.value) as Int
+            Timber.d("onFavoriteClick:$position")
             val itemBelles = getItem(position)
-            callBack.favoriteClick(itemBelles)
+            callBack.favoriteClick(itemBelles, position)
         }
     }
 }
@@ -96,5 +98,5 @@ interface BellesAdapterCallBack {
 
     fun itemClick(itemBelles: Belles, position: Int)
 
-    fun favoriteClick(itemBelles: Belles)
+    fun favoriteClick(itemBelles: Belles, position: Int)
 }
