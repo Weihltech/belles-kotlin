@@ -124,6 +124,7 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
             val hasData = bellesViewModel.switchAlbumTab(album)
             binding.swipeRefreshLayout.isRefreshing = true
             if (!hasData) {
+                binding.albumBar.visibility = View.GONE
                 bellesViewModel.loadNextBelles()
             }
         }
