@@ -41,8 +41,8 @@ class MotionPhoto(
         maskView.x = origin.x.toFloat()
         maskView.y = origin.y.toFloat()
         // 映射 原始 大小
-        maskView.layoutParams.width = rectIt.width().plus(30)
-        maskView.layoutParams.height = rectIt.height().plus(30)
+        maskView.layoutParams.width = rectIt.width()
+        maskView.layoutParams.height = rectIt.height()
 
 //        handler.postDelayed({
 //            // 移动动画

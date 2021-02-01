@@ -61,7 +61,7 @@ class PhotosActivity : BasicActivity() {
             return
         }
 
-        val originRect = intent.getParcelableExtra("globalRect") as Rect
+        val originRect = intent.getParcelableExtra<Rect>("globalRect") as Rect
         val originXY = intent.getIntArrayExtra("globalXY")
         originXY?.let { itXY ->
             val originPhoto = MotionPhoto.OriginPhoto(
