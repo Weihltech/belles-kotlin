@@ -23,12 +23,7 @@ class PhotosAdapter(private val photoList: List<BImage>) :
         )
         val viewHolder = PhotosViewHolder(bind.root)
         viewHolder.bind = bind
-//        viewHolder.bind.image.setOnPhotoTapListener { _: ImageView, _: Float, _: Float ->
-//            callBack.photoOutsideClick()
-//        }
-//        viewHolder.bind.image.setOnOutsidePhotoTapListener { callBack.photoOutsideClick() }
         return viewHolder
-
     }
 
     override fun getItemCount(): Int {
