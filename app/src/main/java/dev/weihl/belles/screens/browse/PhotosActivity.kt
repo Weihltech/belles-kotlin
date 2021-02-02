@@ -2,12 +2,15 @@ package dev.weihl.belles.screens.browse
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dev.weihl.belles.common.IntentKey
 import dev.weihl.belles.common.loadImage
+import dev.weihl.belles.data.BImage
 import dev.weihl.belles.databinding.ActivityPhotosBinding
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 import dev.weihl.belles.json2SexyImageList
@@ -37,6 +40,13 @@ class PhotosActivity : BasicActivity() {
         }
 
         // browse album
+        initBrowseAlbum(photoList)
+
+        // mask view
+        initMaskView()
+    }
+
+    private fun initBrowseAlbum(photoList: List<BImage>) {
         recyclerView = binding.viewPager.getChildAt(0) as RecyclerView
         binding.root.postDelayed({
             binding.viewPager.adapter = PhotosAdapter(photoList)
@@ -56,23 +66,29 @@ class PhotosActivity : BasicActivity() {
             }
         })
         binding.btnBack.setOnClickListener { finish() }
+    }
 
-        // maks view
+    private fun initMaskView() {
         val originRect = intent.getParcelableExtra<Rect>(IntentKey.OBJECT_RECT) ?: return
         val originXY = intent.getIntArrayExtra(IntentKey.LOCATION)
         originXY?.let { itXY ->
             val originPhoto = MotionPhoto.OriginPhoto(
                 itXY[0], itXY[1], originRect
             )
-            motionPhoto = MotionPhoto(originPhoto, binding.root.handler, motionPhotoCallBack)
-            motionPhoto!!.maskOriginView(binding.root)?.let {
-                val referer = intent.getStringExtra(IntentKey.REFERER)
-                val url = intent.getStringExtra(IntentKey.URL)
-                if (referer != null && url != null) {
-                    loadImage(it, referer, url)
+            runCatching {
+                motionPhoto = MotionPhoto(
+                    originPhoto, Handler(Looper.myLooper()!!),
+                    motionPhotoCallBack
+                )
+                motionPhoto!!.maskOriginView(binding.root)?.let {
+                    val referer = intent.getStringExtra(IntentKey.REFERER)
+                    val url = intent.getStringExtra(IntentKey.URL)
+                    if (referer != null && url != null) {
+                        loadImage(it, referer, url)
+                    }
                 }
+                Timber.d("MotionPhoto init $originPhoto")
             }
-            Timber.d("MotionPhoto init $originPhoto")
         }
     }
 
