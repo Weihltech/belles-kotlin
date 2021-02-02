@@ -59,7 +59,7 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         holder.bind.tagFavorite.setOnClickListener(onFavoriteClock)
         for (index in 0..6) {
             findImageView(holder, index)?.let {
-                it.setTag(R.id.position, position)
+                it.setTag(R.id.obj_belles, itemBelles)
                 it.setOnClickListener(onItemClock)
             }
         }
@@ -69,7 +69,8 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         for (index in 0..imgList.size) {
             val imgView = findImageView(holder, index) ?: break
             val imgItem = imgList[index]
-            imgView.setTag(R.id.value, imgItem)
+            imgView.setTag(R.id.position, index)
+            imgView.setTag(R.id.obj_bImage, imgItem)
             glideLoad(holder.context, imgItem.url, imgItem.referer, imgView)
         }
     }
@@ -102,9 +103,9 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
     private val onItemClock = View.OnClickListener {
         runCatching {
             val position = it.getTag(R.id.position) as Int
-            val imgItem = it.getTag(R.id.value) as BImage
-            val itemBelles = getItem(position)
-            callBack.itemClick(it, itemBelles, imgItem)
+            val imgItem = it.getTag(R.id.obj_bImage) as BImage
+            val itemBelles = it.getTag(R.id.obj_belles) as Belles
+            callBack.itemClick(it, position, itemBelles, imgItem)
         }
     }
 
@@ -131,7 +132,7 @@ class BellesDiffCallback :
 
 interface FavoriteAdapterCallBack {
 
-    fun itemClick(view: View, itemBelles: Belles, bImage: BImage)
+    fun itemClick(view: View, position: Int, itemBelles: Belles, bImage: BImage)
 
     fun favoriteClick(itemBelles: Belles)
 }

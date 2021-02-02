@@ -74,13 +74,13 @@ object BellesRepository : DataSource.Repository {
             0,
             bAlbum.title,
             bAlbum.href,
-            bAlbum.cover,
+            bAlbum.list[0].url ?: bAlbum.cover,
             "",
             bAlbum.tab,
             0,
             GSON.toJson(bAlbum.list),
             System.currentTimeMillis(),
-            bAlbum.href
+            bAlbum.list[0].referer ?: bAlbum.href
         )
     }
 

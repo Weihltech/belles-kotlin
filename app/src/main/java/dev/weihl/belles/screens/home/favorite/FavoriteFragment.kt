@@ -32,15 +32,15 @@ class FavoriteFragment : BasicFragment() {
 
         // recycler view
         val adapter = FavoriteAdapter(object : FavoriteAdapterCallBack {
-            override fun itemClick(view: View, itemBelles: Belles, bImage: BImage) {
+            override fun itemClick(view: View, position: Int, itemBelles: Belles, bImage: BImage) {
                 val globalVisibleRect = Rect()
                 view.getLocalVisibleRect(globalVisibleRect)
                 val globalXY = IntArray(2)
                 view.getLocationOnScreen(globalXY)
-                Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
+                Timber.d("itemClick :　$position")
 
                 context?.startPhotosActivity(
-                    itemBelles.details,
+                    itemBelles.details, position,
                     globalXY,
                     globalVisibleRect,
                     bImage.referer,

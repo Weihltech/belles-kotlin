@@ -141,7 +141,7 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
 
         context?.startPhotosActivity(
-            itemBelles.details,
+            itemBelles.details, 0,
             globalXY,
             globalVisibleRect,
             itemBelles.referer,

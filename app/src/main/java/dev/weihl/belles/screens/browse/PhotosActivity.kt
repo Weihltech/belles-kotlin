@@ -41,7 +41,12 @@ class PhotosActivity : BasicActivity() {
 
         // browse album
         recyclerView = binding.viewPager.getChildAt(0) as RecyclerView
-        binding.root.postDelayed({ binding.viewPager.adapter = PhotosAdapter(photoList) }, 500)
+        binding.root.postDelayed({
+            binding.viewPager.adapter = PhotosAdapter(photoList)
+            val index = intent.getIntExtra(IntentKey.INDEX, 0)
+            binding.viewPager.setCurrentItem(index, false)
+            Timber.d("setCurrentItem: $index")
+        }, 500)
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val adapter = binding.viewPager.adapter as PhotosAdapter
@@ -118,6 +123,7 @@ class PhotosActivity : BasicActivity() {
 
 fun Context.startPhotosActivity(
     details: String,// belles.deatils
+    index: Int = 0,
     location: IntArray? = null,
     rect: Rect? = null,
     referer: String? = null,
@@ -125,6 +131,7 @@ fun Context.startPhotosActivity(
 ) {
     val photoIntent = Intent(this, PhotosActivity::class.java)
     photoIntent.putExtra(IntentKey.DETAIL, details)
+    photoIntent.putExtra(IntentKey.INDEX, index)
     photoIntent.putExtra(IntentKey.LOCATION, location)
     photoIntent.putExtra(IntentKey.OBJECT_RECT, rect)
     photoIntent.putExtra(IntentKey.REFERER, referer)
