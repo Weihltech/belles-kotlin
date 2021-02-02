@@ -1,10 +1,7 @@
 package dev.weihl.belles.screens.browse
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +64,7 @@ class PhotosActivity : BasicActivity() {
             val originPhoto = MotionPhoto.OriginPhoto(
                 itXY[0], itXY[1], originRect
             )
-            motionPhoto = MotionPhoto(originPhoto, Handler(), motionPhotoCallBack)
+            motionPhoto = MotionPhoto(originPhoto, binding.root.handler, motionPhotoCallBack)
             motionPhoto!!.maskOriginView(binding.root)?.let {
                 val referer = intent.getStringExtra(IntentKey.REFERER)
                 val url = intent.getStringExtra(IntentKey.URL)
@@ -118,25 +115,6 @@ class PhotosActivity : BasicActivity() {
     override fun onBackPressed() {
         finish()
     }
-
-}
-
-fun Context.startPhotosActivity(
-    details: String,// belles.deatils
-    index: Int = 0,
-    location: IntArray? = null,
-    rect: Rect? = null,
-    referer: String? = null,
-    url: String? = null
-) {
-    val photoIntent = Intent(this, PhotosActivity::class.java)
-    photoIntent.putExtra(IntentKey.DETAIL, details)
-    photoIntent.putExtra(IntentKey.INDEX, index)
-    photoIntent.putExtra(IntentKey.LOCATION, location)
-    photoIntent.putExtra(IntentKey.OBJECT_RECT, rect)
-    photoIntent.putExtra(IntentKey.REFERER, referer)
-    photoIntent.putExtra(IntentKey.URL, url)
-    startActivity(photoIntent)
 
 }
 

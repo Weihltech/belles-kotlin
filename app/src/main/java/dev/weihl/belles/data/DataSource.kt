@@ -1,7 +1,7 @@
 package dev.weihl.belles.data
 
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.EnumAlbum
+import dev.weihl.belles.data.remote.EnumAlbum
 
 interface DataSource {
 
@@ -13,12 +13,6 @@ interface DataSource {
         fun queryAllFavoriteBelles(): List<Belles>?
 
         fun queryBellesByHref(href: String): Belles?
-    }
-
-    interface Remote {
-        fun loadSexyAlbumList(page: Int): List<BAlbum>
-
-        fun syncSexyAlbumDetails(bAlbum: BAlbum)
     }
 
     interface Repository {

@@ -1,4 +1,4 @@
-package dev.weihl.belles.data.remote.req
+package dev.weihl.belles.data.remote
 
 import dev.weihl.belles.data.BAlbum
 import dev.weihl.belles.data.BImage

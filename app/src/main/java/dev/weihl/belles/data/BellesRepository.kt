@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import dev.weihl.belles.MainApp
 import dev.weihl.belles.data.local.LocalDataSource
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.*
+import dev.weihl.belles.data.remote.*
 import timber.log.Timber
 
 object BellesRepository : DataSource.Repository {

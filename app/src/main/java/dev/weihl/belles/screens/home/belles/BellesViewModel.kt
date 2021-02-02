@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.data.remote.req.EnumAlbum
+import dev.weihl.belles.data.remote.EnumAlbum
 import dev.weihl.belles.isNetworkAvailable
 import dev.weihl.belles.screens.BaseViewModel
 

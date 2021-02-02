@@ -1,4 +1,4 @@
-package dev.weihl.belles.data.remote.req
+package dev.weihl.belles.data.remote
 
 enum class EnumAlbum(val title: String, val tab: String, val urlTag: String) {
 
