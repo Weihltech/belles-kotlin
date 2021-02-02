@@ -1,7 +1,7 @@
 package dev.weihl.belles.screens.home.favorite
 
 
-import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +9,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import dev.weihl.belles.common.IntentKey
 import dev.weihl.belles.common.SpaceItemDecoration
+import dev.weihl.belles.data.BImage
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentFavoriteBinding
 import dev.weihl.belles.dp2Px
 import dev.weihl.belles.screens.BasicFragment
-import dev.weihl.belles.screens.browse.PhotosActivity
+import dev.weihl.belles.screens.browse.startPhotosActivity
+import timber.log.Timber
 
 
 class FavoriteFragment : BasicFragment() {
@@ -31,10 +32,20 @@ class FavoriteFragment : BasicFragment() {
 
         // recycler view
         val adapter = FavoriteAdapter(object : FavoriteAdapterCallBack {
-            override fun itemClick(itemBelles: Belles) {
-                val photoIntent = Intent(requireContext(), PhotosActivity::class.java)
-                photoIntent.putExtra(IntentKey.DETAIL, itemBelles.details)
-                startActivity(photoIntent)
+            override fun itemClick(view: View, itemBelles: Belles, bImage: BImage) {
+                val globalVisibleRect = Rect()
+                view.getLocalVisibleRect(globalVisibleRect)
+                val globalXY = IntArray(2)
+                view.getLocationOnScreen(globalXY)
+                Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
+
+                context?.startPhotosActivity(
+                    itemBelles.details,
+                    globalXY,
+                    globalVisibleRect,
+                    bImage.referer,
+                    bImage.url
+                )
             }
 
             override fun favoriteClick(itemBelles: Belles) {

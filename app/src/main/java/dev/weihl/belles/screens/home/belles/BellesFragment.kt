@@ -133,8 +133,6 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
     }
 
     override fun itemClick(itemBelles: Belles, position: Int) {
-        browserItemBelles = itemBelles
-        browserItemPosition = position
         val globalVisibleRect = Rect()
         val clickView = binding.bellesRecyclerView.layoutManager?.findViewByPosition(position)
         clickView?.getLocalVisibleRect(globalVisibleRect)
@@ -142,36 +140,19 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         clickView?.getLocationOnScreen(globalXY)
         Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
 
-        context?.let {
-            it.startPhotosActivity(
-                itemBelles.details,
-                globalXY,
-                globalVisibleRect,
-                itemBelles.referer,
-                itemBelles.thumb
-            )
-
-            binding.bellesRecyclerView.adapter?.let { adapter ->
-                itemBelles.date = -2L
-                adapter.notifyItemChanged(position)
-            }
-        }
+        context?.startPhotosActivity(
+            itemBelles.details,
+            globalXY,
+            globalVisibleRect,
+            itemBelles.referer,
+            itemBelles.thumb
+        )
     }
 
     override fun favoriteClick(itemBelles: Belles, position: Int) {
         bellesViewModel.markFavorites(itemBelles)
         Timber.d("123@@${binding.bellesRecyclerView.adapter}")
         binding.bellesRecyclerView.adapter?.notifyItemChanged(position)
-    }
-
-    private var browserItemBelles: Belles? = null
-    private var browserItemPosition: Int = 0
-    override fun onResume() {
-        super.onResume()
-        browserItemBelles?.let {
-            browserItemBelles?.date = System.currentTimeMillis()
-            getBellesAdapter()?.notifyItemChanged(browserItemPosition)
-        }
     }
 
     private fun getBellesAdapter(): BellesAdapter? {

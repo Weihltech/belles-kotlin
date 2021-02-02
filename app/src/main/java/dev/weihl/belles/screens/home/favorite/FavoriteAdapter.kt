@@ -56,52 +56,33 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         }
 
         holder.bind.tagFavorite.setTag(R.id.value, position)
-        holder.bind.root.setTag(R.id.value, position)
         holder.bind.tagFavorite.setOnClickListener(onFavoriteClock)
-        holder.bind.root.setOnClickListener(onItemClock)
+        for (index in 0..6) {
+            findImageView(holder, index)?.let {
+                it.setTag(R.id.position, position)
+                it.setOnClickListener(onItemClock)
+            }
+        }
     }
 
     private fun dispatchImg(holder: BellesItemHolder, imgList: List<BImage>) {
-        loop@ for (index in 0..imgList.size) {
-            when (index) {
-                0 -> {
-                    glideLoad(
-                        holder.context, imgList[0].url, imgList[0].referer,
-                        holder.bind.imgLeft
-                    )
-                }
-                1 -> {
-                    glideLoad(
-                        holder.context, imgList[1].url, imgList[1].referer,
-                        holder.bind.imgRight1
-                    )
-                }
-                2 -> {
-                    glideLoad(
-                        holder.context, imgList[2].url, imgList[2].referer,
-                        holder.bind.imgRight2
-                    )
-                }
-                3 -> {
-                    glideLoad(
-                        holder.context, imgList[3].url, imgList[3].referer,
-                        holder.bind.imgRight3
-                    )
-                }
-                4 -> {
-                    glideLoad(
-                        holder.context, imgList[4].url, imgList[4].referer,
-                        holder.bind.imgRight4
-                    )
-                }
-                5 -> {
-                    glideLoad(
-                        holder.context, imgList[5].url, imgList[5].referer,
-                        holder.bind.imgBottom
-                    )
-                }
-                else -> break@loop
-            }
+        for (index in 0..imgList.size) {
+            val imgView = findImageView(holder, index) ?: break
+            val imgItem = imgList[index]
+            imgView.setTag(R.id.value, imgItem)
+            glideLoad(holder.context, imgItem.url, imgItem.referer, imgView)
+        }
+    }
+
+    private fun findImageView(holder: BellesItemHolder, index: Int): ImageView? {
+        return when (index) {
+            0 -> holder.bind.imgLeft
+            1 -> holder.bind.imgRight1
+            2 -> holder.bind.imgRight2
+            3 -> holder.bind.imgRight3
+            4 -> holder.bind.imgRight4
+            5 -> holder.bind.imgBottom
+            else -> null
         }
     }
 
@@ -118,11 +99,12 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
         lateinit var context: Context
     }
 
-    private val onItemClock = View.OnClickListener() {
+    private val onItemClock = View.OnClickListener {
         runCatching {
-            val position = it.getTag(R.id.value) as Int
+            val position = it.getTag(R.id.position) as Int
+            val imgItem = it.getTag(R.id.value) as BImage
             val itemBelles = getItem(position)
-            callBack.itemClick(itemBelles)
+            callBack.itemClick(it, itemBelles, imgItem)
         }
     }
 
@@ -149,7 +131,7 @@ class BellesDiffCallback :
 
 interface FavoriteAdapterCallBack {
 
-    fun itemClick(itemBelles: Belles)
+    fun itemClick(view: View, itemBelles: Belles, bImage: BImage)
 
     fun favoriteClick(itemBelles: Belles)
 }

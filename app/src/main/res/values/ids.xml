@@ -2,5 +2,6 @@
 <resources>
 
     <item name="value" type="id"/>
+    <item name="position" type="id"/>
 
 </resources>
