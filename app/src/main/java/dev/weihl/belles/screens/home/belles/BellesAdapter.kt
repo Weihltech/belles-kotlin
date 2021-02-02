@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.weihl.belles.R
-import dev.weihl.belles.common.loadImage
+import dev.weihl.belles.extension.loadImage
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.ItemBellesLayoutBinding
 import timber.log.Timber

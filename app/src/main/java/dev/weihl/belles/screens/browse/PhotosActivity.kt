@@ -8,12 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.gson.Gson
 import dev.weihl.belles.common.IntentKey
-import dev.weihl.belles.common.loadImage
+import dev.weihl.belles.extension.loadImage
 import dev.weihl.belles.data.BImage
 import dev.weihl.belles.databinding.ActivityPhotosBinding
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
-import dev.weihl.belles.json2SexyImageList
+import dev.weihl.belles.extension.json2SexyImageList
 import dev.weihl.belles.screens.BasicActivity
 import timber.log.Timber
 
@@ -34,7 +35,7 @@ class PhotosActivity : BasicActivity() {
         if (photosJson == null || photosJson.isEmpty()) {
             return finish()
         }
-        val photoList = json2SexyImageList(photosJson)
+        val photoList = Gson().json2SexyImageList(photosJson)
         if (photoList.isEmpty()) {
             return finish()
         }

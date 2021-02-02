@@ -65,7 +65,7 @@ open class MotionJudge(callBack: CallBack? = null) {
                 }
             }
 
-            if (hasJudged && isVerticalMotion) {
+            if (hasJudged) {
                 return if (isVerticalMotion) {
                     judgeCallBack?.onMoveVertical(offsetY, eventMove) ?: false
                 } else judgeCallBack?.onMoveHorizontal(offsetX, eventMove) ?: false

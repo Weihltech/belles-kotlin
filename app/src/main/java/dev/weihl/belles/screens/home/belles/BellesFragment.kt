@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
 import dev.weihl.belles.common.SpaceItemDecoration
-import dev.weihl.belles.common.startPhotosActivity
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.EnumAlbum
 import dev.weihl.belles.databinding.FragmentBellesBinding
-import dev.weihl.belles.dp2Px
-import dev.weihl.belles.drawableResources
+import dev.weihl.belles.extension.dp2Px
+import dev.weihl.belles.extension.drawableResources
+import dev.weihl.belles.extension.startPhotosActivity
 import dev.weihl.belles.screens.BasicFragment
 import timber.log.Timber
 import kotlin.math.abs

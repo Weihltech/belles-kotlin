@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import dev.weihl.belles.common.loadImage
+import dev.weihl.belles.extension.loadImage
 import dev.weihl.belles.data.BImage
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 

@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.google.gson.Gson
 import dev.weihl.belles.R
 import dev.weihl.belles.data.BImage
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.ItemFavoriteLayoutBinding
-import dev.weihl.belles.json2SexyImageList
+import dev.weihl.belles.extension.json2SexyImageList
 
 
 /**
@@ -27,6 +28,7 @@ import dev.weihl.belles.json2SexyImageList
 class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
     ListAdapter<Belles, FavoriteAdapter.BellesItemHolder>(BellesDiffCallback()) {
 
+    private val gson = Gson()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BellesItemHolder {
         val bind = ItemFavoriteLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -48,7 +50,7 @@ class FavoriteAdapter(private val callBack: FavoriteAdapterCallBack) :
             }
         )
 
-        val imgList = json2SexyImageList(itemBelles.details)
+        val imgList = gson.json2SexyImageList(itemBelles.details)
         if (imgList.isNotEmpty()) {
             dispatchImg(holder, imgList)
         } else {

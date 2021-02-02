@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import dev.weihl.belles.MainApp
-import dev.weihl.belles.common.screenPixels
+import dev.weihl.belles.extension.screenPixels
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -62,18 +62,17 @@ class MotionPhoto(
                 maskView.alpha = alpha
 
                 origin.rect?.let {
+                    // 改变 mask view 大小
                     val llp = maskView.layoutParams
                     llp.width = (screenPix[0] + screenOffsetWH[0] * alpha).toInt()
                     llp.height = (screenPix[1] + screenOffsetWH[1] * alpha).toInt()
                     maskView.layoutParams = llp
 
+                    // 中心跟随手指移动
                     maskView.x = moveXY[0] - llp.width / 2
                     maskView.y = moveXY[1] - llp.height / 2
-
                 }
-
                 callback.maskViewAlphaChange(alpha)
-
                 return true
             }
         }

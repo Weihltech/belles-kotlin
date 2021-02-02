@@ -6,17 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dev.weihl.belles.R
+import dev.weihl.belles.databinding.FragmentUserBinding
 import dev.weihl.belles.screens.BasicFragment
 
 
 class UserFragment : BasicFragment() {
 
+    private lateinit var binding: FragmentUserBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false)
+        binding = FragmentUserBinding.inflate(layoutInflater)
+        return binding.root
     }
 
 

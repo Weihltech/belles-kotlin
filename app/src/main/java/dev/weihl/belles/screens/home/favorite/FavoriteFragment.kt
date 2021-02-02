@@ -10,11 +10,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.weihl.belles.common.SpaceItemDecoration
-import dev.weihl.belles.common.startPhotosActivity
 import dev.weihl.belles.data.BImage
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentFavoriteBinding
-import dev.weihl.belles.dp2Px
+import dev.weihl.belles.extension.dp2Px
+import dev.weihl.belles.extension.startPhotosActivity
 import dev.weihl.belles.screens.BasicFragment
 import timber.log.Timber
 
