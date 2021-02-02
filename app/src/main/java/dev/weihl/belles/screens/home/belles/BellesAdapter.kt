@@ -1,15 +1,14 @@
 package dev.weihl.belles.screens.home.belles
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
 import dev.weihl.belles.R
+import dev.weihl.belles.common.loadImage
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.ItemBellesLayoutBinding
 import timber.log.Timber
@@ -41,9 +40,7 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
 
         runCatching {
             Timber.d("image load referer:${itemBelles.referer} ; cover:${itemBelles.thumb}")
-            val referer = LazyHeaders.Builder().addHeader("Referer", itemBelles.referer).build()
-            val glideUrl = GlideUrl(itemBelles.thumb, referer)
-            Glide.with(holder.bind.image.context).load(glideUrl).into(holder.bind.image)
+            holder.context.loadImage(holder.bind.image, itemBelles.referer, itemBelles.thumb)
         }
 
         holder.bind.desc.text = itemBelles.title
@@ -63,6 +60,8 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var bind: ItemBellesLayoutBinding
+        val context: Context
+            get() = bind.root.context
     }
 
     private val onItemClick = View.OnClickListener() {

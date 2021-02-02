@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
+import dev.weihl.belles.common.IntentKey
 import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.req.EnumAlbum
@@ -140,9 +141,9 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
 
         val photoIntent = Intent(context, PhotosActivity::class.java)
-        photoIntent.putExtra("details", itemBelles.details)
-        photoIntent.putExtra("globalXY", globalXY)
-        photoIntent.putExtra("globalRect", globalVisibleRect)
+        photoIntent.putExtra(IntentKey.DETAIL, itemBelles.details)
+        photoIntent.putExtra(IntentKey.LOCATION, globalXY)
+        photoIntent.putExtra(IntentKey.OBJECT_RECT, globalVisibleRect)
         startActivity(photoIntent)
     }
 

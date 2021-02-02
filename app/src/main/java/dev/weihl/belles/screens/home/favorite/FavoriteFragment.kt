@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import dev.weihl.belles.common.IntentKey
 import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.databinding.FragmentFavoriteBinding
@@ -32,8 +33,7 @@ class FavoriteFragment : BasicFragment() {
         val adapter = FavoriteAdapter(object : FavoriteAdapterCallBack {
             override fun itemClick(itemBelles: Belles) {
                 val photoIntent = Intent(requireContext(), PhotosActivity::class.java)
-                photoIntent.putExtra("details", itemBelles.details)
-                photoIntent.putExtra("simple", true)
+                photoIntent.putExtra(IntentKey.DETAIL, itemBelles.details)
                 startActivity(photoIntent)
             }
 

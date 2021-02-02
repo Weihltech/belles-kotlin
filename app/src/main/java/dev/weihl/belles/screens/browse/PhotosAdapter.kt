@@ -1,12 +1,11 @@
 package dev.weihl.belles.screens.browse
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
+import dev.weihl.belles.common.loadImage
 import dev.weihl.belles.data.BImage
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 
@@ -35,22 +34,15 @@ class PhotosAdapter(private val photoList: List<BImage>) :
     }
 
     override fun onBindViewHolder(holder: PhotosViewHolder, position: Int) {
-
-        val glideUrl = GlideUrl(
-            photo(position).url,
-            LazyHeaders.Builder().addHeader("Referer", photo(position).referer).build()
-        )
-        Glide.with(holder.bind.image.context)
-            .load(glideUrl)
-//            .placeholder(R.drawable.ic_action_load)
-            .thumbnail(0.1f)
-            .into(holder.bind.image)
-
+        val photo = photo(position)
+        holder.context.loadImage(holder.bind.image, photo.referer, photo.url)
     }
 
     // view holder
     class PhotosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lateinit var bind: ItemPhotosLayoutBinding
+        val context: Context
+            get() = bind.root.context
     }
 
 }

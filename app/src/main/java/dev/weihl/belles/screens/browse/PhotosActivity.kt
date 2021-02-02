@@ -6,6 +6,8 @@ import android.os.Handler
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import dev.weihl.belles.common.IntentKey
+import dev.weihl.belles.common.loadImage
 import dev.weihl.belles.databinding.ActivityPhotosBinding
 import dev.weihl.belles.databinding.ItemPhotosLayoutBinding
 import dev.weihl.belles.json2SexyImageList
@@ -21,55 +23,45 @@ class PhotosActivity : BasicActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityPhotosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val photosJson = intent.getStringExtra("details")
+        // album detail
+        val photosJson = intent.getStringExtra(IntentKey.DETAIL)
         if (photosJson == null || photosJson.isEmpty()) {
             return finish()
         }
-
         val photoList = json2SexyImageList(photosJson)
         if (photoList.isEmpty()) {
             return finish()
         }
 
-//        recyclerView = binding.viewPager.getChildAt(0) as RecyclerView
-//        binding.viewPager.adapter = PhotosAdapter(photoList)
-//        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                val adapter = binding.viewPager.adapter as PhotosAdapter
-//                val numTxt = "${binding.viewPager.currentItem + 1} · ${adapter.itemCount}"
-//                binding.tvNum.text = numTxt
-//
-//                getCurrentItemViewBind()?.let {
-//                    Timber.d("MotionPhoto holdOriginView ")
-//                    motionPhoto?.holdOriginView()
-//                }
-//            }
-//        })
-//        binding.btnBack.setOnClickListener { finish() }
+        // browse album
+        recyclerView = binding.viewPager.getChildAt(0) as RecyclerView
+        binding.root.postDelayed({ binding.viewPager.adapter = PhotosAdapter(photoList) }, 500)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                val adapter = binding.viewPager.adapter as PhotosAdapter
+                val numTxt = "${binding.viewPager.currentItem + 1} · ${adapter.itemCount}"
+                binding.tvNum.text = numTxt
+            }
+        })
+        binding.btnBack.setOnClickListener { finish() }
 
-        initPhotoParamData()
-    }
-
-    private fun initPhotoParamData() {
-
-        val simple = intent.getBooleanExtra("simple", false)
-        if (simple) {
-            return
-        }
-
-        val originRect = intent.getParcelableExtra<Rect>("globalRect") as Rect
-        val originXY = intent.getIntArrayExtra("globalXY")
+        // maks view
+        val originRect = intent.getParcelableExtra<Rect>(IntentKey.OBJECT_RECT) ?: return
+        val originXY = intent.getIntArrayExtra(IntentKey.LOCATION)
         originXY?.let { itXY ->
             val originPhoto = MotionPhoto.OriginPhoto(
                 itXY[0], itXY[1], originRect
             )
             motionPhoto = MotionPhoto(originPhoto, Handler())
             binding.root.addView(motionPhoto!!.maskView)
-            motionPhoto?.holdOriginView()
+            val maskView = motionPhoto?.maskOriginView()
+            maskView?.let {
+                val firstPhoto = photoList[0]
+                loadImage(it, firstPhoto.referer, firstPhoto.url)
+            }
             Timber.d("MotionPhoto init $originPhoto")
         }
     }
