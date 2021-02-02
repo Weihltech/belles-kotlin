@@ -22,25 +22,81 @@ import kotlin.math.roundToInt
  */
 class MotionPhoto(
     private val origin: OriginPhoto,
-    private val handler: Handler
-) : MotionJudge(motionCallBack) {
+    private val handler: Handler,
+    private val callback: MotionCallBack
+) : MotionJudge() {
 
     private val screenPix = MainApp.getContext().screenPixels()
-    private val screenCenterPoint = arrayOf(screenPix[0] / 2, screenPix[1] / 2)
-    val maskView = ImageView(MainApp.getContext()).apply {
+    private val screenOffsetWH = arrayOf(0, 0)
+    private val maskView = ImageView(MainApp.getContext()).apply {
         setBackgroundColor(Color.GRAY)
         scaleType = ImageView.ScaleType.CENTER_CROP
         layoutParams = ViewGroup.LayoutParams(0, 0)
     }
 
+    interface MotionCallBack {
+        fun maskViewRestoreFinish()
 
-    fun maskOriginView(): ImageView? {
+        fun maskViewAlphaChange(alpha: Float)
+    }
+
+    init {
+        judgeCallBack = object : CallBack {
+
+            private var alpha: Float = 0f
+            override fun onUp() {
+                if (alpha == 1f) {
+                    translateAnimation(maskView, origin.x.toFloat(), origin.y.toFloat())
+                    handler.postDelayed({ callback.maskViewRestoreFinish() }, 500)
+                } else {
+                    maskView.alpha = 0f
+                    callback.maskViewAlphaChange(0f)
+                }
+            }
+
+            // Y移动量，锚点 down;
+            override fun onMoveVertical(offsetY: Float, moveXY: Array<Float>): Boolean {
+                val tAlpha = -offsetY * 0.003f
+                alpha = if (tAlpha <= 0) 0f else (if (tAlpha >= 1) 1f else tAlpha)
+                Timber.d("onMoveVertical: $alpha")
+                maskView.alpha = alpha
+
+                origin.rect?.let {
+                    val llp = maskView.layoutParams
+                    llp.width = (screenPix[0] + screenOffsetWH[0] * alpha).toInt()
+                    llp.height = (screenPix[1] + screenOffsetWH[1] * alpha).toInt()
+                    maskView.layoutParams = llp
+
+                    maskView.x = moveXY[0] - llp.width / 2
+                    maskView.y = moveXY[1] - llp.height / 2
+
+                }
+
+                callback.maskViewAlphaChange(alpha)
+
+                return true
+            }
+        }
+    }
+
+    fun maskOriginView(viewGroup: ViewGroup): ImageView? {
+        maskOriginView()?.let {
+            viewGroup.addView(it)
+            return it
+        }
+        return null
+    }
+
+    private fun maskOriginView(): ImageView? {
 
         if (origin.rect == null) {
             return null
         }
 
         val rectIt = origin.rect
+        // 宽高与屏幕大小
+        screenOffsetWH[0] = rectIt.width() - screenPix[0]
+        screenOffsetWH[1] = rectIt.height() - screenPix[1]
         // 映射到 原始 坐标
         maskView.x = origin.x.toFloat()
         maskView.y = origin.y.toFloat()
@@ -49,20 +105,23 @@ class MotionPhoto(
         maskView.layoutParams.height = rectIt.height()
         maskView.alpha = 1f
 
-        handler.post {
-            // 移动动画
-            translateAnimation(maskView, 500)
-            // 属性放大 view
-            scaleAnimation(maskView, 500)
-        }
-        handler.postDelayed({
-            alphaAnimation(maskView, 300)
-        }, 516)
-
+        startAnimation(maskView)
         return maskView
     }
 
-    private fun alphaAnimation(maskView: ImageView, duration: Long) {
+    private fun startAnimation(view: View) {
+        handler.post {
+            // 移动动画
+            translateAnimation(view)
+            // 属性放大 view
+            scaleAnimation(view)
+        }
+        handler.postDelayed({
+            alphaAnimation(view)
+        }, 516)
+    }
+
+    private fun alphaAnimation(maskView: View, duration: Long = 500) {
         val rAnim = ValueAnimator.ofFloat(1f, 0f)
         rAnim.duration = duration
         rAnim.addUpdateListener { aniVal ->
@@ -72,7 +131,7 @@ class MotionPhoto(
         rAnim.start()
     }
 
-    private fun scaleAnimation(maskView: View, duration: Long) {
+    private fun scaleAnimation(maskView: View, duration: Long = 500) {
         val radio = maskView.layoutParams.width.div(screenPix[0].toFloat())
         val rAnim = ValueAnimator.ofFloat(radio, 1f)
         rAnim.duration = duration
@@ -86,34 +145,29 @@ class MotionPhoto(
         rAnim.start()
     }
 
-    private fun translateAnimation(view: View, duration: Long) {
+    private fun translateAnimation(
+        maskView: View,
+        toX: Float = 0f,
+        toY: Float = 0f,
+        duration: Long = 500
+    ) {
 
-        val xAnim = ValueAnimator.ofFloat(view.x, 0f)
+        val xAnim = ValueAnimator.ofFloat(maskView.x, toX)
         xAnim.duration = duration
         xAnim.addUpdateListener {
             val xVal = it.animatedValue
-            view.x = xVal as Float
+            maskView.x = xVal as Float
         }
         xAnim.start()
 
-        val yAnim = ValueAnimator.ofFloat(view.y, 0f)
+        val yAnim = ValueAnimator.ofFloat(maskView.y, toY)
         yAnim.duration = duration
         yAnim.addUpdateListener {
             val yVal = it.animatedValue
-            view.y = yVal as Float
+            maskView.y = yVal as Float
         }
         yAnim.start()
 
-    }
-
-    companion object {
-        private val motionCallBack = object : CallBack {
-            // Y移动量，锚点 down;
-            override fun onMoveVertical(offsetY: Float): Boolean {
-                Timber.d("onMoveVertical: $offsetY")
-                return false
-            }
-        }
     }
 
     // 原图片位置信息

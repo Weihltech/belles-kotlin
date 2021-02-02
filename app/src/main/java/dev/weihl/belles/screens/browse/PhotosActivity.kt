@@ -1,9 +1,12 @@
 package dev.weihl.belles.screens.browse
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.view.MotionEvent
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dev.weihl.belles.common.IntentKey
@@ -44,6 +47,10 @@ class PhotosActivity : BasicActivity() {
                 val adapter = binding.viewPager.adapter as PhotosAdapter
                 val numTxt = "${binding.viewPager.currentItem + 1} · ${adapter.itemCount}"
                 binding.tvNum.text = numTxt
+
+                if (binding.tvNum.visibility != View.VISIBLE) {
+                    binding.tvNum.visibility = View.VISIBLE
+                }
             }
         })
         binding.btnBack.setOnClickListener { finish() }
@@ -55,15 +62,29 @@ class PhotosActivity : BasicActivity() {
             val originPhoto = MotionPhoto.OriginPhoto(
                 itXY[0], itXY[1], originRect
             )
-            motionPhoto = MotionPhoto(originPhoto, Handler())
-            binding.root.addView(motionPhoto!!.maskView)
-            val maskView = motionPhoto?.maskOriginView()
-            maskView?.let {
-                val firstPhoto = photoList[0]
-                loadImage(it, firstPhoto.referer, firstPhoto.url)
+            motionPhoto = MotionPhoto(originPhoto, Handler(), motionPhotoCallBack)
+            motionPhoto!!.maskOriginView(binding.root)?.let {
+                val referer = intent.getStringExtra(IntentKey.REFERER)
+                val url = intent.getStringExtra(IntentKey.URL)
+                if (referer != null && url != null) {
+                    loadImage(it, referer, url)
+                }
             }
             Timber.d("MotionPhoto init $originPhoto")
         }
+    }
+
+    private val motionPhotoCallBack = object : MotionPhoto.MotionCallBack {
+        override fun maskViewRestoreFinish() {
+            finish()
+        }
+
+        override fun maskViewAlphaChange(alpha: Float) {
+            val tAlpha = 1 - alpha
+            binding.viewPager.alpha = tAlpha
+            binding.tvNum.alpha = tAlpha
+        }
+
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -92,6 +113,23 @@ class PhotosActivity : BasicActivity() {
     override fun onBackPressed() {
         finish()
     }
+
+}
+
+fun Context.startPhotosActivity(
+    details: String,// belles.deatils
+    location: IntArray? = null,
+    rect: Rect? = null,
+    referer: String? = null,
+    url: String? = null
+) {
+    val photoIntent = Intent(this, PhotosActivity::class.java)
+    photoIntent.putExtra(IntentKey.DETAIL, details)
+    photoIntent.putExtra(IntentKey.LOCATION, location)
+    photoIntent.putExtra(IntentKey.OBJECT_RECT, rect)
+    photoIntent.putExtra(IntentKey.REFERER, referer)
+    photoIntent.putExtra(IntentKey.URL, url)
+    startActivity(photoIntent)
 
 }
 

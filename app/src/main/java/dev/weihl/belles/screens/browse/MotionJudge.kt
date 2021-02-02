@@ -10,7 +10,7 @@ import kotlin.math.abs
  * @author Ngai
  * @since 2021/2/1
  */
-open class MotionJudge(private val callBack: CallBack) {
+open class MotionJudge(callBack: CallBack? = null) {
 
     private val eventDown = arrayOf(0f, 0f)
     private val eventMove = arrayOf(0f, 0f)
@@ -18,6 +18,7 @@ open class MotionJudge(private val callBack: CallBack) {
     private var hasJudged = false
     private var offsetX = 0F
     private var offsetY = 0F
+    protected var judgeCallBack: CallBack? = callBack
 
     interface CallBack {
         fun onDown() {}
@@ -25,11 +26,11 @@ open class MotionJudge(private val callBack: CallBack) {
         fun onUp() {}
 
         // Y移动量，锚点 down;
-        fun onMoveVertical(offsetY: Float): Boolean {
+        fun onMoveVertical(offsetY: Float, moveXY: Array<Float>): Boolean {
             return false
         }
 
-        fun onMoveHorizontal(offsetX: Float): Boolean {
+        fun onMoveHorizontal(offsetX: Float, moveXY: Array<Float>): Boolean {
             return false
         }
     }
@@ -44,7 +45,7 @@ open class MotionJudge(private val callBack: CallBack) {
                     eventDown[0] = event.x
                     eventDown[1] = event.y
                     Timber.d("down: (${event.x},${event.y}")
-                    callBack.onDown()
+                    judgeCallBack?.onDown()
                 }
                 MotionEvent.ACTION_UP -> {
                     hasJudged = false
@@ -52,7 +53,7 @@ open class MotionJudge(private val callBack: CallBack) {
                     offsetX = 0F
                     offsetY = 0F
                     Timber.d("up: (${event.x},${event.y}")
-                    callBack.onUp()
+                    judgeCallBack?.onUp()
                 }
                 MotionEvent.ACTION_MOVE -> {
                     eventMove[0] = event.x
@@ -66,8 +67,8 @@ open class MotionJudge(private val callBack: CallBack) {
 
             if (hasJudged && isVerticalMotion) {
                 return if (isVerticalMotion) {
-                    callBack.onMoveVertical(offsetY)
-                } else callBack.onMoveHorizontal(offsetX)
+                    judgeCallBack?.onMoveVertical(offsetY, eventMove) ?: false
+                } else judgeCallBack?.onMoveHorizontal(offsetX, eventMove) ?: false
             }
         }
 

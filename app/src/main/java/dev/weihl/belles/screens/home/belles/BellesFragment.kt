@@ -1,7 +1,6 @@
 package dev.weihl.belles.screens.home.belles
 
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dev.weihl.belles.R
-import dev.weihl.belles.common.IntentKey
 import dev.weihl.belles.common.SpaceItemDecoration
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.req.EnumAlbum
@@ -26,7 +24,7 @@ import dev.weihl.belles.databinding.FragmentBellesBinding
 import dev.weihl.belles.dp2Px
 import dev.weihl.belles.drawableResources
 import dev.weihl.belles.screens.BasicFragment
-import dev.weihl.belles.screens.browse.PhotosActivity
+import dev.weihl.belles.screens.browse.startPhotosActivity
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -140,11 +138,13 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         clickView?.getLocationOnScreen(globalXY)
         Timber.d("globalVisibleRect :　$globalVisibleRect ; globalXY ${globalXY.contentToString()}")
 
-        val photoIntent = Intent(context, PhotosActivity::class.java)
-        photoIntent.putExtra(IntentKey.DETAIL, itemBelles.details)
-        photoIntent.putExtra(IntentKey.LOCATION, globalXY)
-        photoIntent.putExtra(IntentKey.OBJECT_RECT, globalVisibleRect)
-        startActivity(photoIntent)
+        context?.startPhotosActivity(
+            itemBelles.details,
+            globalXY,
+            globalVisibleRect,
+            itemBelles.referer,
+            itemBelles.thumb
+        )
     }
 
     override fun favoriteClick(itemBelles: Belles, position: Int) {
