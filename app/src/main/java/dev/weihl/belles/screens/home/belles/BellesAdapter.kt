@@ -56,6 +56,8 @@ class BellesAdapter(private val callBack: BellesAdapterCallBack) :
         holder.bind.root.setTag(R.id.value, position)
         holder.bind.tagFavorite.setOnClickListener(onFavoriteClick)
         holder.bind.root.setOnClickListener(onItemClick)
+
+        holder.bind.image.visibility = if (itemBelles.date == -2L) View.GONE else View.VISIBLE
     }
 
     class BellesItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
