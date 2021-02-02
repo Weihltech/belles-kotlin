@@ -6,7 +6,7 @@ import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.EnumAlbum
 import dev.weihl.belles.extension.isNetworkAvailable
-import dev.weihl.belles.screens.BaseViewModel
+import dev.weihl.belles.screens.BasicViewModel
 
 /**
  * @desc ViewMode
@@ -14,7 +14,7 @@ import dev.weihl.belles.screens.BaseViewModel
  * @author Weihl Created by 2019/11/22
  *
  */
-class BellesViewModel(application: Application) : BaseViewModel(application) {
+class BellesViewModel(application: Application) : BasicViewModel(application) {
 
     private val repository = BellesRepository
     private val context = application

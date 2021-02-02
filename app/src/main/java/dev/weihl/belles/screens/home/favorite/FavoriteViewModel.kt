@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import dev.weihl.belles.data.BellesRepository
 import dev.weihl.belles.data.local.entity.Belles
-import dev.weihl.belles.screens.BaseViewModel
+import dev.weihl.belles.screens.BasicViewModel
 
 /**
  * @desc ViewMode
@@ -12,7 +12,7 @@ import dev.weihl.belles.screens.BaseViewModel
  * @author Weihl Created by 2019/11/22
  *
  */
-class FavoriteViewModel(application: Application) : BaseViewModel(application) {
+class FavoriteViewModel(application: Application) : BasicViewModel(application) {
 
     private val repository = BellesRepository
 

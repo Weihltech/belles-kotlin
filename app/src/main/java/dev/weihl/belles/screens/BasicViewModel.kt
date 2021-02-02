@@ -9,4 +9,4 @@ import androidx.lifecycle.AndroidViewModel
  * @author Weihl Created by 2019/12/3
  *
  */
-abstract class BaseViewModel(application: Application) : AndroidViewModel(application)
+abstract class BasicViewModel(application: Application) : AndroidViewModel(application)

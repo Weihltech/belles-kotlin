@@ -1,6 +1,7 @@
 package dev.weihl.belles.screens.home
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -12,6 +13,8 @@ import dev.weihl.belles.screens.BasicActivity
  * @author Weihl
  */
 class HomeActivity : BasicActivity() {
+
+    private val viewModel: HomeViewModel by viewModels()
 
     // var 可变变量；val 不可变变量；
     private var currFragmentId: Int = R.id.bellesFragment
