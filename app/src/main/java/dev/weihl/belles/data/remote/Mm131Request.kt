@@ -21,6 +21,10 @@ sealed class Mm131Request : AlbumPageRequest() {
     override val pageUrl: String
         get() = if (page < 2) "$HOST_URL/${tab}/" else "$HOST_URL/${tab}/${urlTag}$page.html"
 
+    private var _maxPage: Int = 0
+    val maxPage: Int
+        get() = _maxPage
+
     override fun analysisPageDocument(pageDocument: Document): List<BAlbum> {
         val albumList = mutableListOf<BAlbum>()
 
@@ -43,14 +47,30 @@ sealed class Mm131Request : AlbumPageRequest() {
             }
         }
 
+        runCatching {
+            val pageElements = pageDocument.getElementsByClass("page-en")
+            val pageEns = pageElements[pageElements.size - 1].attr("href")
+            val maxPage = pageEns.replace(".html", "").split("_").last()
+            _maxPage = maxPage.toInt()
+            Timber.d("maxPage:$maxPage")
+        }
+
         return albumList
     }
 
-    override fun albumIncreasePageImage(albumPageHref: String, albumFirstImageUrl: String, page: Int): String {
+    override fun albumIncreasePageImage(
+        albumPageHref: String,
+        albumFirstImageUrl: String,
+        page: Int
+    ): String {
         return "${analysisAlbumCoverSimilar(albumFirstImageUrl)}${page}.jpg"
     }
 
-    override fun albumIncreasePageHref(albumFirstDocument: Document, albumFirstHref: String, page: Int): String {
+    override fun albumIncreasePageHref(
+        albumFirstDocument: Document,
+        albumFirstHref: String,
+        page: Int
+    ): String {
         return albumFirstHref.replace(".html", "_${page}.html")
     }
 

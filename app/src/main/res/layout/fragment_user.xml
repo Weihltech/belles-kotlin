@@ -27,7 +27,7 @@
             android:id="@+id/img_user"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/ic_round_bg"
+            android:background="@drawable/ic_round_blue_bg"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

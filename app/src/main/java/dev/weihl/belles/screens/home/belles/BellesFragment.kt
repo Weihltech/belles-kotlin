@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -72,7 +71,7 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
         }
 
         // observe list data
-        bellesViewModel.bellesList.observe(viewLifecycleOwner, Observer {
+        bellesViewModel.bellesList.observe(viewLifecycleOwner, {
             Timber.d("refresh new Belles list !")
             getBellesAdapter()?.let { adapter ->
                 adapter.submitList(it) {
@@ -80,6 +79,14 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
                 }
             }
             binding.swipeRefreshLayout.isRefreshing = false
+        })
+
+        // album tab page
+        bellesViewModel.albumPage.observe(viewLifecycleOwner, {
+            // find album tab view
+            // change text
+
+            bellesViewModel.anEnum
         })
 
         // Album tab layout
@@ -105,7 +112,7 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
                 val albumView = TextView(context).apply {
                     text = album.title
                     gravity = Gravity.CENTER
-                    background = context.drawableResources(R.drawable.ic_round_bg)
+                    background = context.drawableResources(R.drawable.ic_round_blue_bg)
                     setTextColor(Color.WHITE)
                 }
                 albumView.setTag(R.id.value, album)
@@ -123,11 +130,23 @@ class BellesFragment : BasicFragment(), BellesAdapterCallBack {
             }
             val album = it.getTag(R.id.value) as EnumAlbum
             val hasData = bellesViewModel.switchAlbumTab(album)
+            toggleAlbumTab(it)
+            binding.albumBar.visibility = View.GONE
             binding.swipeRefreshLayout.isRefreshing = true
             if (!hasData) {
-                binding.albumBar.visibility = View.GONE
                 bellesViewModel.loadNextBelles()
-                binding.albumBar.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun toggleAlbumTab(view: View?) {
+        view?.let {
+            runCatching {
+                for (index in 0 until binding.albumLayout.childCount) {
+                    val tabView = binding.albumLayout.getChildAt(index)
+                    tabView.background = it.context.drawableResources(R.drawable.ic_round_blue_bg)
+                }
+                it.background = it.context.drawableResources(R.drawable.ic_round_red_bg)
             }
         }
     }

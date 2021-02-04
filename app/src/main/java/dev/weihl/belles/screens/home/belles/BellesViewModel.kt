@@ -20,14 +20,18 @@ class BellesViewModel(application: Application) : BasicViewModel(application) {
     private val context = application
 
     // 专辑项
-    private var anEnum: EnumAlbum = EnumAlbum.SEXY
+    private var _anEnum: EnumAlbum = EnumAlbum.SEXY
+    val anEnum: EnumAlbum
+        get() = _anEnum
 
     // 页面数据
     private val _bellesListMap = HashMap<EnumAlbum, MutableList<Belles>>()
     val bellesList = MutableLiveData<List<Belles>>()
 
+    val albumPage = MutableLiveData<Int>()
+
     fun switchAlbumTab(enumAlbum: EnumAlbum): Boolean {
-        anEnum = enumAlbum
+        _anEnum = enumAlbum
 
         // set empty list
         if (_bellesListMap[anEnum].isNullOrEmpty()) {
@@ -56,6 +60,7 @@ class BellesViewModel(application: Application) : BasicViewModel(application) {
                     it.addAll(0, pageBellesList)
                 }
             }
+            albumPage.postValue(repository.albumPage(anEnum))
             bellesList.postValue(_bellesListMap[anEnum])
         }.start()
     }

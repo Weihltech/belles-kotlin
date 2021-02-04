@@ -97,5 +97,9 @@ object BellesRepository : DataSource.Repository {
         return localDB.queryAllFavoriteBelles()
     }
 
+    override fun albumPage(anEnum: EnumAlbum): Int {
+        return findAlbumRequest(anEnum).page
+    }
+
 
 }
