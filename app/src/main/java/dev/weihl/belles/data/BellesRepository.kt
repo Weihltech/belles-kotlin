@@ -7,7 +7,7 @@ import dev.weihl.belles.data.local.entity.Belles
 import dev.weihl.belles.data.remote.*
 import timber.log.Timber
 
-object BellesRepository : DataSource.Repository {
+class BellesRepository : DataSource.Repository {
 
     private val mContext = MainApp.getContext()
     private var localDB: LocalDataSource = LocalDataSource(mContext)

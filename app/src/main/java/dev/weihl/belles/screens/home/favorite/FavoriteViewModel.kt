@@ -14,7 +14,7 @@ import dev.weihl.belles.screens.BasicViewModel
  */
 class FavoriteViewModel(application: Application) : BasicViewModel(application) {
 
-    private val repository = BellesRepository
+    private val repository = BellesRepository()
 
     val bellesList = MutableLiveData<List<Belles>>()
 

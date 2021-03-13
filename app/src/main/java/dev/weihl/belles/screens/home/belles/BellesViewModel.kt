@@ -16,7 +16,7 @@ import dev.weihl.belles.screens.BasicViewModel
  */
 class BellesViewModel(application: Application) : BasicViewModel(application) {
 
-    private val repository = BellesRepository
+    private val repository = BellesRepository()
     private val context = application
 
     // 专辑项
